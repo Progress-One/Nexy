@@ -3,10 +3,6 @@
   "slug": "degradation-he-degrades-her",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "dirty_talk",
-    "power_dynamic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -70,12 +66,48 @@
       "en": "What do you like about verbal degradation?"
     },
     "options": [
-      { "id": "vlast", "label": { "ru": "Чувство власти", "en": "Feeling of power" } },
-      { "id": "reakciya", "label": { "ru": "Её реакция на слова", "en": "Her reaction to words" } },
-      { "id": "kontrast", "label": { "ru": "Контраст с обычной жизнью", "en": "Contrast with normal life" } },
-      { "id": "tabu", "label": { "ru": "Нарушение табу", "en": "Breaking taboos" } },
-      { "id": "pokornost", "label": { "ru": "Её покорность", "en": "Her submission" } },
-      { "id": "intensivnost", "label": { "ru": "Интенсивность момента", "en": "Intensity of the moment" } }
+      {
+        "id": "vlast",
+        "label": {
+          "ru": "Чувство власти",
+          "en": "Feeling of power"
+        }
+      },
+      {
+        "id": "reakciya",
+        "label": {
+          "ru": "Её реакция на слова",
+          "en": "Her reaction to words"
+        }
+      },
+      {
+        "id": "kontrast",
+        "label": {
+          "ru": "Контраст с обычной жизнью",
+          "en": "Contrast with normal life"
+        }
+      },
+      {
+        "id": "tabu",
+        "label": {
+          "ru": "Нарушение табу",
+          "en": "Breaking taboos"
+        }
+      },
+      {
+        "id": "pokornost",
+        "label": {
+          "ru": "Её покорность",
+          "en": "Her submission"
+        }
+      },
+      {
+        "id": "intensivnost",
+        "label": {
+          "ru": "Интенсивность момента",
+          "en": "Intensity of the moment"
+        }
+      }
     ],
     "allow_other": true,
     "other_placeholder": {

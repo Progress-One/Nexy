@@ -3,9 +3,6 @@
   "slug": "breeding-kink",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "body_fluids"
-  ],
   "is_active": false,
   "is_onboarding": false,
   "for_gender": null,

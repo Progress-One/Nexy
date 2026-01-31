@@ -3,11 +3,10 @@
   "slug": "cunnilingus-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "oral"
-  ],
+  "sets_gate": "oral",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 2,
   "for_gender": "female",
   "paired_scene": "cunnilingus",
   "role_direction": "m_to_f",
@@ -50,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Кунилингус — он лижет тебя?",
-      "en": "Cunnilingus — he licks you?"
+      "ru": "Кунилингус — он лижет тебя",
+      "en": "Cunnilingus — he licks you"
     }
   }
 }

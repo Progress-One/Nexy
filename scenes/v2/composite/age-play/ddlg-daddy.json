@@ -4,8 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "roleplay",
-    "power_dynamic"
+    "bondage-he-ties-her",
+    "praise-he-praises-her"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -54,8 +54,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Роль Daddy?",
-      "en": "Being Daddy?"
+      "ru": "Роль Daddy",
+      "en": "Being Daddy"
     }
   }
 }

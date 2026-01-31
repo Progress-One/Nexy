@@ -3,10 +3,6 @@
   "slug": "male-uniforms",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "lingerie",
-    "roleplay"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -53,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Какие мужские костюмы возбуждают?",
-      "en": "Which male costumes excite you?"
+      "ru": "Какие мужские костюмы возбуждают",
+      "en": "Which male costumes excite you"
     }
-      }
+  }
 }

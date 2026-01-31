@@ -4,7 +4,7 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "bondage"
+    "bondage-he-ties-her-receive"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -50,8 +50,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Ты полностью обездвижена — плёнка, бинты?",
-      "en": "You're fully immobilized — wrap, bandages?"
+      "ru": "Ты полностью обездвижена — плёнка, бинты",
+      "en": "You're fully immobilized — wrap, bandages"
     }
   }
 }

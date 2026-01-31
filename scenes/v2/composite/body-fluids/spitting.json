@@ -3,10 +3,6 @@
   "slug": "spitting",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "dirty_talk",
-    "power_dynamic"
-  ],
   "is_active": false,
   "is_onboarding": false,
   "for_gender": null,
@@ -55,5 +51,5 @@
       "ru": "Что привлекает в плевках?",
       "en": "What appeals about spitting?"
     }
-      }
+  }
 }

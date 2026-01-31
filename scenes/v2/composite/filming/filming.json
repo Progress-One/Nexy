@@ -3,12 +3,10 @@
   "slug": "filming",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "recording",
-    "exhibitionism"
-  ],
+  "sets_gate": "recording",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 19,
   "for_gender": null,
   "role_direction": "mutual",
   "title": {
@@ -64,8 +62,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что нравится в съёмке?",
-      "en": "What do you like about filming?"
+      "ru": "Что нравится в съёмке",
+      "en": "What do you like about filming"
     }
-      }
+  }
 }

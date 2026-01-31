@@ -3,9 +3,6 @@
   "slug": "squirting-on-him",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "body_fluids"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -36,14 +33,18 @@
     "wet"
   ],
   "ai_context": {
-    "tests_primary": ["squirting"],
-    "tests_secondary": ["body_fluids"]
+    "tests_primary": [
+      "squirting"
+    ],
+    "tests_secondary": [
+      "body_fluids"
+    ]
   },
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Сквиртовать на него?",
-      "en": "Squirt on him?"
+      "ru": "Сквиртовать на него",
+      "en": "Squirt on him"
     }
   }
 }

@@ -3,12 +3,10 @@
   "slug": "praise-she-praises-him",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "praise",
-    "dirty_talk"
-  ],
+  "sets_gate": "praise",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 17,
   "for_gender": "female",
   "paired_scene": "praise-f-to-m-receive",
   "role_direction": "f_to_m",
@@ -68,12 +66,48 @@
       "en": "What do you like about her praise?"
     },
     "options": [
-      { "id": "odobrenie", "label": { "ru": "Чувство одобрения", "en": "Feeling of approval" } },
-      { "id": "motivaciya", "label": { "ru": "Мотивирует стараться", "en": "Motivates to try harder" } },
-      { "id": "nagrada", "label": { "ru": "Похвала как награда", "en": "Praise as reward" } },
-      { "id": "goloc", "label": { "ru": "Её голос", "en": "Her voice" } },
-      { "id": "vlast", "label": { "ru": "Её власть надо мной", "en": "Her power over me" } },
-      { "id": "nezhnost", "label": { "ru": "Нежность в словах", "en": "Tenderness in words" } }
+      {
+        "id": "odobrenie",
+        "label": {
+          "ru": "Чувство одобрения",
+          "en": "Feeling of approval"
+        }
+      },
+      {
+        "id": "motivaciya",
+        "label": {
+          "ru": "Мотивирует стараться",
+          "en": "Motivates to try harder"
+        }
+      },
+      {
+        "id": "nagrada",
+        "label": {
+          "ru": "Похвала как награда",
+          "en": "Praise as reward"
+        }
+      },
+      {
+        "id": "goloc",
+        "label": {
+          "ru": "Её голос",
+          "en": "Her voice"
+        }
+      },
+      {
+        "id": "vlast",
+        "label": {
+          "ru": "Её власть надо мной",
+          "en": "Her power over me"
+        }
+      },
+      {
+        "id": "nezhnost",
+        "label": {
+          "ru": "Нежность в словах",
+          "en": "Tenderness in words"
+        }
+      }
     ],
     "allow_other": true,
     "other_placeholder": {

@@ -4,7 +4,9 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "power_dynamic"
+    "bondage-he-ties-her",
+    "bondage-she-ties-him",
+    "dirty-talk"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -51,9 +53,9 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в секс-заданиях?",
-      "en": "What appeals about sex tasks?"
+      "ru": "Что привлекает в секс-заданиях",
+      "en": "What appeals about sex tasks"
     }
-      },
+  },
   "context": "discovery"
 }

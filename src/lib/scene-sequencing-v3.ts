@@ -26,7 +26,8 @@ export interface DiscoveryContextV3 {
   userId: string;
   userGender: 'male' | 'female';
   userInterestedIn: 'male' | 'female' | 'both';
-  onboardingResponses: Record<string, OnboardingResponseValue>;
+  /** All scene responses (YES/VERY) - map of scene_slug to response value */
+  sceneResponses: Record<string, OnboardingResponseValue>;
   userGates: Record<string, boolean>;
   shownClarifications: Set<string>;
   locale: 'ru' | 'en';
@@ -193,17 +194,17 @@ export async function getNextDiscoveryScenesV3(
   context: DiscoveryContextV3,
   batchSize: number = 5
 ): Promise<NextScenesResult> {
-  // Find main_questions user is interested in (YES=1, VERY=2)
-  const interestedMainQuestions = Object.entries(context.onboardingResponses)
+  // Find scenes user showed interest in (YES=1, VERY=2)
+  const interestedScenes = Object.entries(context.sceneResponses)
     .filter(([_, value]) => value === 1 || value === 2)
     .map(([slug]) => slug);
 
-  if (interestedMainQuestions.length === 0) {
+  if (interestedScenes.length === 0) {
     return { scenes: [] };
   }
 
-  // Try each main_question until we find unshown clarifications
-  for (const mainSlug of interestedMainQuestions) {
+  // Try each scene until we find unshown clarifications
+  for (const mainSlug of interestedScenes) {
     const clarifications = await getClarificationsFor(supabase, mainSlug, context);
 
     if (clarifications.length > 0) {
@@ -322,12 +323,12 @@ export async function buildDiscoveryContextV3(
     .eq('user_id', userId);
 
   // Build responses map: { scene_slug: value }
-  const onboardingResponses: Record<string, number> = {};
+  const sceneResponses: Record<string, number> = {};
   for (const r of responses || []) {
     const slug = r.scene_slug;
     const value = (r.answer as { value?: number })?.value ?? 0;
     if (slug && value >= 1) {
-      onboardingResponses[slug] = value;
+      sceneResponses[slug] = value;
     }
   }
 
@@ -345,7 +346,7 @@ export async function buildDiscoveryContextV3(
     userId,
     userGender: profile.gender as 'male' | 'female',
     userInterestedIn: profile.interested_in as 'male' | 'female' | 'both',
-    onboardingResponses,
+    sceneResponses,
     userGates: gates?.gates || {},
     shownClarifications,
     locale,

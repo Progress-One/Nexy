@@ -3,9 +3,6 @@
   "slug": "angry-sex",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "rough"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -51,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в злом сексе?",
-      "en": "What appeals about angry sex?"
+      "ru": "Что привлекает в злом сексе",
+      "en": "What appeals about angry sex"
     }
-      }
+  }
 }

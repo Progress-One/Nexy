@@ -3,9 +3,6 @@
   "slug": "handjob-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -50,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Ручная стимуляция — она ласкает тебя?",
-      "en": "Handjob — she strokes you?"
+      "ru": "Ручная стимуляция — она ласкает тебя",
+      "en": "Handjob — she strokes you"
     }
   }
 }

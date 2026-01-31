@@ -3,9 +3,6 @@
   "slug": "ice-play",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -51,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в игре со льдом?",
-      "en": "What appeals about ice play?"
+      "ru": "Что привлекает в игре со льдом",
+      "en": "What appeals about ice play"
     }
-      }
+  }
 }

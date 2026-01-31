@@ -3,10 +3,6 @@
   "slug": "needle-play",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "rough",
-    "bondage"
-  ],
   "is_active": false,
   "is_onboarding": false,
   "for_gender": null,
@@ -55,5 +51,5 @@
       "ru": "Что привлекает в играх с иглами?",
       "en": "What appeals about needle play?"
     }
-      }
+  }
 }

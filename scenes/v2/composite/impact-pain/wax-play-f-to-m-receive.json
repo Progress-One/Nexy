@@ -3,10 +3,6 @@
   "slug": "wax-play-f-to-m-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "rough",
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -53,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает когда она капает воск на тебя?",
-      "en": "What appeals when she drips wax on you?"
+      "ru": "Что привлекает когда она капает воск на тебя",
+      "en": "What appeals when she drips wax on you"
     }
-      }
+  }
 }

@@ -3,10 +3,6 @@
   "slug": "pet-play-she-is-pet-owner",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "roleplay",
-    "power_dynamic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -51,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает когда она питомец?",
-      "en": "What appeals when she's your pet?"
+      "ru": "Что привлекает когда она питомец",
+      "en": "What appeals when she's your pet"
     }
-      }
+  }
 }

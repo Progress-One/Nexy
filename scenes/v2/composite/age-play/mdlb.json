@@ -3,10 +3,6 @@
   "slug": "mommy-dom-little-boy",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "roleplay",
-    "power_dynamic"
-  ],
   "is_active": false,
   "is_onboarding": false,
   "for_gender": null,
@@ -57,5 +53,5 @@
       "ru": "Что привлекает в MDlb?",
       "en": "What appeals about MDlb?"
     }
-      }
+  }
 }

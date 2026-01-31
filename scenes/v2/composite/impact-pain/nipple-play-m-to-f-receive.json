@@ -3,9 +3,6 @@
   "slug": "nipple-play-m-to-f-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "rough"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -52,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что нравится когда он играет с твоими сосками?",
-      "en": "What do you like when he plays with your nipples?"
+      "ru": "Что нравится когда он играет с твоими сосками",
+      "en": "What do you like when he plays with your nipples"
     }
-      }
+  }
 }

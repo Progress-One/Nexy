@@ -2,7 +2,7 @@
   "id": "anal-play-on-her",
   "slug": "anal-play-on-her",
   "version": 2,
-  "scene_type": null,
+  "scene_type": "clarification",
   "sets_gate": "anal",
   "is_active": true,
   "is_onboarding": true,
@@ -49,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Анальные игры с ней?",
-      "en": "Anal play on her?"
+      "ru": "Анальные игры с ней",
+      "en": "Anal play on her"
     }
   }
 }

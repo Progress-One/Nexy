@@ -3,9 +3,6 @@
   "slug": "chastity-she-locked-keyholder",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "power_dynamic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -51,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в контроле над её поясом?",
-      "en": "What appeals about controlling her belt?"
+      "ru": "Что привлекает в контроле над её поясом",
+      "en": "What appeals about controlling her belt"
     }
-      }
+  }
 }

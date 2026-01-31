@@ -3,9 +3,6 @@
   "slug": "teacher-f-student-m-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "roleplay"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -50,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Она — строгая учительница, ты — непослушный ученик?",
-      "en": "She's strict teacher, you're naughty student?"
+      "ru": "Она — строгая учительница, ты — непослушный ученик",
+      "en": "She's strict teacher, you're naughty student"
     }
   }
 }

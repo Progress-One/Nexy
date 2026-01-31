@@ -3,10 +3,6 @@
   "slug": "pet-play-he-is-pet-sub",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "roleplay",
-    "power_dynamic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -51,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает когда ты питомец?",
-      "en": "What appeals when you're her pet?"
+      "ru": "Что привлекает когда ты питомец",
+      "en": "What appeals when you're her pet"
     }
-      }
+  }
 }

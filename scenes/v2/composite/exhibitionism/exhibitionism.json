@@ -3,9 +3,6 @@
   "slug": "exhibitionism",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "exhibitionism"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -51,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в эксгибиционизме?",
-      "en": "What appeals about exhibitionism?"
+      "ru": "Что привлекает в эксгибиционизме",
+      "en": "What appeals about exhibitionism"
     }
-      }
+  }
 }

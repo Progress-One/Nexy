@@ -4,8 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "romantic",
-    "bondage"
+    "bondage-he-ties-her",
+    "bondage-she-ties-him"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -51,8 +51,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в повязке на глаза?",
-      "en": "What appeals about blindfolds?"
+      "ru": "Что привлекает в повязке на глаза",
+      "en": "What appeals about blindfolds"
     }
-      }
+  }
 }

@@ -3,7 +3,6 @@
   "slug": "dirty-words-she-likes",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": ["dirty_talk", "power_dynamic"],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -27,10 +26,21 @@
   },
   "intensity": 3,
   "category": "verbal",
-  "tags": ["dirty_talk", "verbal", "degradation", "words"],
+  "tags": [
+    "dirty_talk",
+    "verbal",
+    "degradation",
+    "words"
+  ],
   "ai_context": {
-    "tests_primary": ["dirty_words", "degradation"],
-    "tests_secondary": ["verbal_preference", "submission"]
+    "tests_primary": [
+      "dirty_words",
+      "degradation"
+    ],
+    "tests_secondary": [
+      "verbal_preference",
+      "submission"
+    ]
   },
   "question": {
     "type": "multi_select",
@@ -39,16 +49,76 @@
       "en": "What words turn you on?"
     },
     "options": [
-      { "id": "shluha", "label": { "ru": "Шлюха", "en": "Slut" } },
-      { "id": "suchka", "label": { "ru": "Сучка", "en": "Bitch" } },
-      { "id": "blyad", "label": { "ru": "Блядь", "en": "Whore" } },
-      { "id": "shalava", "label": { "ru": "Шалава", "en": "Tramp" } },
-      { "id": "gryaznaya", "label": { "ru": "Грязная девочка", "en": "Dirty girl" } },
-      { "id": "igrushka", "label": { "ru": "Моя игрушка", "en": "My toy" } },
-      { "id": "moya", "label": { "ru": "Моя", "en": "Mine" } },
-      { "id": "devochka", "label": { "ru": "Девочка", "en": "Girl" } },
-      { "id": "kiska", "label": { "ru": "Киска", "en": "Kitty" } },
-      { "id": "milaya", "label": { "ru": "Милая", "en": "Sweetie" } }
+      {
+        "id": "shluha",
+        "label": {
+          "ru": "Шлюха",
+          "en": "Slut"
+        }
+      },
+      {
+        "id": "suchka",
+        "label": {
+          "ru": "Сучка",
+          "en": "Bitch"
+        }
+      },
+      {
+        "id": "blyad",
+        "label": {
+          "ru": "Блядь",
+          "en": "Whore"
+        }
+      },
+      {
+        "id": "shalava",
+        "label": {
+          "ru": "Шалава",
+          "en": "Tramp"
+        }
+      },
+      {
+        "id": "gryaznaya",
+        "label": {
+          "ru": "Грязная девочка",
+          "en": "Dirty girl"
+        }
+      },
+      {
+        "id": "igrushka",
+        "label": {
+          "ru": "Моя игрушка",
+          "en": "My toy"
+        }
+      },
+      {
+        "id": "moya",
+        "label": {
+          "ru": "Моя",
+          "en": "Mine"
+        }
+      },
+      {
+        "id": "devochka",
+        "label": {
+          "ru": "Девочка",
+          "en": "Girl"
+        }
+      },
+      {
+        "id": "kiska",
+        "label": {
+          "ru": "Киска",
+          "en": "Kitty"
+        }
+      },
+      {
+        "id": "milaya",
+        "label": {
+          "ru": "Милая",
+          "en": "Sweetie"
+        }
+      }
     ],
     "allow_other": true,
     "other_placeholder": {

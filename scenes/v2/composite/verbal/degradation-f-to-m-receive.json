@@ -4,8 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "dirty_talk",
-    "power_dynamic"
+    "dirty-talk",
+    "spanking-f-to-m-receive"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -49,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Она унижает тебя словами?",
-      "en": "She degrades you verbally?"
+      "ru": "Она унижает тебя словами",
+      "en": "She degrades you verbally"
     }
   }
 }

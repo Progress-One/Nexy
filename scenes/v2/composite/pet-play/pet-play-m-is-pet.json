@@ -3,10 +3,6 @@
   "slug": "pet-play-he-is-pet",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "roleplay",
-    "power_dynamic"
-  ],
   "is_active": false,
   "is_onboarding": false,
   "for_gender": null,
@@ -57,5 +53,5 @@
       "ru": "Что привлекает когда он питомец?",
       "en": "What appeals when he's pet?"
     }
-      }
+  }
 }

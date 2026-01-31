@@ -3,9 +3,6 @@
   "slug": "handjob",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -64,8 +61,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что нравится в ручной стимуляции?",
-      "en": "What do you like about handjobs?"
+      "ru": "Что нравится в ручной стимуляции",
+      "en": "What do you like about handjobs"
     }
-      }
+  }
 }

@@ -3,9 +3,6 @@
   "slug": "morning-teasing",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -51,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в утреннем дразнении?",
-      "en": "What appeals about morning teasing?"
+      "ru": "Что привлекает в утреннем дразнении",
+      "en": "What appeals about morning teasing"
     }
-      }
+  }
 }

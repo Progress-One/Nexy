@@ -3,9 +3,6 @@
   "slug": "lactation",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -51,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в лактации?",
-      "en": "What appeals about lactation?"
+      "ru": "Что привлекает в лактации",
+      "en": "What appeals about lactation"
     }
-      }
+  }
 }

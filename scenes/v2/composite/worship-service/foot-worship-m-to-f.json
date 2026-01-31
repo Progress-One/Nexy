@@ -3,10 +3,6 @@
   "slug": "foot-worship-he-worships-her",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "foot",
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -53,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в поклонении ногам?",
-      "en": "What appeals about foot worship?"
+      "ru": "Что привлекает в поклонении ногам",
+      "en": "What appeals about foot worship"
     }
-      }
+  }
 }

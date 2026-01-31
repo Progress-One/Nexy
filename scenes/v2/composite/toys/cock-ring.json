@@ -3,11 +3,10 @@
   "slug": "cock-ring",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "toys"
-  ],
+  "sets_gate": "toys",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 12,
   "for_gender": "female",
   "role_direction": "f_to_m",
   "title": {
@@ -50,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Эрекционное кольцо на нём?",
-      "en": "Cock ring on him?"
+      "ru": "Эрекционное кольцо на нём",
+      "en": "Cock ring on him"
     }
   }
 }

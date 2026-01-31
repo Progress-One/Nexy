@@ -3,12 +3,10 @@
   "slug": "public-sex",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "public",
-    "exhibitionism"
-  ],
+  "sets_gate": "exhibitionism",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 18,
   "for_gender": null,
   "role_direction": "mutual",
   "title": {
@@ -52,8 +50,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в сексе в публичном месте?",
-      "en": "What appeals about public sex?"
+      "ru": "Что привлекает в сексе в публичном месте",
+      "en": "What appeals about public sex"
     }
-      }
+  }
 }

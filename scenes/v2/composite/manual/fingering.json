@@ -3,9 +3,6 @@
   "slug": "fingering",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -64,8 +61,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что нравится в фингеринге?",
-      "en": "What do you like about fingering?"
+      "ru": "Что нравится в фингеринге",
+      "en": "What do you like about fingering"
     }
-      }
+  }
 }

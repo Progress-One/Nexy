@@ -3,10 +3,6 @@
   "slug": "facesitting-he-on-her",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "oral",
-    "power_dynamic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -53,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает когда он на её лице?",
-      "en": "What appeals about him on her face?"
+      "ru": "Что привлекает когда он на её лице",
+      "en": "What appeals about him on her face"
     }
-      }
+  }
 }

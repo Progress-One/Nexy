@@ -3,7 +3,6 @@
   "slug": "genital-naming-she-names-his",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": ["dirty_talk"],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -27,10 +26,20 @@
   },
   "intensity": 2,
   "category": "verbal",
-  "tags": ["dirty_talk", "verbal", "naming", "genitals"],
+  "tags": [
+    "dirty_talk",
+    "verbal",
+    "naming",
+    "genitals"
+  ],
   "ai_context": {
-    "tests_primary": ["genital_naming", "dirty_talk"],
-    "tests_secondary": ["verbal_preference"]
+    "tests_primary": [
+      "genital_naming",
+      "dirty_talk"
+    ],
+    "tests_secondary": [
+      "verbal_preference"
+    ]
   },
   "question": {
     "type": "multi_select",
@@ -39,14 +48,62 @@
       "en": "What words do you like to use?"
     },
     "options": [
-      { "id": "chlen", "label": { "ru": "Член", "en": "Cock" } },
-      { "id": "hui", "label": { "ru": "Хуй", "en": "Dick" } },
-      { "id": "bolt", "label": { "ru": "Болт", "en": "Rod" } },
-      { "id": "palka", "label": { "ru": "Палка", "en": "Stick" } },
-      { "id": "elda", "label": { "ru": "Елда", "en": "Shaft" } },
-      { "id": "tam", "label": { "ru": "Там", "en": "Down there" } },
-      { "id": "on", "label": { "ru": "Он", "en": "It" } },
-      { "id": "penis", "label": { "ru": "Пенис", "en": "Penis" } }
+      {
+        "id": "chlen",
+        "label": {
+          "ru": "Член",
+          "en": "Cock"
+        }
+      },
+      {
+        "id": "hui",
+        "label": {
+          "ru": "Хуй",
+          "en": "Dick"
+        }
+      },
+      {
+        "id": "bolt",
+        "label": {
+          "ru": "Болт",
+          "en": "Rod"
+        }
+      },
+      {
+        "id": "palka",
+        "label": {
+          "ru": "Палка",
+          "en": "Stick"
+        }
+      },
+      {
+        "id": "elda",
+        "label": {
+          "ru": "Елда",
+          "en": "Shaft"
+        }
+      },
+      {
+        "id": "tam",
+        "label": {
+          "ru": "Там",
+          "en": "Down there"
+        }
+      },
+      {
+        "id": "on",
+        "label": {
+          "ru": "Он",
+          "en": "It"
+        }
+      },
+      {
+        "id": "penis",
+        "label": {
+          "ru": "Пенис",
+          "en": "Penis"
+        }
+      }
     ],
     "allow_other": true,
     "other_placeholder": {

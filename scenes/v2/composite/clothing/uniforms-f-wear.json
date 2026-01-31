@@ -3,10 +3,6 @@
   "slug": "uniforms-f-wear",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "lingerie",
-    "roleplay"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -52,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в ношении костюма?",
-      "en": "What appeals about wearing a costume?"
+      "ru": "Что привлекает в ношении костюма",
+      "en": "What appeals about wearing a costume"
     }
-      }
+  }
 }

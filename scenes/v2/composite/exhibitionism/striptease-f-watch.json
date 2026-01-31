@@ -3,9 +3,6 @@
   "slug": "female-striptease-watch",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "exhibitionism"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -52,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает когда она раздевается для тебя?",
-      "en": "What appeals when she undresses for you?"
+      "ru": "Что привлекает когда она раздевается для тебя",
+      "en": "What appeals when she undresses for you"
     }
-      }
+  }
 }

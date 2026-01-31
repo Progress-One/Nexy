@@ -4,8 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "roleplay",
-    "power_dynamic"
+    "bondage-she-ties-him",
+    "praise-she-praises-him"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -53,8 +53,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Роль маленького мальчика?",
-      "en": "Being a little boy?"
+      "ru": "Роль маленького мальчика",
+      "en": "Being a little boy"
     }
   }
 }

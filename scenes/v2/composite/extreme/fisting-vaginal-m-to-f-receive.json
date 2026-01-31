@@ -4,7 +4,7 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "toys"
+    "vibrator-play"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -50,8 +50,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Вагинальный фистинг — его рука в тебе?",
-      "en": "Vaginal fisting — his hand inside you?"
+      "ru": "Вагинальный фистинг — его рука в тебе",
+      "en": "Vaginal fisting — his hand inside you"
     }
   }
 }

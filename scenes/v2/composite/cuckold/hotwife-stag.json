@@ -3,10 +3,6 @@
   "slug": "hotwife-stag",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "group",
-    "power_dynamic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -51,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает когда она hotwife?",
-      "en": "What appeals when she's your hotwife?"
+      "ru": "Что привлекает когда она hotwife",
+      "en": "What appeals when she's your hotwife"
     }
   }
 }

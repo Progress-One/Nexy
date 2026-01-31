@@ -3,10 +3,6 @@
   "slug": "pet-play-she-is-pet",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "roleplay",
-    "power_dynamic"
-  ],
   "is_active": false,
   "is_onboarding": false,
   "for_gender": null,
@@ -58,5 +54,5 @@
       "ru": "Что привлекает в pet play?",
       "en": "What appeals about pet play?"
     }
-      }
+  }
 }

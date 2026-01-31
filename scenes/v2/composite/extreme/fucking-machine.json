@@ -3,9 +3,6 @@
   "slug": "fucking-machine",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "toys"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -51,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в секс-машинах?",
-      "en": "What appeals about fucking machines?"
+      "ru": "Что привлекает в секс-машинах",
+      "en": "What appeals about fucking machines"
     }
-      }
+  }
 }

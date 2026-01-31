@@ -3,10 +3,6 @@
   "slug": "makeup-sex",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic",
-    "rough"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -51,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в сексе после ссоры?",
-      "en": "What appeals about makeup sex?"
+      "ru": "Что привлекает в сексе после ссоры",
+      "en": "What appeals about makeup sex"
     }
-      }
+  }
 }

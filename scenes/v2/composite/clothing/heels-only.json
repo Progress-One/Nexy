@@ -4,8 +4,7 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "lingerie",
-    "foot"
+    "lingerie-lace"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -52,8 +51,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в сексе в каблуках?",
-      "en": "What appeals about sex in heels?"
+      "ru": "Что привлекает в сексе в каблуках",
+      "en": "What appeals about sex in heels"
     }
-      }
+  }
 }

@@ -3,9 +3,6 @@
   "slug": "boss-f-subordinate-m",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "roleplay"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -49,8 +46,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Она — босс, он — подчинённый?",
-      "en": "She's boss, he's subordinate?"
+      "ru": "Она — босс, он — подчинённый",
+      "en": "She's boss, he's subordinate"
     }
   }
 }

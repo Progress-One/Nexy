@@ -2,7 +2,7 @@
   "id": "cunnilingus",
   "slug": "cunnilingus",
   "version": 2,
-  "scene_type": null,
+  "scene_type": "clarification",
   "sets_gate": "oral",
   "is_active": true,
   "is_onboarding": true,
@@ -59,8 +59,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Кунилингус — делать ей?",
-      "en": "Cunnilingus — giving to her?"
+      "ru": "Кунилингус — делать ей",
+      "en": "Cunnilingus — giving to her"
     }
   }
 }

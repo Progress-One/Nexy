@@ -2,11 +2,11 @@
   "id": "anal-play-on-him",
   "slug": "anal-play-on-him",
   "version": 2,
-  "scene_type": null,
+  "scene_type": "clarification",
   "sets_gate": "anal",
   "is_active": true,
   "is_onboarding": true,
-  "onboarding_order": 3,
+  "onboarding_order": 4,
   "for_gender": "female",
   "paired_scene": "anal-play-on-him-receive",
   "role_direction": "f_to_m",
@@ -50,8 +50,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Анальные игры с ним?",
-      "en": "Anal play on him?"
+      "ru": "Анальные игры с ним",
+      "en": "Anal play on him"
     }
   }
 }

@@ -3,9 +3,6 @@
   "slug": "body-worship-f-to-m-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -48,8 +45,11 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Она поклоняется твоему телу?",
-      "en": "She worships your body?"
+      "ru": "Она поклоняется твоему телу",
+      "en": "She worships your body"
     }
-  }
+  },
+  "clarification_for": [
+    "massage-f-to-m-receive"
+  ]
 }

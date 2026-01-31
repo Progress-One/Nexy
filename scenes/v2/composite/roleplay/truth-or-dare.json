@@ -4,7 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "roleplay"
+    "stranger-roleplay",
+    "dirty-talk"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -51,9 +52,9 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в игре Правда или Действие?",
-      "en": "What appeals about Truth or Dare?"
+      "ru": "Что привлекает в игре Правда или Действие",
+      "en": "What appeals about Truth or Dare"
     }
-      },
+  },
   "context": "discovery"
 }

@@ -4,7 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "power_dynamic"
+    "bondage-she-ties-him",
+    "free-use-m-available"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -49,8 +50,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Он как объект — мебель, игрушка?",
-      "en": "He as object — furniture, toy?"
+      "ru": "Он как объект — мебель, игрушка",
+      "en": "He as object — furniture, toy"
     }
   }
 }

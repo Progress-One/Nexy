@@ -3,9 +3,6 @@
   "slug": "swinging-partner-swap",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "group"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -51,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в свингинге?",
-      "en": "What appeals about swinging?"
+      "ru": "Что привлекает в свингинге",
+      "en": "What appeals about swinging"
     }
-      }
+  }
 }

@@ -2,11 +2,11 @@
   "id": "anal-play-on-him-receive",
   "slug": "anal-play-on-him-receive",
   "version": 2,
-  "scene_type": null,
+  "scene_type": "clarification",
   "sets_gate": "anal",
   "is_active": true,
   "is_onboarding": true,
-  "onboarding_order": 3,
+  "onboarding_order": 4,
   "for_gender": "male",
   "paired_scene": "anal-play-on-him",
   "role_direction": "f_to_m",
@@ -50,8 +50,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Анальные игры когда она тебе?",
-      "en": "Anal play when she does to you?"
+      "ru": "Анальные игры когда она тебе",
+      "en": "Anal play when she does to you"
     }
   }
 }

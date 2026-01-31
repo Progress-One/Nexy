@@ -3,9 +3,6 @@
   "slug": "chastity-he-locked-wear",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "power_dynamic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -51,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в ношении клетки?",
-      "en": "What appeals about wearing a cage?"
+      "ru": "Что привлекает в ношении клетки",
+      "en": "What appeals about wearing a cage"
     }
-      }
+  }
 }

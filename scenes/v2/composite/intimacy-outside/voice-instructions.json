@@ -4,8 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "dirty_talk",
-    "power_dynamic"
+    "filming",
+    "dirty-talk"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -52,9 +52,9 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в голосовых инструкциях?",
-      "en": "What appeals about voice instructions?"
+      "ru": "Что привлекает в голосовых инструкциях",
+      "en": "What appeals about voice instructions"
     }
-      },
+  },
   "context": "discovery"
 }

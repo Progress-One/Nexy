@@ -4,8 +4,7 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "recording",
-    "exhibitionism"
+    "filming"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -52,9 +51,9 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в виртуальном сексе?",
-      "en": "What appeals about video sex?"
+      "ru": "Что привлекает в виртуальном сексе",
+      "en": "What appeals about video sex"
     }
-      },
+  },
   "context": "discovery"
 }

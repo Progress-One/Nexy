@@ -3,9 +3,6 @@
   "slug": "stockings-garters",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "lingerie"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -51,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в чулках?",
-      "en": "What appeals about stockings?"
+      "ru": "Что привлекает в чулках",
+      "en": "What appeals about stockings"
     }
-      }
+  }
 }

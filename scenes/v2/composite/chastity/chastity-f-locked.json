@@ -3,9 +3,6 @@
   "slug": "chastity-she-locked",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "power_dynamic"
-  ],
   "is_active": false,
   "is_onboarding": false,
   "for_gender": null,
@@ -56,5 +53,5 @@
       "ru": "Что привлекает в женском chastity?",
       "en": "What appeals about female chastity?"
     }
-      }
+  }
 }

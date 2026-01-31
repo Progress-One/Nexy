@@ -3,12 +3,10 @@
   "slug": "praise-f-to-m-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "praise",
-    "dirty_talk"
-  ],
+  "sets_gate": "praise",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 17,
   "for_gender": "male",
   "paired_scene": "praise-she-praises-him",
   "role_direction": "f_to_m",
@@ -49,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Она хвалит тебя — «хороший мальчик»?",
-      "en": "She praises you — \"good boy\"?"
+      "ru": "Она хвалит тебя — «хороший мальчик»",
+      "en": "She praises you — \"good boy\""
     }
   }
 }

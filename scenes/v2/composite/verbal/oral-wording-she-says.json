@@ -3,7 +3,6 @@
   "slug": "oral-wording-she-says",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": ["oral", "dirty_talk"],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -27,10 +26,20 @@
   },
   "intensity": 2,
   "category": "verbal",
-  "tags": ["oral", "dirty_talk", "verbal", "wording"],
+  "tags": [
+    "oral",
+    "dirty_talk",
+    "verbal",
+    "wording"
+  ],
   "ai_context": {
-    "tests_primary": ["oral_wording", "dirty_talk"],
-    "tests_secondary": ["verbal_preference"]
+    "tests_primary": [
+      "oral_wording",
+      "dirty_talk"
+    ],
+    "tests_secondary": [
+      "verbal_preference"
+    ]
   },
   "question": {
     "type": "multi_select",
@@ -39,14 +48,62 @@
       "en": "What phrases do you like to use?"
     },
     "options": [
-      { "id": "lizhi", "label": { "ru": "Лижи меня", "en": "Lick me" } },
-      { "id": "kunni", "label": { "ru": "Сделай мне куни", "en": "Go down on me" } },
-      { "id": "yazikom", "label": { "ru": "Языком", "en": "With your tongue" } },
-      { "id": "tam", "label": { "ru": "Поцелуй меня там", "en": "Kiss me there" } },
-      { "id": "vkusnaya", "label": { "ru": "Я вкусная?", "en": "Am I tasty?" } },
-      { "id": "eshche", "label": { "ru": "Ещё", "en": "More" } },
-      { "id": "polaskap", "label": { "ru": "Поласкай меня", "en": "Pleasure me" } },
-      { "id": "hochu_yazik", "label": { "ru": "Хочу твой язык", "en": "I want your tongue" } }
+      {
+        "id": "lizhi",
+        "label": {
+          "ru": "Лижи меня",
+          "en": "Lick me"
+        }
+      },
+      {
+        "id": "kunni",
+        "label": {
+          "ru": "Сделай мне куни",
+          "en": "Go down on me"
+        }
+      },
+      {
+        "id": "yazikom",
+        "label": {
+          "ru": "Языком",
+          "en": "With your tongue"
+        }
+      },
+      {
+        "id": "tam",
+        "label": {
+          "ru": "Поцелуй меня там",
+          "en": "Kiss me there"
+        }
+      },
+      {
+        "id": "vkusnaya",
+        "label": {
+          "ru": "Я вкусная?",
+          "en": "Am I tasty?"
+        }
+      },
+      {
+        "id": "eshche",
+        "label": {
+          "ru": "Ещё",
+          "en": "More"
+        }
+      },
+      {
+        "id": "polaskap",
+        "label": {
+          "ru": "Поласкай меня",
+          "en": "Pleasure me"
+        }
+      },
+      {
+        "id": "hochu_yazik",
+        "label": {
+          "ru": "Хочу твой язык",
+          "en": "I want your tongue"
+        }
+      }
     ],
     "allow_other": true,
     "other_placeholder": {

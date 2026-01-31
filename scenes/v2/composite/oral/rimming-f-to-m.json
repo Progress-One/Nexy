@@ -3,10 +3,6 @@
   "slug": "rimming-she-to-him",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "oral",
-    "anal"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -65,8 +61,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в римминге (она ему)?",
-      "en": "What appeals about rimming (her to him)?"
+      "ru": "Что привлекает в римминге (она ему)",
+      "en": "What appeals about rimming (her to him)"
     }
-      }
+  }
 }

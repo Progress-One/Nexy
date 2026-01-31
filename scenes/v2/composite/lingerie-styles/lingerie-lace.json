@@ -3,11 +3,10 @@
   "slug": "lingerie-lace",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "lingerie"
-  ],
+  "sets_gate": "lingerie",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 20,
   "for_gender": null,
   "role_direction": "mutual",
   "title": {
@@ -41,7 +40,5 @@
     ],
     "tests_secondary": []
   },
-  "question": null,
-  "paired_with": null,
-  "priority": 50
+  "question": null
 }

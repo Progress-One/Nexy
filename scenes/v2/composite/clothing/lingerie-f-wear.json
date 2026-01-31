@@ -3,9 +3,6 @@
   "slug": "lingerie-f-wear",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "lingerie"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -52,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в ношении красивого белья?",
-      "en": "What appeals about wearing lingerie?"
+      "ru": "Что привлекает в ношении красивого белья",
+      "en": "What appeals about wearing lingerie"
     }
-      }
+  }
 }

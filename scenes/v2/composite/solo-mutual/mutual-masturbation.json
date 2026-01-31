@@ -3,9 +3,6 @@
   "slug": "mutual-masturbation",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "exhibitionism"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -62,8 +59,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что нравится во взаимной мастурбации?",
-      "en": "What do you like about mutual masturbation?"
+      "ru": "Что нравится во взаимной мастурбации",
+      "en": "What do you like about mutual masturbation"
     }
-      }
+  }
 }

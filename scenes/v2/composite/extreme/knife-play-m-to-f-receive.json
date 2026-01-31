@@ -3,10 +3,6 @@
   "slug": "knife-play-m-to-f-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "rough",
-    "power_dynamic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -51,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Он водит ножом по твоему телу?",
-      "en": "He traces knife on your body?"
+      "ru": "Он водит ножом по твоему телу",
+      "en": "He traces knife on your body"
     }
   }
 }

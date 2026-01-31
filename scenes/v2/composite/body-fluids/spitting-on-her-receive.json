@@ -3,10 +3,6 @@
   "slug": "spitting-m-to-f-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "dirty_talk",
-    "power_dynamic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -54,8 +50,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в плевках?",
-      "en": "What appeals about spitting?"
+      "ru": "Что привлекает в плевках",
+      "en": "What appeals about spitting"
     }
-      }
+  }
 }

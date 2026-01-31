@@ -3,10 +3,6 @@
   "slug": "uniforms-m-wear",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "lingerie",
-    "roleplay"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -53,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в ношении униформы?",
-      "en": "What appeals about wearing a uniform?"
+      "ru": "Что привлекает в ношении униформы",
+      "en": "What appeals about wearing a uniform"
     }
-      }
+  }
 }

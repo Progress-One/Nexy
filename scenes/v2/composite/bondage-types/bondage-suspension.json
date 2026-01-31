@@ -3,9 +3,6 @@
   "slug": "bondage-suspension",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "bondage"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,

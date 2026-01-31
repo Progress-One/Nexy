@@ -2,11 +2,11 @@
   "id": "blowjob",
   "slug": "blowjob",
   "version": 2,
-  "scene_type": null,
+  "scene_type": "clarification",
   "sets_gate": "oral",
   "is_active": true,
   "is_onboarding": true,
-  "onboarding_order": 2,
+  "onboarding_order": 1,
   "for_gender": "female",
   "paired_scene": "blowjob-receive",
   "role_direction": "f_to_m",
@@ -59,8 +59,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Минет — делать ему?",
-      "en": "Blowjob — giving to him?"
+      "ru": "Минет — делать ему",
+      "en": "Blowjob — giving to him"
     }
   }
 }

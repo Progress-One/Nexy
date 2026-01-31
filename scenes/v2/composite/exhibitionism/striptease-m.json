@@ -3,9 +3,6 @@
   "slug": "male-striptease",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "exhibitionism"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -52,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в мужском стриптизе?",
-      "en": "What appeals about male striptease?"
+      "ru": "Что привлекает в мужском стриптизе",
+      "en": "What appeals about male striptease"
     }
-      }
+  }
 }

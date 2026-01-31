@@ -3,7 +3,6 @@
   "slug": "anal-wording-he-says",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": ["anal", "dirty_talk"],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -27,10 +26,20 @@
   },
   "intensity": 3,
   "category": "verbal",
-  "tags": ["anal", "dirty_talk", "verbal", "wording"],
+  "tags": [
+    "anal",
+    "dirty_talk",
+    "verbal",
+    "wording"
+  ],
   "ai_context": {
-    "tests_primary": ["anal_wording", "dirty_talk"],
-    "tests_secondary": ["verbal_preference"]
+    "tests_primary": [
+      "anal_wording",
+      "dirty_talk"
+    ],
+    "tests_secondary": [
+      "verbal_preference"
+    ]
   },
   "question": {
     "type": "multi_select",
@@ -39,14 +48,62 @@
       "en": "What phrases do you like to use?"
     },
     "options": [
-      { "id": "v_popku", "label": { "ru": "Хочу в попку", "en": "I want your ass" } },
-      { "id": "v_zhopu", "label": { "ru": "В жопу", "en": "In the ass" } },
-      { "id": "szadi", "label": { "ru": "Возьму тебя сзади", "en": "Take you from behind" } },
-      { "id": "tesnaya", "label": { "ru": "Какая тесная", "en": "So tight" } },
-      { "id": "rasslabsya", "label": { "ru": "Расслабься", "en": "Relax" } },
-      { "id": "medlenno", "label": { "ru": "Медленно", "en": "Slowly" } },
-      { "id": "anal", "label": { "ru": "Анал", "en": "Anal" } },
-      { "id": "dyrochka", "label": { "ru": "Дырочка", "en": "Little hole" } }
+      {
+        "id": "v_popku",
+        "label": {
+          "ru": "Хочу в попку",
+          "en": "I want your ass"
+        }
+      },
+      {
+        "id": "v_zhopu",
+        "label": {
+          "ru": "В жопу",
+          "en": "In the ass"
+        }
+      },
+      {
+        "id": "szadi",
+        "label": {
+          "ru": "Возьму тебя сзади",
+          "en": "Take you from behind"
+        }
+      },
+      {
+        "id": "tesnaya",
+        "label": {
+          "ru": "Какая тесная",
+          "en": "So tight"
+        }
+      },
+      {
+        "id": "rasslabsya",
+        "label": {
+          "ru": "Расслабься",
+          "en": "Relax"
+        }
+      },
+      {
+        "id": "medlenno",
+        "label": {
+          "ru": "Медленно",
+          "en": "Slowly"
+        }
+      },
+      {
+        "id": "anal",
+        "label": {
+          "ru": "Анал",
+          "en": "Anal"
+        }
+      },
+      {
+        "id": "dyrochka",
+        "label": {
+          "ru": "Дырочка",
+          "en": "Little hole"
+        }
+      }
     ],
     "allow_other": true,
     "other_placeholder": {

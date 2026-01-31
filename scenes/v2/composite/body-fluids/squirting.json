@@ -3,9 +3,6 @@
   "slug": "squirting",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "body_fluids"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -65,8 +62,12 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что тебя интересует в сквирте?",
-      "en": "What interests you about squirting?"
+      "ru": "Что тебя интересует в сквирте",
+      "en": "What interests you about squirting"
     }
-      }
+  },
+  "clarification_for": [
+    "cunnilingus",
+    "vibrator-play"
+  ]
 }

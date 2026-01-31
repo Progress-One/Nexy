@@ -4,8 +4,9 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "toys",
-    "rough"
+    "nipple-play-he-on-her",
+    "nipple-play-she-on-him",
+    "spanking-he-spanks-her"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -51,8 +52,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Зажимы для сосков?",
-      "en": "Nipple clamps?"
+      "ru": "Зажимы для сосков",
+      "en": "Nipple clamps"
     }
   }
 }

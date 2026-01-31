@@ -3,9 +3,6 @@
   "slug": "cum-where-to-finish",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "body_fluids"
-  ],
   "is_active": false,
   "is_onboarding": false,
   "for_gender": null,
@@ -63,5 +60,5 @@
       "ru": "Какие варианты финиша тебе интересны?",
       "en": "What finish options interest you?"
     }
-      }
+  }
 }

@@ -3,11 +3,10 @@
   "slug": "vibrator-play",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "toys"
-  ],
+  "sets_gate": "toys",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 11,
   "for_gender": null,
   "role_direction": "mutual",
   "title": {
@@ -50,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Вибратор?",
-      "en": "Vibrator?"
+      "ru": "Вибратор",
+      "en": "Vibrator"
     }
   }
 }

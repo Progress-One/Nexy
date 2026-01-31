@@ -3,11 +3,10 @@
   "slug": "spanking-she-spanks-him",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "rough"
-  ],
+  "sets_gate": "rough",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 6,
   "for_gender": "female",
   "paired_scene": "spanking-f-to-m-receive",
   "role_direction": "f_to_m",
@@ -65,8 +64,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает когда она шлёпает?",
-      "en": "What appeals about her spanking?"
+      "ru": "Что привлекает когда она шлёпает",
+      "en": "What appeals about her spanking"
     }
-      }
+  }
 }

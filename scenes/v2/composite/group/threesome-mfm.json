@@ -3,11 +3,10 @@
   "slug": "threesome-mfm",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "group"
-  ],
+  "sets_gate": "group",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 14,
   "for_gender": null,
   "paired_scene": "threesome-fmf",
   "role_direction": "group",
@@ -53,8 +52,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в тройке MFM?",
-      "en": "What appeals about MFM threesome?"
+      "ru": "Что привлекает в тройке MFM",
+      "en": "What appeals about MFM threesome"
     }
-      }
+  }
 }

@@ -3,9 +3,6 @@
   "slug": "breeding-kink-f",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "body_fluids"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -50,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Бридинг — он кончает в тебя?",
-      "en": "Breeding — he cums inside you?"
+      "ru": "Бридинг — он кончает в тебя",
+      "en": "Breeding — he cums inside you"
     }
   }
 }

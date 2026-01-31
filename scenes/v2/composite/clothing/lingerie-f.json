@@ -3,9 +3,6 @@
   "slug": "female-lingerie",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "lingerie"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -52,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в красивом белье?",
-      "en": "What appeals about lingerie?"
+      "ru": "Что привлекает в красивом белье",
+      "en": "What appeals about lingerie"
     }
-      }
+  }
 }

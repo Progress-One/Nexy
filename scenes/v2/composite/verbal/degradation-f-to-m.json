@@ -3,10 +3,6 @@
   "slug": "degradation-she-degrades-him",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "dirty_talk",
-    "power_dynamic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -70,12 +66,48 @@
       "en": "What do you like about verbal degradation from her?"
     },
     "options": [
-      { "id": "vlast", "label": { "ru": "Её власть надо мной", "en": "Her power over me" } },
-      { "id": "styd", "label": { "ru": "Чувство стыда возбуждает", "en": "Shame turns me on" } },
-      { "id": "kontrast", "label": { "ru": "Контраст с обычной жизнью", "en": "Contrast with normal life" } },
-      { "id": "goloc", "label": { "ru": "Её голос и тон", "en": "Her voice and tone" } },
-      { "id": "sdacha", "label": { "ru": "Полная сдача контроля", "en": "Complete surrender" } },
-      { "id": "intensivnost", "label": { "ru": "Интенсивность ощущений", "en": "Intensity of feelings" } }
+      {
+        "id": "vlast",
+        "label": {
+          "ru": "Её власть надо мной",
+          "en": "Her power over me"
+        }
+      },
+      {
+        "id": "styd",
+        "label": {
+          "ru": "Чувство стыда возбуждает",
+          "en": "Shame turns me on"
+        }
+      },
+      {
+        "id": "kontrast",
+        "label": {
+          "ru": "Контраст с обычной жизнью",
+          "en": "Contrast with normal life"
+        }
+      },
+      {
+        "id": "goloc",
+        "label": {
+          "ru": "Её голос и тон",
+          "en": "Her voice and tone"
+        }
+      },
+      {
+        "id": "sdacha",
+        "label": {
+          "ru": "Полная сдача контроля",
+          "en": "Complete surrender"
+        }
+      },
+      {
+        "id": "intensivnost",
+        "label": {
+          "ru": "Интенсивность ощущений",
+          "en": "Intensity of feelings"
+        }
+      }
     ],
     "allow_other": true,
     "other_placeholder": {

@@ -1,17 +1,18 @@
 /**
- * Deactivate baseline scenes (redundant with onboarding)
+ * Deactivate all baseline scenes (abstract questions)
  *
- * Run with: npx tsx scripts/deactivate-baseline.ts
+ * Baseline is deprecated - we use CONCRETE scenes for onboarding instead.
+ * Example: "blowjob" instead of "oral-preference?"
  */
+import fs from 'fs';
+import path from 'path';
 
-import * as fs from 'fs';
-import * as path from 'path';
+const BASELINE_DIR = 'scenes/v2/composite/baseline';
 
-const BASELINE_DIR = path.join(__dirname, '../scenes/v2/composite/baseline');
+// Get all JSON files in baseline
+const files = fs.readdirSync(BASELINE_DIR).filter(f => f.endsWith('.json'));
 
 let deactivated = 0;
-
-const files = fs.readdirSync(BASELINE_DIR).filter(f => f.endsWith('.json'));
 
 for (const file of files) {
   const filePath = path.join(BASELINE_DIR, file);
@@ -21,15 +22,20 @@ for (const file of files) {
 
     if (scene.is_active !== false) {
       scene.is_active = false;
-      fs.writeFileSync(filePath, JSON.stringify(scene, null, 2) + '\n', 'utf-8');
+      // Add note about deprecation
+      scene._deprecated = 'Use concrete scenes with is_onboarding: true instead';
+
+      fs.writeFileSync(filePath, JSON.stringify(scene, null, 2) + '\n');
+      console.log('[DEACTIVATED]', scene.slug || file);
       deactivated++;
-      console.log(`✗ Deactivated: ${scene.slug}`);
+    } else {
+      console.log('[ALREADY INACTIVE]', scene.slug || file);
     }
   } catch (e) {
-    console.error(`Error processing ${file}:`, e);
+    console.error('Failed to process', file, e);
   }
 }
 
-console.log(`\n========================================`);
-console.log(`Deactivated: ${deactivated} baseline scenes`);
-console.log(`========================================`);
+console.log('\n=== SUMMARY ===');
+console.log('Deactivated:', deactivated);
+console.log('Total files:', files.length);

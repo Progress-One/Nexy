@@ -3,9 +3,6 @@
   "slug": "female-harness",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "lingerie"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -53,8 +50,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в портупеях и харнессах?",
-      "en": "What appeals about harnesses and body chains?"
+      "ru": "Что привлекает в портупеях и харнессах",
+      "en": "What appeals about harnesses and body chains"
     }
-      }
+  }
 }

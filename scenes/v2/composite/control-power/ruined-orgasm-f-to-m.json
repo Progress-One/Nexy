@@ -4,7 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "power_dynamic"
+    "edging-she-controls-him",
+    "bondage-she-ties-him"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -50,8 +51,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Она портит ему оргазм — убирает руку в момент кульминации?",
-      "en": "She ruins his orgasm — removes hand at climax?"
+      "ru": "Она портит ему оргазм — убирает руку в момент кульминации",
+      "en": "She ruins his orgasm — removes hand at climax"
     }
   }
 }

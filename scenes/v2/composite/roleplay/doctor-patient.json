@@ -3,9 +3,6 @@
   "slug": "doctor-patient",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "roleplay"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -51,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в медицинской ролевой игре?",
-      "en": "What appeals about medical roleplay?"
+      "ru": "Что привлекает в медицинской ролевой игре",
+      "en": "What appeals about medical roleplay"
     }
-      }
+  }
 }

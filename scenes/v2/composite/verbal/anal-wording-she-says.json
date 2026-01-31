@@ -3,7 +3,6 @@
   "slug": "anal-wording-she-says",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": ["anal", "dirty_talk"],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -27,10 +26,20 @@
   },
   "intensity": 3,
   "category": "verbal",
-  "tags": ["anal", "dirty_talk", "verbal", "wording"],
+  "tags": [
+    "anal",
+    "dirty_talk",
+    "verbal",
+    "wording"
+  ],
   "ai_context": {
-    "tests_primary": ["anal_wording", "dirty_talk"],
-    "tests_secondary": ["verbal_preference"]
+    "tests_primary": [
+      "anal_wording",
+      "dirty_talk"
+    ],
+    "tests_secondary": [
+      "verbal_preference"
+    ]
   },
   "question": {
     "type": "multi_select",
@@ -39,14 +48,62 @@
       "en": "What phrases do you like to use?"
     },
     "options": [
-      { "id": "v_popku", "label": { "ru": "Возьми меня в попку", "en": "Take me in the ass" } },
-      { "id": "szadi", "label": { "ru": "Хочу сзади", "en": "I want it from behind" } },
-      { "id": "medlenno", "label": { "ru": "Только медленно", "en": "Just slowly" } },
-      { "id": "hochu_tuda", "label": { "ru": "Хочу туда", "en": "I want it there" } },
-      { "id": "anal", "label": { "ru": "Давай в анал", "en": "Let's do anal" } },
-      { "id": "ostorozhno", "label": { "ru": "Осторожно", "en": "Careful" } },
-      { "id": "glubzhe", "label": { "ru": "Глубже", "en": "Deeper" } },
-      { "id": "vse_tvoyo", "label": { "ru": "Всё твоё", "en": "It's all yours" } }
+      {
+        "id": "v_popku",
+        "label": {
+          "ru": "Возьми меня в попку",
+          "en": "Take me in the ass"
+        }
+      },
+      {
+        "id": "szadi",
+        "label": {
+          "ru": "Хочу сзади",
+          "en": "I want it from behind"
+        }
+      },
+      {
+        "id": "medlenno",
+        "label": {
+          "ru": "Только медленно",
+          "en": "Just slowly"
+        }
+      },
+      {
+        "id": "hochu_tuda",
+        "label": {
+          "ru": "Хочу туда",
+          "en": "I want it there"
+        }
+      },
+      {
+        "id": "anal",
+        "label": {
+          "ru": "Давай в анал",
+          "en": "Let's do anal"
+        }
+      },
+      {
+        "id": "ostorozhno",
+        "label": {
+          "ru": "Осторожно",
+          "en": "Careful"
+        }
+      },
+      {
+        "id": "glubzhe",
+        "label": {
+          "ru": "Глубже",
+          "en": "Deeper"
+        }
+      },
+      {
+        "id": "vse_tvoyo",
+        "label": {
+          "ru": "Всё твоё",
+          "en": "It's all yours"
+        }
+      }
     ],
     "allow_other": true,
     "other_placeholder": {

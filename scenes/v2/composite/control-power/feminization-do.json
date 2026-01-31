@@ -4,7 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "power_dynamic"
+    "bondage-she-ties-him",
+    "lingerie-lace"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -49,8 +50,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в феминизации партнёра?",
-      "en": "What appeals about feminizing your partner?"
+      "ru": "Что привлекает в феминизации партнёра",
+      "en": "What appeals about feminizing your partner"
     }
-      }
+  }
 }

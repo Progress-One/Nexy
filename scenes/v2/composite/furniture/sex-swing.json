@@ -3,10 +3,6 @@
   "slug": "sex-swing",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "toys",
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,

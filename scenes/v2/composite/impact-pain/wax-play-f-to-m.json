@@ -3,10 +3,6 @@
   "slug": "wax-play-she-on-him",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "rough",
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -65,8 +61,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает когда она капает воск?",
-      "en": "What appeals about her dripping wax?"
+      "ru": "Что привлекает когда она капает воск",
+      "en": "What appeals about her dripping wax"
     }
-      }
+  }
 }

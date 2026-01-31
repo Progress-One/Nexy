@@ -3,7 +3,6 @@
   "slug": "anal-sex-give",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": ["anal"],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -48,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Анальный секс — полное проникновение?",
-      "en": "Anal sex — full penetration?"
+      "ru": "Анальный секс — полное проникновение",
+      "en": "Anal sex — full penetration"
     }
   }
 }

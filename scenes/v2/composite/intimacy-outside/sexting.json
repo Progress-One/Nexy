@@ -4,8 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "recording",
-    "exhibitionism"
+    "filming",
+    "dirty-talk"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -52,8 +52,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в секстинге?",
-      "en": "What appeals about sexting?"
+      "ru": "Что привлекает в секстинге",
+      "en": "What appeals about sexting"
     }
-      }
+  }
 }

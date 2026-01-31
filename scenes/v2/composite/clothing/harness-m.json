@@ -3,9 +3,6 @@
   "slug": "male-harness",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "lingerie"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -52,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в харнессе на мужчине?",
-      "en": "What appeals about harness on a man?"
+      "ru": "Что привлекает в харнессе на мужчине",
+      "en": "What appeals about harness on a man"
     }
-      }
+  }
 }

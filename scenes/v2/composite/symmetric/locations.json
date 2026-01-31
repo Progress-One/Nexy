@@ -3,10 +3,6 @@
   "slug": "sex-locations",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "public",
-    "quickie"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -61,8 +57,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Где тебе нравится заниматься сексом?",
-      "en": "Where do you like to have sex?"
+      "ru": "Где тебе нравится заниматься сексом",
+      "en": "Where do you like to have sex"
     }
-      }
+  }
 }

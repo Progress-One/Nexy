@@ -3,9 +3,6 @@
   "slug": "massage-f-to-m-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -50,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Массаж — она массирует тебя?",
-      "en": "Massage — she massages you?"
+      "ru": "Массаж — она массирует тебя",
+      "en": "Massage — she massages you"
     }
   }
 }

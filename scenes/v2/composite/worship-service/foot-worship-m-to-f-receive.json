@@ -3,10 +3,6 @@
   "slug": "foot-worship-m-to-f-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "foot",
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -49,8 +45,12 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Он поклоняется твоим ногам?",
-      "en": "He worships your feet?"
+      "ru": "Он поклоняется твоим ногам",
+      "en": "He worships your feet"
     }
-  }
+  },
+  "clarification_for": [
+    "lingerie-lace",
+    "heels-only"
+  ]
 }

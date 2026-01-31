@@ -3,10 +3,6 @@
   "slug": "joi",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "dirty_talk",
-    "power_dynamic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -64,8 +60,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что нравится в JOI?",
-      "en": "What do you like about JOI?"
+      "ru": "Что нравится в JOI",
+      "en": "What do you like about JOI"
     }
-      }
+  }
 }

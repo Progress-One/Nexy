@@ -3,7 +3,6 @@
   "slug": "praise-words-he-likes",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": ["praise"],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -27,10 +26,19 @@
   },
   "intensity": 1,
   "category": "verbal",
-  "tags": ["praise", "verbal", "affirmation", "words"],
+  "tags": [
+    "praise",
+    "verbal",
+    "affirmation",
+    "words"
+  ],
   "ai_context": {
-    "tests_primary": ["praise_words"],
-    "tests_secondary": ["verbal_preference"]
+    "tests_primary": [
+      "praise_words"
+    ],
+    "tests_secondary": [
+      "verbal_preference"
+    ]
   },
   "question": {
     "type": "multi_select",
@@ -39,16 +47,76 @@
       "en": "What words do you like to hear?"
     },
     "options": [
-      { "id": "good_boy", "label": { "ru": "Хороший мальчик", "en": "Good boy" } },
-      { "id": "molodec", "label": { "ru": "Молодец", "en": "Well done" } },
-      { "id": "silnyy", "label": { "ru": "Сильный", "en": "Strong" } },
-      { "id": "krasavchik", "label": { "ru": "Красавчик", "en": "Handsome" } },
-      { "id": "moy", "label": { "ru": "Мой", "en": "Mine" } },
-      { "id": "luchshiy", "label": { "ru": "Лучший", "en": "The best" } },
-      { "id": "umnyy", "label": { "ru": "Умный", "en": "Smart" } },
-      { "id": "lyubimyy", "label": { "ru": "Любимый", "en": "Darling" } },
-      { "id": "bolshoy", "label": { "ru": "Большой", "en": "Big" } },
-      { "id": "tak_horosho", "label": { "ru": "Так хорошо", "en": "So good" } }
+      {
+        "id": "good_boy",
+        "label": {
+          "ru": "Хороший мальчик",
+          "en": "Good boy"
+        }
+      },
+      {
+        "id": "molodec",
+        "label": {
+          "ru": "Молодец",
+          "en": "Well done"
+        }
+      },
+      {
+        "id": "silnyy",
+        "label": {
+          "ru": "Сильный",
+          "en": "Strong"
+        }
+      },
+      {
+        "id": "krasavchik",
+        "label": {
+          "ru": "Красавчик",
+          "en": "Handsome"
+        }
+      },
+      {
+        "id": "moy",
+        "label": {
+          "ru": "Мой",
+          "en": "Mine"
+        }
+      },
+      {
+        "id": "luchshiy",
+        "label": {
+          "ru": "Лучший",
+          "en": "The best"
+        }
+      },
+      {
+        "id": "umnyy",
+        "label": {
+          "ru": "Умный",
+          "en": "Smart"
+        }
+      },
+      {
+        "id": "lyubimyy",
+        "label": {
+          "ru": "Любимый",
+          "en": "Darling"
+        }
+      },
+      {
+        "id": "bolshoy",
+        "label": {
+          "ru": "Большой",
+          "en": "Big"
+        }
+      },
+      {
+        "id": "tak_horosho",
+        "label": {
+          "ru": "Так хорошо",
+          "en": "So good"
+        }
+      }
     ],
     "allow_other": true,
     "other_placeholder": {

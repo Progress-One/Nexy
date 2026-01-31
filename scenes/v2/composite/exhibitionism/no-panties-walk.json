@@ -4,8 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "exhibitionism",
-    "public"
+    "public-sex",
+    "lingerie-lace"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -53,8 +53,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в прогулке без белья?",
-      "en": "What appeals about going without underwear?"
+      "ru": "Что привлекает в прогулке без белья",
+      "en": "What appeals about going without underwear"
     }
-      }
+  }
 }

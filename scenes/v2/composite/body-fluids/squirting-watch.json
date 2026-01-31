@@ -3,9 +3,6 @@
   "slug": "squirting-watch",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "body_fluids"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -37,14 +34,19 @@
     "female_orgasm"
   ],
   "ai_context": {
-    "tests_primary": ["squirt_watching"],
-    "tests_secondary": ["voyeurism", "body_fluids"]
+    "tests_primary": [
+      "squirt_watching"
+    ],
+    "tests_secondary": [
+      "voyeurism",
+      "body_fluids"
+    ]
   },
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Смотреть как она сквиртует?",
-      "en": "Watch her squirt?"
+      "ru": "Смотреть как она сквиртует",
+      "en": "Watch her squirt"
     }
   }
 }

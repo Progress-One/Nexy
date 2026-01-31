@@ -3,12 +3,10 @@
   "slug": "bondage-he-ties-her-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "power_dynamic",
-    "bondage"
-  ],
+  "sets_gate": "bondage",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 7,
   "for_gender": "female",
   "paired_scene": "bondage-he-ties-her",
   "role_direction": "m_to_f",
@@ -54,8 +52,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает когда тебя связывают?",
-      "en": "What appeals about being tied?"
+      "ru": "Что привлекает когда тебя связывают",
+      "en": "What appeals about being tied"
     }
-      }
+  }
 }

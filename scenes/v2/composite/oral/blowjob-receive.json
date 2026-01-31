@@ -3,11 +3,10 @@
   "slug": "blowjob-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "oral"
-  ],
+  "sets_gate": "oral",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 1,
   "for_gender": "male",
   "paired_scene": "blowjob",
   "role_direction": "f_to_m",
@@ -50,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Минет — она сосёт тебя?",
-      "en": "Blowjob — she sucks you?"
+      "ru": "Минет — она сосёт тебя",
+      "en": "Blowjob — she sucks you"
     }
   }
 }

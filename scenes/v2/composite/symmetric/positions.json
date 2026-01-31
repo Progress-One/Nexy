@@ -3,9 +3,6 @@
   "slug": "sex-positions",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -59,8 +56,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Какие позы тебе нравятся?",
-      "en": "What positions do you like?"
+      "ru": "Какие позы тебе нравятся",
+      "en": "What positions do you like"
     }
-      }
+  }
 }

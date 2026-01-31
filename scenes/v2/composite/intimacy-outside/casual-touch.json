@@ -3,9 +3,6 @@
   "slug": "casual-intimate-touch",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -59,8 +56,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Какие случайные касания тебе нравятся?",
-      "en": "What casual touches do you like?"
+      "ru": "Какие случайные касания тебе нравятся",
+      "en": "What casual touches do you like"
     }
-      }
+  }
 }

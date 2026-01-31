@@ -4,7 +4,7 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "toys"
+    "vibrator-play"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -44,8 +44,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Клиторальная игрушка?",
-      "en": "Clitoral toy?"
+      "ru": "Клиторальная игрушка",
+      "en": "Clitoral toy"
     }
   },
   "paired_with": null,

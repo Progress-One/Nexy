@@ -3,9 +3,6 @@
   "slug": "squirt-receiving-body",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "body_fluids"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -37,14 +34,19 @@
     "body"
   ],
   "ai_context": {
-    "tests_primary": ["squirt_receiving"],
-    "tests_secondary": ["body_fluids", "wet_play"]
+    "tests_primary": [
+      "squirt_receiving"
+    ],
+    "tests_secondary": [
+      "body_fluids",
+      "wet_play"
+    ]
   },
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Принимать её сквирт на тело?",
-      "en": "Take her squirt on your body?"
+      "ru": "Принимать её сквирт на тело",
+      "en": "Take her squirt on your body"
     }
   }
 }

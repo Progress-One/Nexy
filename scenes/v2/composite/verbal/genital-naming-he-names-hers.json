@@ -3,7 +3,6 @@
   "slug": "genital-naming-he-names-hers",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": ["dirty_talk"],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -27,10 +26,20 @@
   },
   "intensity": 2,
   "category": "verbal",
-  "tags": ["dirty_talk", "verbal", "naming", "genitals"],
+  "tags": [
+    "dirty_talk",
+    "verbal",
+    "naming",
+    "genitals"
+  ],
   "ai_context": {
-    "tests_primary": ["genital_naming", "dirty_talk"],
-    "tests_secondary": ["verbal_preference"]
+    "tests_primary": [
+      "genital_naming",
+      "dirty_talk"
+    ],
+    "tests_secondary": [
+      "verbal_preference"
+    ]
   },
   "question": {
     "type": "multi_select",
@@ -39,14 +48,62 @@
       "en": "What words do you like to use?"
     },
     "options": [
-      { "id": "kiska", "label": { "ru": "Киска", "en": "Pussy" } },
-      { "id": "pizda", "label": { "ru": "Пизда", "en": "Cunt" } },
-      { "id": "schelka", "label": { "ru": "Щёлка", "en": "Slit" } },
-      { "id": "dyrka", "label": { "ru": "Дырка", "en": "Hole" } },
-      { "id": "manda", "label": { "ru": "Манда", "en": "Snatch" } },
-      { "id": "tam", "label": { "ru": "Там внизу", "en": "Down there" } },
-      { "id": "vlagalishe", "label": { "ru": "Влагалище", "en": "Vagina" } },
-      { "id": "prелесть", "label": { "ru": "Прелесть", "en": "Pretty thing" } }
+      {
+        "id": "kiska",
+        "label": {
+          "ru": "Киска",
+          "en": "Pussy"
+        }
+      },
+      {
+        "id": "pizda",
+        "label": {
+          "ru": "Пизда",
+          "en": "Cunt"
+        }
+      },
+      {
+        "id": "schelka",
+        "label": {
+          "ru": "Щёлка",
+          "en": "Slit"
+        }
+      },
+      {
+        "id": "dyrka",
+        "label": {
+          "ru": "Дырка",
+          "en": "Hole"
+        }
+      },
+      {
+        "id": "manda",
+        "label": {
+          "ru": "Манда",
+          "en": "Snatch"
+        }
+      },
+      {
+        "id": "tam",
+        "label": {
+          "ru": "Там внизу",
+          "en": "Down there"
+        }
+      },
+      {
+        "id": "vlagalishe",
+        "label": {
+          "ru": "Влагалище",
+          "en": "Vagina"
+        }
+      },
+      {
+        "id": "prелесть",
+        "label": {
+          "ru": "Прелесть",
+          "en": "Pretty thing"
+        }
+      }
     ],
     "allow_other": true,
     "other_placeholder": {

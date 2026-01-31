@@ -3,10 +3,6 @@
   "slug": "facesitting-she-on-him",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "oral",
-    "power_dynamic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -66,8 +62,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в фейсситтинге?",
-      "en": "What appeals about facesitting?"
+      "ru": "Что привлекает в фейсситтинге",
+      "en": "What appeals about facesitting"
     }
-      }
+  }
 }

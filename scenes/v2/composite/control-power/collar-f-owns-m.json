@@ -4,7 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "power_dynamic"
+    "bondage-she-ties-him",
+    "lingerie-lace"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -65,8 +66,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает когда она владеет?",
-      "en": "What appeals about her ownership?"
+      "ru": "Что привлекает когда она владеет",
+      "en": "What appeals about her ownership"
     }
-      }
+  }
 }

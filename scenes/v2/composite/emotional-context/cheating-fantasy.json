@@ -3,9 +3,6 @@
   "slug": "cheating-fantasy",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "roleplay"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -51,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Фантазия об измене возбуждает?",
-      "en": "Does cheating fantasy excite you?"
+      "ru": "Фантазия об измене возбуждает",
+      "en": "Does cheating fantasy excite you"
     }
   }
 }

@@ -3,10 +3,6 @@
   "slug": "cuckold-play",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "group",
-    "power_dynamic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -50,8 +46,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает когда он смотрит?",
-      "en": "What appeals when he watches?"
+      "ru": "Что привлекает когда он смотрит",
+      "en": "What appeals when he watches"
     }
-      }
+  }
 }

@@ -3,10 +3,6 @@
   "slug": "needle-play-f-to-m",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "rough",
-    "bondage"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -50,8 +46,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Игры с иглами — ты вводишь ему?",
-      "en": "Needle play — you insert into him?"
+      "ru": "Игры с иглами — ты вводишь ему",
+      "en": "Needle play — you insert into him"
     }
   }
 }

@@ -3,10 +3,6 @@
   "slug": "needle-play-f-to-m-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "rough",
-    "bondage"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -50,8 +46,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Игры с иглами — она вводит тебе?",
-      "en": "Needle play — she inserts into you?"
+      "ru": "Игры с иглами — она вводит тебе",
+      "en": "Needle play — she inserts into you"
     }
   }
 }

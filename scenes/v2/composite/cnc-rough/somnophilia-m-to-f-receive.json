@@ -4,7 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "power_dynamic"
+    "free-use-f-available-receive",
+    "bondage-he-ties-her-receive"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -50,8 +51,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Он трахает тебя пока ты спишь?",
-      "en": "He fucks you while you sleep?"
+      "ru": "Он трахает тебя пока ты спишь",
+      "en": "He fucks you while you sleep"
     }
   }
 }

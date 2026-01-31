@@ -3,10 +3,6 @@
   "slug": "aftercare",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic",
-    "rough"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -52,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что важно в aftercare?",
-      "en": "What matters in aftercare?"
+      "ru": "Что важно в aftercare",
+      "en": "What matters in aftercare"
     }
-      }
+  }
 }

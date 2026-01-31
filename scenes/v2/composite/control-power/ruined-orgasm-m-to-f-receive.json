@@ -4,7 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "power_dynamic"
+    "edging-he-controls-her-receive",
+    "bondage-he-ties-her-receive"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -49,8 +50,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Он портит тебе оргазм — останавливается в момент кульминации?",
-      "en": "He ruins your orgasm — stops at climax?"
+      "ru": "Он портит тебе оргазм — останавливается в момент кульминации",
+      "en": "He ruins your orgasm — stops at climax"
     }
   }
 }

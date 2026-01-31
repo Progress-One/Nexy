@@ -4,8 +4,9 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "toys",
-    "anal"
+    "anal-play-on-her",
+    "anal-play-on-him",
+    "vibrator-play"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -51,8 +52,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Анальная пробка?",
-      "en": "Butt plug?"
+      "ru": "Анальная пробка",
+      "en": "Butt plug"
     }
   }
 }

@@ -3,11 +3,10 @@
   "slug": "dirty-talk",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "dirty_talk"
-  ],
+  "sets_gate": "dirty_talk",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 15,
   "for_gender": null,
   "role_direction": "mutual",
   "title": {

@@ -3,7 +3,6 @@
   "slug": "sex-initiation-she-says-dirty",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": ["dirty_talk"],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -27,10 +26,19 @@
   },
   "intensity": 3,
   "category": "verbal",
-  "tags": ["dirty_talk", "verbal", "initiation"],
+  "tags": [
+    "dirty_talk",
+    "verbal",
+    "initiation"
+  ],
   "ai_context": {
-    "tests_primary": ["sex_initiation", "dirty_talk"],
-    "tests_secondary": ["verbal_preference"]
+    "tests_primary": [
+      "sex_initiation",
+      "dirty_talk"
+    ],
+    "tests_secondary": [
+      "verbal_preference"
+    ]
   },
   "question": {
     "type": "multi_select",
@@ -39,14 +47,62 @@
       "en": "What phrases do you like to say?"
     },
     "options": [
-      { "id": "trahni", "label": { "ru": "Трахни меня", "en": "Fuck me" } },
-      { "id": "vyebi", "label": { "ru": "Выеби меня", "en": "Fuck me hard" } },
-      { "id": "hochu_chlen", "label": { "ru": "Хочу твой член", "en": "I want your cock" } },
-      { "id": "vstavit", "label": { "ru": "Вставь мне", "en": "Put it in me" } },
-      { "id": "beri", "label": { "ru": "Бери меня", "en": "Take me" } },
-      { "id": "tvoya", "label": { "ru": "Я твоя, делай что хочешь", "en": "I'm yours, do what you want" } },
-      { "id": "glubzhe", "label": { "ru": "Глубже", "en": "Deeper" } },
-      { "id": "silnee", "label": { "ru": "Сильнее", "en": "Harder" } }
+      {
+        "id": "trahni",
+        "label": {
+          "ru": "Трахни меня",
+          "en": "Fuck me"
+        }
+      },
+      {
+        "id": "vyebi",
+        "label": {
+          "ru": "Выеби меня",
+          "en": "Fuck me hard"
+        }
+      },
+      {
+        "id": "hochu_chlen",
+        "label": {
+          "ru": "Хочу твой член",
+          "en": "I want your cock"
+        }
+      },
+      {
+        "id": "vstavit",
+        "label": {
+          "ru": "Вставь мне",
+          "en": "Put it in me"
+        }
+      },
+      {
+        "id": "beri",
+        "label": {
+          "ru": "Бери меня",
+          "en": "Take me"
+        }
+      },
+      {
+        "id": "tvoya",
+        "label": {
+          "ru": "Я твоя, делай что хочешь",
+          "en": "I'm yours, do what you want"
+        }
+      },
+      {
+        "id": "glubzhe",
+        "label": {
+          "ru": "Глубже",
+          "en": "Deeper"
+        }
+      },
+      {
+        "id": "silnee",
+        "label": {
+          "ru": "Сильнее",
+          "en": "Harder"
+        }
+      }
     ],
     "allow_other": true,
     "other_placeholder": {

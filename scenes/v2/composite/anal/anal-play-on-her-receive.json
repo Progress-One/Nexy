@@ -2,7 +2,7 @@
   "id": "anal-play-on-her-receive",
   "slug": "anal-play-on-her-receive",
   "version": 2,
-  "scene_type": null,
+  "scene_type": "clarification",
   "sets_gate": "anal",
   "is_active": true,
   "is_onboarding": true,
@@ -49,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Анальные игры когда он тебе?",
-      "en": "Anal play when he does to you?"
+      "ru": "Анальные игры когда он тебе",
+      "en": "Anal play when he does to you"
     }
   }
 }

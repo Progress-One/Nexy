@@ -3,9 +3,6 @@
   "slug": "female-striptease",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "exhibitionism"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -52,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в стриптизе?",
-      "en": "What appeals about striptease?"
+      "ru": "Что привлекает в стриптизе",
+      "en": "What appeals about striptease"
     }
-      }
+  }
 }

@@ -3,9 +3,6 @@
   "slug": "voyeurism",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "exhibitionism"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -50,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в вуайеризме?",
-      "en": "What appeals about voyeurism?"
+      "ru": "Что привлекает в вуайеризме",
+      "en": "What appeals about voyeurism"
     }
-      }
+  }
 }

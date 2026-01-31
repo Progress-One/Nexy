@@ -3,10 +3,6 @@
   "slug": "remote-control-toy",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "toys",
-    "public"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -52,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Вибратор с пультом в публичном месте?",
-      "en": "Remote vibrator in public?"
+      "ru": "Вибратор с пультом в публичном месте",
+      "en": "Remote vibrator in public"
     }
   }
 }

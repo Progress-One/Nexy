@@ -4,8 +4,8 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "exhibitionism",
-    "lingerie"
+    "public-sex",
+    "lingerie-lace"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -52,9 +52,9 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в том, что партнёр выбирает одежду?",
-      "en": "What appeals about partner choosing your outfit?"
+      "ru": "Что привлекает в том, что партнёр выбирает одежду",
+      "en": "What appeals about partner choosing your outfit"
     }
-      },
+  },
   "context": "discovery"
 }

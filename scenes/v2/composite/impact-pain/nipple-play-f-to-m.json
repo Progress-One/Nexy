@@ -3,9 +3,6 @@
   "slug": "nipple-play-she-on-him",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "rough"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -64,8 +61,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что нравится когда она играет с его сосками?",
-      "en": "What do you like when she plays with his nipples?"
+      "ru": "Что нравится когда она играет с его сосками",
+      "en": "What do you like when she plays with his nipples"
     }
-      }
+  }
 }

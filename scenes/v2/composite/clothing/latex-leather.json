@@ -4,7 +4,7 @@
   "version": 2,
   "scene_type": "clarification",
   "clarification_for": [
-    "lingerie"
+    "lingerie-lace"
   ],
   "is_active": true,
   "is_onboarding": false,
@@ -52,8 +52,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в латексе и коже?",
-      "en": "What appeals about latex and leather?"
+      "ru": "Что привлекает в латексе и коже",
+      "en": "What appeals about latex and leather"
     }
-      }
+  }
 }

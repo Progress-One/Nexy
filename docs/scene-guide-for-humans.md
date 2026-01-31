@@ -197,25 +197,78 @@ user_gates.gates = { "anal": true, "oral": true, ... }
 
 ### clarification_for — уточняющие сцены
 
-**Clarification** — сцена, которая уточняет/детализирует конкретную другую сцену.
+**Clarification** — сцена, которая **по контексту продолжает** конкретную другую сцену.
 
 `clarification_for` содержит **slug-и сцен** (не gate names!), после которых показать уточнение.
+
+#### ⚠️ ВАЖНО: clarification — это НЕ категория!
+
+**Неправильно:** "все сцены из папки `toys/` уточняют какую-то одну сцену"
+
+**Правильно:** clarification определяется по **смысловой связи**:
+
+```
+vibrator-play: "Вибратор на ней"
+    ↓ clarification (по контексту)
+remote-control: "Вибратор с пультом"  — логичное продолжение
+
+anal-play-on-her: "Ласкать её анус"
+    ↓ clarification (по контексту)
+butt-plug: "Анальная пробка"  — логичное продолжение
+anal-hook: "Анальный крюк"    — логичное продолжение
+```
+
+**Одна сцена может уточнять несколько РАЗНЫХ родительских сцен!**
+
+#### Пример: butt-plug
 
 ```json
 {
   "slug": "butt-plug",
-  "clarification_for": ["toys-interest", "anal-play-on-her"]
-  // Показать после YES на "toys-interest" ИЛИ "anal-play-on-her"
+  "clarification_for": ["vibrator-play", "anal-play-on-her"]
+  // Показать после YES на vibrator-play ИЛИ anal-play-on-her
+}
+```
+
+#### Пример: deepthroat
+
+```json
+{
+  "slug": "deepthroat",
+  "clarification_for": ["blowjob"]
+  // После YES на blowjob — логично спросить про deepthroat
 }
 ```
 
 **Логика:**
-1. Юзер отвечает YES на сцену со slug `toys-interest`
+1. Юзер отвечает YES на сцену `blowjob`
 2. Ответ сохраняется в `scene_responses`
-3. Система ищет сцены где `clarification_for.includes("toys-interest")`
-4. `butt-plug` выпадает как уточнение к `toys-interest`
+3. Система ищет сцены где `clarification_for.includes("blowjob")`
+4. `deepthroat`, `facefuck` и т.п. выпадают как уточнения
 
 **Важно:** Одна сцена может быть clarification для нескольких сцен. Покажется после первой, на которую юзер ответил YES.
+
+#### Как определить правильный clarification_for
+
+Задай вопрос: **"После какой КОНКРЕТНОЙ сцены логично показать эту?"**
+
+| Сцена | После чего показать? | clarification_for |
+|-------|---------------------|-------------------|
+| `deepthroat` | После минета | `["blowjob"]` |
+| `butt-plug` | После анальных ласк или вибратора | `["anal-play-on-her", "vibrator-play"]` |
+| `collar-he-owns-her` | После бондажа | `["bondage-he-ties-her"]` |
+| `cnc-m-takes-f` | После шлепков или бондажа | `["spanking-he-spanks-her", "bondage-he-ties-her"]` |
+| `pegging` | После анала на нём или бондажа | `["anal-play-on-him", "bondage-she-ties-him"]` |
+
+**НЕ правильно:**
+- ❌ `clarification_for: ["anal"]` — это gate name, не slug сцены!
+- ❌ `clarification_for: ["power-dynamic"]` — deprecated baseline slug!
+- ❌ Ставить абстрактные понятия вместо конкретных сцен
+
+**Правильно:**
+- ✅ `clarification_for: ["blowjob"]` — slug конкретной существующей сцены
+- ✅ `clarification_for: ["bondage-he-ties-her", "spanking-he-spanks-her"]` — несколько сцен
+- ✅ Смотреть на контекст — после какой сцены это имеет смысл
 
 ---
 
@@ -287,11 +340,11 @@ user_gates.gates = { "anal": true, "oral": true, ... }
 
 ```json
 {
-  "slug": "onboarding-rough-give-m",
+  "slug": "spanking-he-spanks-her",
   "is_onboarding": true,
-  "onboarding_order": 9,
+  "onboarding_order": 5,
   "for_gender": "male",
-  "paired_scene": "onboarding-rough-receive-f",
+  "paired_scene": "spanking-m-to-f-receive",
   "sets_gate": "rough"
 }
 ```
@@ -421,8 +474,6 @@ user_gates.gates = { "anal": true, "oral": true, ... }
 
 ```
 scenes/v2/composite/
-├── baseline/          # Базовые вопросы (власть, боль, одежда)
-├── onboarding/        # Онбординг сцены
 ├── anal/              # Анальные практики
 ├── oral/              # Оральные практики
 ├── bondage-types/     # Виды бондажа
@@ -444,6 +495,73 @@ scenes/v2/composite/
 ├── sensory/           # Сенсорные практики
 └── extreme/           # Экстремальные практики
 ```
+
+---
+
+---
+
+## Онбординг
+
+### Принцип: Конкретные сцены, НЕ абстрактные вопросы
+
+**НЕПРАВИЛЬНО:**
+```
+"Анал интересно?" → абстрактный вопрос
+"Оральный секс?" → абстрактный вопрос
+```
+
+**ПРАВИЛЬНО:**
+```
+"Ласкать её анус пальцем или игрушкой" → конкретная сцена
+"Она берёт у тебя в рот" → конкретная сцена
+```
+
+### Как выбрать сцены для онбординга
+
+Берём **типичные/стандартные сцены** из каждой категории:
+
+| Gate | Сцены (M видит / F видит) | sets_gate | order |
+|------|---------------------------|-----------|-------|
+| oral | blowjob-receive / blowjob | oral | 1 |
+| oral | cunnilingus / cunnilingus-receive | oral | 2 |
+| anal | anal-play-on-her / anal-play-on-her-receive | anal | 3 |
+| anal | anal-play-on-him-receive / anal-play-on-him | anal | 4 |
+| rough | spanking-he-spanks-her / spanking-m-to-f-receive | rough | 5 |
+| rough | spanking-f-to-m-receive / spanking-she-spanks-him | rough | 6 |
+| bondage | bondage-he-ties-her / bondage-he-ties-her-receive | bondage | 7 |
+| bondage | bondage-she-ties-him-receive / bondage-she-ties-him | bondage | 8 |
+| roleplay | stranger-roleplay | roleplay | 9 |
+| roleplay | boss-m-secretary-f / boss-m-secretary-f-receive | roleplay | 10 |
+| toys | vibrator-play | toys | 11 |
+| toys | cock-ring | toys | 12 |
+| group | threesome-fmf / threesome-mfm | group | 13-14 |
+| dirty_talk | dirty-talk | dirty_talk | 15 |
+| praise | praise-he-praises-her / praise-m-to-f-receive | praise | 16 |
+| praise | praise-f-to-m-receive / praise-she-praises-him | praise | 17 |
+| exhibitionism | public-sex | exhibitionism | 18 |
+| recording | filming | recording | 19 |
+| lingerie | lingerie-lace | lingerie | 20 |
+
+### Поле is_onboarding
+
+```json
+{
+  "slug": "blowjob",
+  "is_onboarding": true,   // ← показывать в онбординге
+  "onboarding_order": 1,   // ← порядок показа
+  "sets_gate": "oral",     // ← открывает gate при YES/VERY
+  "for_gender": "female",  // ← кто видит
+  "paired_scene": "blowjob-receive"  // ← парная сцена
+}
+```
+
+Онбординг — это обычные сцены с флагом `is_onboarding: true` и `sets_gate` для открытия гейтов.
+
+### ❌ НЕ используем абстрактные вопросы
+
+Папка `baseline/` с вопросами типа "anal-interest", "oral-preference" — **DEPRECATED**.
+
+Вместо "Интересно ли тебе X?" спрашиваем про конкретную ситуацию X.
 
 ---
 

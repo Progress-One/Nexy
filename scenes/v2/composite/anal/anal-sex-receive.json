@@ -3,7 +3,6 @@
   "slug": "anal-sex-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": ["anal"],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "female",
@@ -50,8 +49,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Анальный секс — полное проникновение?",
-      "en": "Anal sex — full penetration?"
+      "ru": "Анальный секс — полное проникновение",
+      "en": "Anal sex — full penetration"
     }
   }
 }

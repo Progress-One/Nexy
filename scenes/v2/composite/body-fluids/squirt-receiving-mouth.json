@@ -3,9 +3,6 @@
   "slug": "squirt-receiving-mouth",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "body_fluids"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -37,14 +34,19 @@
     "oral"
   ],
   "ai_context": {
-    "tests_primary": ["squirt_drinking"],
-    "tests_secondary": ["body_fluids", "oral"]
+    "tests_primary": [
+      "squirt_drinking"
+    ],
+    "tests_secondary": [
+      "body_fluids",
+      "oral"
+    ]
   },
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Принимать её сквирт в рот?",
-      "en": "Take her squirt in your mouth?"
+      "ru": "Принимать её сквирт в рот",
+      "en": "Take her squirt in your mouth"
     }
   }
 }

@@ -3,10 +3,6 @@
   "slug": "foot-worship-f-to-m-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "foot",
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -49,8 +45,11 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Она поклоняется твоим ногам?",
-      "en": "She worships your feet?"
+      "ru": "Она поклоняется твоим ногам",
+      "en": "She worships your feet"
     }
-  }
+  },
+  "clarification_for": [
+    "bondage-she-ties-him-receive"
+  ]
 }

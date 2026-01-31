@@ -3,10 +3,6 @@
   "slug": "wax-play",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "rough",
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -52,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в воске?",
-      "en": "What appeals about wax play?"
+      "ru": "Что привлекает в воске",
+      "en": "What appeals about wax play"
     }
-      }
+  }
 }

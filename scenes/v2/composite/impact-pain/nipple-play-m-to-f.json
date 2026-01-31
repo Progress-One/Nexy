@@ -3,9 +3,6 @@
   "slug": "nipple-play-he-on-her",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "rough"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -65,8 +62,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что нравится в играх с сосками?",
-      "en": "What do you like about nipple play?"
+      "ru": "Что нравится в играх с сосками",
+      "en": "What do you like about nipple play"
     }
-      }
+  }
 }

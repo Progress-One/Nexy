@@ -3,10 +3,6 @@
   "slug": "female-uniforms",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "lingerie",
-    "roleplay"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": "male",
@@ -52,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Какие костюмы тебя возбуждают?",
-      "en": "Which costumes excite you?"
+      "ru": "Какие костюмы тебя возбуждают",
+      "en": "Which costumes excite you"
     }
-      }
+  }
 }

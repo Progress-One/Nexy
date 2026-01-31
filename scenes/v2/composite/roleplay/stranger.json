@@ -3,11 +3,10 @@
   "slug": "stranger-roleplay",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "roleplay"
-  ],
+  "sets_gate": "roleplay",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 9,
   "for_gender": null,
   "role_direction": "mutual",
   "title": {
@@ -51,8 +50,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в игре 'незнакомцы'?",
-      "en": "What appeals about strangers roleplay?"
+      "ru": "Что привлекает в игре 'незнакомцы'",
+      "en": "What appeals about strangers roleplay"
     }
-      }
+  }
 }

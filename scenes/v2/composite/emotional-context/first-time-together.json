@@ -3,9 +3,6 @@
   "slug": "first-time-together",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -50,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в первом разе с новым партнёром?",
-      "en": "What appeals about first time with new partner?"
+      "ru": "Что привлекает в первом разе с новым партнёром",
+      "en": "What appeals about first time with new partner"
     }
-      }
+  }
 }

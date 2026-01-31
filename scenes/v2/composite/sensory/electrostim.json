@@ -3,10 +3,6 @@
   "slug": "electrostim",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "romantic",
-    "toys"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -52,8 +48,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Что привлекает в электростимуляции?",
-      "en": "What appeals about electrostimulation?"
+      "ru": "Что привлекает в электростимуляции",
+      "en": "What appeals about electrostimulation"
     }
-      }
+  }
 }

@@ -3,9 +3,6 @@
   "slug": "dildo-play",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "toys"
-  ],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
@@ -50,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Фаллоимитатор?",
-      "en": "Dildo?"
+      "ru": "Фаллоимитатор",
+      "en": "Dildo"
     }
   }
 }

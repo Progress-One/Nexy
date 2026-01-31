@@ -3,12 +3,10 @@
   "slug": "praise-m-to-f-receive",
   "version": 2,
   "scene_type": "clarification",
-  "clarification_for": [
-    "praise",
-    "dirty_talk"
-  ],
+  "sets_gate": "praise",
   "is_active": true,
-  "is_onboarding": false,
+  "is_onboarding": true,
+  "onboarding_order": 16,
   "for_gender": "female",
   "paired_scene": "praise-he-praises-her",
   "role_direction": "m_to_f",
@@ -49,8 +47,8 @@
   "question": {
     "type": "swipe",
     "text": {
-      "ru": "Он хвалит тебя — «хорошая девочка»?",
-      "en": "He praises you — \"good girl\"?"
+      "ru": "Он хвалит тебя — «хорошая девочка»",
+      "en": "He praises you — \"good girl\""
     }
   }
 }
