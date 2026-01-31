@@ -289,14 +289,14 @@
 
 ### positions (8 сцен)
 
-⚥ position-69
-⚥ position-cowgirl
-⚥ position-doggy
-⚥ position-missionary
-⚥ position-reverse-cowgirl
-⚥ position-sitting
-⚥ position-spooning
-⚥ position-standing
+⚥ position-69 🔒[oral] ← [blowjob, cunnilingus]
+⚥ position-cowgirl ← [fingering, handjob]
+⚥ position-doggy ← [fingering, handjob]
+⚥ position-missionary ← [fingering, handjob]
+⚥ position-reverse-cowgirl ← [position-cowgirl, fingering]
+⚥ position-sitting ← [fingering, handjob]
+⚥ position-spooning ← [fingering, handjob]
+⚥ position-standing ← [fingering, handjob]
 
 ### bondage-types (7 сцен)
 
@@ -597,6 +597,15 @@
   - gangbang
   - orgy
 
+### fingering (7 clarifications)
+  - position-cowgirl
+  - position-doggy
+  - position-missionary
+  - position-reverse-cowgirl
+  - position-sitting
+  - position-spooning
+  - position-standing
+
 ### spanking-f-to-m-receive (6 clarifications)
   - cnc-she-takes-him-receive
   - figging-f-to-m-receive
@@ -613,6 +622,21 @@
   - whipping-m-to-f-receive
   - degradation-m-to-f-receive
 
+### handjob (6 clarifications)
+  - position-cowgirl
+  - position-doggy
+  - position-missionary
+  - position-sitting
+  - position-spooning
+  - position-standing
+
+### cunnilingus (5 clarifications)
+  - squirting-watch
+  - squirting
+  - finger-sucking
+  - position-69
+  - pussy-worship
+
 ### anal-play-on-her-receive (4 clarifications)
   - anal-sex-receive
   - figging-m-to-f-receive
@@ -625,32 +649,17 @@
   - fisting-anal-f-to-m-receive
   - rimming-f-to-m-receive
 
-### cunnilingus (4 clarifications)
-  - squirting-watch
-  - squirting
-  - finger-sucking
-  - pussy-worship
-
 ### lingerie-lace (4 clarifications)
   - heels-only
   - latex-leather
   - dress-code
   - no-panties-walk
 
-### filming (3 clarifications)
-  - sexting
-  - video-sex
-  - voice-instructions
-
-### blowjob (3 clarifications)
+### blowjob (4 clarifications)
   - deepthroat
   - finger-sucking
+  - position-69
   - cock-worship
-
-### stranger-roleplay (3 clarifications)
-  - service-roleplay
-  - taboo-roleplay
-  - truth-or-dare
 
 ## СЦЕНЫ БЕЗ CLARIFICATION_FOR (потенциальные main questions)
 
@@ -770,14 +779,6 @@
 - oral/facesitting-he-on-her: "Facesitting"
 - oral/rimming-she-to-him: "Римминг"
 - oral/rimming-he-to-her: "Римминг"
-- positions/position-69: "69"
-- positions/position-cowgirl: "Наездница"
-- positions/position-doggy: "Догги-стайл"
-- positions/position-missionary: "Миссионерская"
-- positions/position-reverse-cowgirl: "Обратная наездница"
-- positions/position-sitting: "Сидя"
-- positions/position-spooning: "Ложки"
-- positions/position-standing: "Стоя"
 - roleplay/boss-f-subordinate-m-receive: "Босс и подчинённый"
 - roleplay/boss-f-subordinate-m: "Босс и подчинённый"
 - roleplay/boss-m-secretary-f-receive: "Босс и секретарша"
@@ -883,7 +884,7 @@
   - service-roleplay
   ... и ещё 7
 
-### oral (16 сцен)
+### oral (17 сцен)
   - glory-hole-f-gives-receive
   - glory-hole-f-gives
   - glory-hole-m-gives-receive
@@ -894,7 +895,7 @@
   - cunnilingus
   - deepthroat-receive
   - deepthroat
-  ... и ещё 6
+  ... и ещё 7
 
 ### toys (13 сцен)
   - fucking-machine
@@ -960,7 +961,7 @@
 
 ## СЦЕНЫ БЕЗ ГЕЙТОВ (показываются всем)
 
-Всего: 140
+Всего: 139
 
 - body-fluids/finish-preference-f
 - body-fluids/finish-preference-m
@@ -992,7 +993,7 @@
 - clothing/male-lingerie
 - clothing/stockings-garters
 - clothing/uniforms-f-wear
-... и ещё 110
+... и ещё 109
 
 ## ВСЕ SLUG-и (для поиска)
 

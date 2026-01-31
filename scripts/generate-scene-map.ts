@@ -25,6 +25,7 @@ const SCENE_GATES: Record<string, GateRequirement> = {
   'rimming-f-to-m': { gates: ['oral', 'anal'], operator: 'AND' },
   'cock-worship': { gates: ['oral'], operator: 'AND' },
   'pussy-worship': { gates: ['oral'], operator: 'AND' },
+  'position-69': { gates: ['oral'], operator: 'AND' },  // combines blowjob + cunnilingus
 
   // ANAL
   'anal-play-on-her': { gates: ['anal'], operator: 'AND' },

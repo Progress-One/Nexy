@@ -3,6 +3,7 @@
   "slug": "position-sitting",
   "version": 2,
   "scene_type": "clarification",
+  "clarification_for": ["fingering", "handjob"],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,

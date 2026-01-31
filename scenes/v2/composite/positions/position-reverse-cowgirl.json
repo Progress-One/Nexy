@@ -3,6 +3,7 @@
   "slug": "position-reverse-cowgirl",
   "version": 2,
   "scene_type": "clarification",
+  "clarification_for": ["position-cowgirl", "fingering"],
   "is_active": true,
   "is_onboarding": false,
   "for_gender": null,
