@@ -50,5 +50,8 @@
       "ru": "Что привлекает когда она питомец",
       "en": "What appeals when she's your pet"
     }
-  }
+  },
+  "clarification_for": [
+    "collar-he-owns-her-receive"
+  ]
 }

@@ -52,5 +52,8 @@
       "ru": "Он контролирует твоё дыхание?",
       "en": "He controls your breathing?"
     }
-  }
+  },
+  "clarification_for": [
+    "face-slapping-m-to-f-receive"
+  ]
 }

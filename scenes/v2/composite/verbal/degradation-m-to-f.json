@@ -115,5 +115,8 @@
       "en": "Other..."
     },
     "min_selections": 0
-  }
+  },
+  "clarification_for": [
+    "dirty-talk"
+  ]
 }

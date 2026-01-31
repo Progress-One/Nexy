@@ -52,5 +52,8 @@
       "ru": "Что нравится когда он поклоняется",
       "en": "What do you like when he worships"
     }
-  }
+  },
+  "clarification_for": [
+    "massage-he-massages-her"
+  ]
 }

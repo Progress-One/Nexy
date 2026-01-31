@@ -50,5 +50,8 @@
       "ru": "Он водит ножом по твоему телу",
       "en": "He traces knife on your body"
     }
-  }
+  },
+  "clarification_for": [
+    "whipping-m-to-f-receive"
+  ]
 }

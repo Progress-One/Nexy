@@ -29,25 +29,22 @@ const SCENE_GATES: Record<string, GateRequirement> = {
   // ANAL
   'anal-play-on-her': { gates: ['anal'], operator: 'AND' },
   'anal-play-on-him': { gates: ['anal'], operator: 'AND' },
-  pegging: { gates: ['anal', 'bondage'], operator: 'AND' },
+  pegging: { gates: ['anal'], operator: 'AND' },  // removed bondage - pegging is about anal, not bondage
   'butt-plug': { gates: ['anal', 'toys'], operator: 'OR' },
   'anal-hook': { gates: ['anal', 'bondage'], operator: 'AND' },
   figging: { gates: ['anal', 'rough'], operator: 'AND' },
+  'anal-sex-give': { gates: ['anal'], operator: 'AND' },  // NEW: anal penetration
+  'anal-sex-receive': { gates: ['anal'], operator: 'AND' },  // NEW: anal penetration
 
-  // BODY FLUIDS
-  squirting: { gates: ['body_fluids'], operator: 'AND' },
-  'squirt-receiving': { gates: ['body_fluids', 'oral'], operator: 'AND' },
-  'golden-shower-m-to-f': { gates: ['body_fluids'], operator: 'AND' },
-  'golden-shower-f-to-m': { gates: ['body_fluids'], operator: 'AND' },
-  'spitting-m-to-f': { gates: ['body_fluids', 'rough'], operator: 'AND' },
-  'spitting-f-to-m': { gates: ['body_fluids', 'rough'], operator: 'AND' },
-  // breeding-kink - independent fetish, no gate required
+  // BODY FLUIDS - REMOVED: squirting, golden-shower, spitting are independent fetishes
+  // They don't need gates, should use clarification_for instead
+  // - squirting: shows as clarification to cunnilingus/vibrator-play
+  // - golden-shower, spitting: independent fetishes, show to everyone
+  // - breeding-kink: independent fetish
 
-  // WORSHIP
-  'body-worship-m-to-f': { gates: ['romantic'], operator: 'AND' },
-  'body-worship-f-to-m': { gates: ['romantic'], operator: 'AND' },
-  'foot-worship-m-to-f': { gates: ['foot'], operator: 'AND' },
-  'foot-worship-f-to-m': { gates: ['foot'], operator: 'AND' },
+  // WORSHIP - REMOVED: these are basic/independent scenes
+  // - body-worship: shows as clarification to massage
+  // - foot-worship: independent fetish, show to everyone
 
   // IMPACT/PAIN
   'spanking-he-spanks-her': { gates: ['rough'], operator: 'AND' },
@@ -80,6 +77,8 @@ const SCENE_GATES: Record<string, GateRequirement> = {
   'bondage-restraint': { gates: ['bondage'], operator: 'AND' },
   'bondage-spreader-bar': { gates: ['bondage'], operator: 'AND' },
   'bondage-chains': { gates: ['bondage'], operator: 'AND' },
+  'bondage-st-andrews-cross': { gates: ['bondage'], operator: 'AND' },  // NEW
+  'bondage-suspension': { gates: ['bondage'], operator: 'AND', level: 'very' },  // NEW - extreme
   blindfold: { gates: ['bondage'], operator: 'AND' },
   'collar-he-owns-her': { gates: ['bondage'], operator: 'AND' },
   'collar-she-owns-him': { gates: ['bondage'], operator: 'AND' },
@@ -118,10 +117,10 @@ const SCENE_GATES: Record<string, GateRequirement> = {
   'feminization-wear': { gates: ['bondage'], operator: 'AND' },
   'fisting-anal-m-to-f': { gates: ['anal'], operator: 'AND', level: 'very' },
   'fisting-anal-f-to-m': { gates: ['anal'], operator: 'AND', level: 'very' },
-  'fisting-vaginal-m-to-f': { gates: ['toys'], operator: 'AND', level: 'very' },
+  'fisting-vaginal-m-to-f': { gates: ['rough'], operator: 'AND', level: 'very' },  // fisting is not toys, it's extreme rough
   'fucking-machine': { gates: ['toys'], operator: 'AND' },
   electrostim: { gates: ['toys'], operator: 'AND' },
-  lactation: { gates: ['body_fluids'], operator: 'AND' },
+  // lactation - REMOVED: independent fetish, no gate needed
 
   // GROUP
   'threesome-fmf': { gates: ['group'], operator: 'AND' },
@@ -130,8 +129,12 @@ const SCENE_GATES: Record<string, GateRequirement> = {
   orgy: { gates: ['group'], operator: 'AND', level: 'very' },
   swinging: { gates: ['group'], operator: 'AND' },
   'double-penetration': { gates: ['group', 'anal'], operator: 'AND' },
-  cuckold: { gates: ['group', 'bondage'], operator: 'AND' },
+  cuckold: { gates: ['group'], operator: 'AND' },  // removed bondage - cuckold is about group dynamics
+  'cuckold-watch': { gates: ['group'], operator: 'AND' },  // NEW
+  'cuckold-play': { gates: ['group'], operator: 'AND' },  // NEW
   hotwife: { gates: ['group'], operator: 'AND' },
+  'hotwife-stag': { gates: ['group'], operator: 'AND' },  // NEW
+  'hotwife-vixen-f': { gates: ['group'], operator: 'AND' },  // NEW
 
   // EXHIBITIONISM
   exhibitionism: { gates: ['exhibitionism'], operator: 'AND' },
@@ -151,7 +154,7 @@ const SCENE_GATES: Record<string, GateRequirement> = {
   'teacher-f-student-m': { gates: ['roleplay'], operator: 'AND' },
   'doctor-patient': { gates: ['roleplay'], operator: 'AND' },
   'stranger-roleplay': { gates: ['roleplay'], operator: 'AND' },
-  'service-roleplay': { gates: ['roleplay', 'bondage'], operator: 'AND' },
+  'service-roleplay': { gates: ['roleplay'], operator: 'AND' },  // removed bondage - service can be without bondage
   'taboo-roleplay': { gates: ['roleplay'], operator: 'AND', level: 'very' },
   'truth-or-dare': { gates: ['roleplay'], operator: 'AND' },
   'uniforms-f': { gates: ['roleplay', 'lingerie'], operator: 'AND' },
@@ -169,7 +172,7 @@ const SCENE_GATES: Record<string, GateRequirement> = {
   'vibrator-play': { gates: ['toys'], operator: 'AND' },
   'dildo': { gates: ['toys'], operator: 'AND' },
   'cock-ring': { gates: ['toys'], operator: 'AND' },
-  'remote-control': { gates: ['toys', 'exhibitionism'], operator: 'AND' },
+  'remote-control': { gates: ['toys'], operator: 'AND' },  // removed exhibitionism - can use at home
   'toy-wand': { gates: ['toys'], operator: 'AND' },
   'toy-beads': { gates: ['toys', 'anal'], operator: 'AND' },
   'toy-clitoral': { gates: ['toys'], operator: 'AND' },
@@ -184,8 +187,8 @@ const SCENE_GATES: Record<string, GateRequirement> = {
   'lingerie-corset': { gates: ['lingerie'], operator: 'AND' },
   stockings: { gates: ['lingerie'], operator: 'AND' },
   'heels-only': { gates: ['lingerie'], operator: 'AND' },
-  'harness-f': { gates: ['lingerie', 'bondage'], operator: 'AND' },
-  'harness-m': { gates: ['lingerie', 'bondage'], operator: 'AND' },
+  'harness-f': { gates: ['lingerie'], operator: 'AND' },  // removed bondage - harness is clothing
+  'harness-m': { gates: ['lingerie'], operator: 'AND' },  // removed bondage - harness is clothing
   'latex-leather': { gates: ['lingerie'], operator: 'AND' },
   'torn-clothes': { gates: ['rough'], operator: 'AND' },
 
@@ -195,10 +198,10 @@ const SCENE_GATES: Record<string, GateRequirement> = {
   'video-sex': { gates: ['recording'], operator: 'AND' },
   'voice-instructions': { gates: ['recording', 'dirty_talk'], operator: 'AND' },
 
-  // ROMANTIC/CONTEXT
-  aftercare: { gates: ['romantic', 'rough'], operator: 'OR' },
-  'massage-m-to-f': { gates: ['romantic'], operator: 'AND' },
-  'massage-f-to-m': { gates: ['romantic'], operator: 'AND' },
+  // ROMANTIC/CONTEXT - REMOVED: these are basic scenes, shown to everyone
+  // - aftercare: shown after any rough scene
+  // - massage: basic scene, no gate needed
+  // - body-worship: shown as clarification to massage
 };
 
 // Helper to get gate requirement for a scene (tries base slug without -receive suffix)
@@ -343,7 +346,6 @@ console.log(`Онбординг сцен: ${scenes.filter(s => s.isOnboarding).l
 
 console.log('## ЛЕГЕНДА\n');
 console.log('```');
-console.log('✓/✗     — активна/неактивна');
 console.log('♂/♀/⚥   — for_gender: male/female/null');
 console.log('↔       — paired_scene (парная сцена)');
 console.log('←       — clarification_for (после какой сцены показать)');
@@ -351,6 +353,8 @@ console.log('🔓oral  — sets_gate (открывает гейт при YES)');
 console.log('🔒[x&y] — requires gates (AND)');
 console.log('🔒[x|y] — requires gates (OR)');
 console.log('🔒![x]  — requires gates (level: very)');
+console.log('');
+console.log('Показаны только АКТИВНЫЕ сцены. Неактивные в конце файла.');
 console.log('```\n');
 
 // Categories
@@ -359,10 +363,11 @@ const sortedCategories = [...byCategory.entries()].sort((a, b) => b[1].length - 
 
 for (const [cat, catScenes] of sortedCategories) {
   const active = catScenes.filter(s => s.isActive);
-  console.log(`### ${cat} (${active.length}/${catScenes.length})\n`);
+  if (active.length === 0) continue; // Skip categories with no active scenes
+  console.log(`### ${cat} (${active.length} сцен)\n`);
 
-  for (const scene of catScenes.sort((a, b) => a.slug.localeCompare(b.slug))) {
-    const status = scene.isActive ? '✓' : '✗';
+  // Only show active scenes (inactive ones are in archive)
+  for (const scene of active.sort((a, b) => a.slug.localeCompare(b.slug))) {
     const gender = scene.forGender === 'male' ? '♂' : scene.forGender === 'female' ? '♀' : '⚥';
     const paired = scene.pairedScene ? ` ↔ ${scene.pairedScene}` : '';
     const clarFor = scene.clarificationFor.length > 0 ? ` ← [${scene.clarificationFor.join(', ')}]` : '';
@@ -378,7 +383,7 @@ for (const [cat, catScenes] of sortedCategories) {
       requiresStr = ` 🔒${level}[${scene.requiresGates.join(op)}]`;
     }
 
-    console.log(`${status} ${gender} ${scene.slug}${paired}${setsGateStr}${requiresStr}${clarFor}`);
+    console.log(`${gender} ${scene.slug}${paired}${setsGateStr}${requiresStr}${clarFor}`);
   }
   console.log('');
 }
@@ -474,7 +479,17 @@ if (noGates.length > 30) {
 }
 console.log('');
 
-// All unique slugs for reference
+// All unique slugs for reference (active only)
 console.log('## ВСЕ SLUG-и (для поиска)\n');
-const allSlugs = scenes.map(s => s.slug).sort();
+const allSlugs = scenes.filter(s => s.isActive).map(s => s.slug).sort();
 console.log(allSlugs.join('\n'));
+
+// Archived/inactive scenes
+const inactiveScenes = scenes.filter(s => !s.isActive);
+if (inactiveScenes.length > 0) {
+  console.log('\n\n## АРХИВ (неактивные сцены)\n');
+  console.log(`Всего: ${inactiveScenes.length}\n`);
+  for (const scene of inactiveScenes.sort((a, b) => a.slug.localeCompare(b.slug))) {
+    console.log(`- ${scene.category}/${scene.slug}`);
+  }
+}

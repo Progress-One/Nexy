@@ -9,7 +9,6 @@
 ## ЛЕГЕНДА
 
 ```
-✓/✗     — активна/неактивна
 ♂/♀/⚥   — for_gender: male/female/null
 ↔       — paired_scene (парная сцена)
 ←       — clarification_for (после какой сцены показать)
@@ -17,465 +16,416 @@
 🔒[x&y] — requires gates (AND)
 🔒[x|y] — requires gates (OR)
 🔒![x]  — requires gates (level: very)
+
+Показаны только АКТИВНЫЕ сцены. Неактивные в конце файла.
 ```
 
 ## КАТЕГОРИИ
 
-### extreme (34/40)
-
-✗ ⚥ breath-play
-✓ ♀ breath-play-f-to-m ↔ breath-play-f-to-m-receive 🔒![rough]
-✓ ♂ breath-play-f-to-m-receive ↔ breath-play-f-to-m 🔒![rough]
-✓ ♂ breath-play-m-to-f ↔ breath-play-m-to-f-receive 🔒![rough]
-✓ ♀ breath-play-m-to-f-receive ↔ breath-play-m-to-f 🔒![rough]
-✗ ⚥ breeding-kink
-✓ ♀ breeding-kink-f ↔ breeding-kink-m
-✓ ♂ breeding-kink-m ↔ breeding-kink-f
-✗ ⚥ figging 🔒[anal&rough]
-✓ ♀ figging-f-to-m ↔ figging-f-to-m-receive ← [anal-play-on-him, spanking-she-spanks-him]
-✓ ♂ figging-f-to-m-receive ↔ figging-f-to-m ← [anal-play-on-him-receive, spanking-f-to-m-receive]
-✓ ♂ figging-m-to-f ↔ figging-m-to-f-receive ← [anal-play-on-her, spanking-he-spanks-her]
-✓ ♀ figging-m-to-f-receive ↔ figging-m-to-f ← [anal-play-on-her-receive, spanking-m-to-f-receive]
-✗ ⚥ fisting
-✓ ♀ fisting-anal-f-to-m ↔ fisting-anal-f-to-m-receive 🔒![anal] ← [anal-play-on-him]
-✓ ♂ fisting-anal-f-to-m-receive ↔ fisting-anal-f-to-m 🔒![anal] ← [anal-play-on-him-receive]
-✓ ♂ fisting-anal-m-to-f ↔ fisting-anal-m-to-f-receive 🔒![anal] ← [anal-play-on-her]
-✓ ♀ fisting-anal-m-to-f-receive ↔ fisting-anal-m-to-f 🔒![anal] ← [anal-play-on-her-receive]
-✓ ♂ fisting-vaginal-m-to-f ↔ fisting-vaginal-m-to-f-receive 🔒![toys] ← [vibrator-play]
-✓ ♀ fisting-vaginal-m-to-f-receive ↔ fisting-vaginal-m-to-f 🔒![toys] ← [vibrator-play]
-✓ ⚥ fucking-machine 🔒[toys]
-✗ ⚥ knife-play
-✓ ♀ knife-play-f-to-m ↔ knife-play-f-to-m-receive 🔒![rough]
-✓ ♂ knife-play-f-to-m-receive ↔ knife-play-f-to-m 🔒![rough]
-✓ ♂ knife-play-m-to-f ↔ knife-play-m-to-f-receive 🔒![rough]
-✓ ♀ knife-play-m-to-f-receive ↔ knife-play-m-to-f 🔒![rough]
-✓ ♀ lactation 🔒[body_fluids]
-✓ ♂ mummification-f ↔ mummification-f-receive 🔒![bondage] ← [bondage-he-ties-her]
-✓ ♀ mummification-f-receive ↔ mummification-f 🔒![bondage] ← [bondage-he-ties-her-receive]
-✓ ♀ mummification-m ↔ mummification-m-receive 🔒![bondage] ← [bondage-she-ties-him]
-✓ ♂ mummification-m-receive ↔ mummification-m 🔒![bondage] ← [bondage-she-ties-him-receive]
-✗ ⚥ needle-play
-✓ ♀ needle-play-f-to-m ↔ needle-play-f-to-m-receive 🔒![rough]
-✓ ♂ needle-play-f-to-m-receive ↔ needle-play-f-to-m 🔒![rough]
-✓ ♂ needle-play-m-to-f ↔ needle-play-m-to-f-receive 🔒![rough]
-✓ ♀ needle-play-m-to-f-receive ↔ needle-play-m-to-f 🔒![rough]
-✓ ♂ objectification-f ↔ objectification-f-receive 🔒![bondage] ← [bondage-he-ties-her, free-use-f-available]
-✓ ♀ objectification-f-receive ↔ objectification-f 🔒![bondage] ← [bondage-he-ties-her-receive, free-use-f-available-receive]
-✓ ♀ objectification-m ↔ objectification-m-receive 🔒![bondage] ← [bondage-she-ties-him, free-use-m-available]
-✓ ♂ objectification-m-receive ↔ objectification-m 🔒![bondage] ← [bondage-she-ties-him-receive, free-use-m-available-receive]
-
-### control-power (28/30)
-
-✓ ♂ bondage-he-ties-her ↔ bondage-he-ties-her-receive 🔓bondage
-✓ ♀ bondage-he-ties-her-receive ↔ bondage-he-ties-her 🔓bondage
-✓ ♀ bondage-she-ties-him ↔ bondage-she-ties-him-receive 🔓bondage
-✓ ♂ bondage-she-ties-him-receive ↔ bondage-she-ties-him 🔓bondage
-✓ ♂ collar-he-owns-her ↔ collar-he-owns-her-receive 🔒[bondage] ← [bondage-he-ties-her, lingerie-lace]
-✓ ♀ collar-he-owns-her-receive ↔ collar-he-owns-her 🔒[bondage] ← [bondage-he-ties-her-receive, lingerie-lace]
-✓ ♀ collar-she-owns-him ↔ collar-she-owns-him-receive 🔒[bondage] ← [bondage-she-ties-him, lingerie-lace]
-✓ ♂ collar-she-owns-him-receive ↔ collar-she-owns-him 🔒[bondage] ← [bondage-she-ties-him-receive, lingerie-lace]
-✓ ♂ edging-he-controls-her ↔ edging-he-controls-her-receive 🔒[bondage] ← [bondage-he-ties-her]
-✓ ♀ edging-he-controls-her-receive ↔ edging-he-controls-her 🔒[bondage] ← [bondage-he-ties-her-receive]
-✓ ♀ edging-she-controls-him ↔ edging-she-controls-him-receive 🔒[bondage] ← [bondage-she-ties-him]
-✓ ♂ edging-she-controls-him-receive ↔ edging-she-controls-him 🔒[bondage] ← [bondage-she-ties-him-receive]
-✗ ⚥ feminization
-✓ ♀ feminization-do ↔ feminization-wear 🔒[bondage] ← [bondage-she-ties-him, lingerie-lace]
-✓ ♂ feminization-wear ↔ feminization-do 🔒[bondage] ← [bondage-she-ties-him-receive, lingerie-lace]
-✓ ♂ forced-orgasm-on-her ↔ forced-orgasm-on-her-receive 🔒[bondage] ← [bondage-he-ties-her, vibrator-play]
-✓ ♀ forced-orgasm-on-her-receive ↔ forced-orgasm-on-her 🔒[bondage] ← [bondage-he-ties-her-receive, vibrator-play]
-✓ ♀ forced-orgasm-on-him ↔ forced-orgasm-on-him-receive 🔒[bondage] ← [bondage-she-ties-him]
-✓ ♂ forced-orgasm-on-him-receive ↔ forced-orgasm-on-him 🔒[bondage] ← [bondage-she-ties-him-receive]
-✓ ♂ free-use-f-available ↔ free-use-f-available-receive 🔒[bondage] ← [bondage-he-ties-her]
-✓ ♀ free-use-f-available-receive ↔ free-use-f-available 🔒[bondage] ← [bondage-he-ties-her-receive]
-✓ ♀ free-use-m-available ↔ free-use-m-available-receive 🔒[bondage] ← [bondage-she-ties-him]
-✓ ♂ free-use-m-available-receive ↔ free-use-m-available 🔒[bondage] ← [bondage-she-ties-him-receive]
-✓ ⚥ orgasm-control 🔒[bondage] ← [bondage-he-ties-her, bondage-she-ties-him]
-✗ ⚥ ruined-orgasm
-✓ ♀ ruined-orgasm-f-to-m ↔ ruined-orgasm-f-to-m-receive 🔒[bondage] ← [edging-she-controls-him, bondage-she-ties-him]
-✓ ♂ ruined-orgasm-f-to-m-receive ↔ ruined-orgasm-f-to-m 🔒[bondage] ← [edging-she-controls-him-receive, bondage-she-ties-him-receive]
-✓ ♂ ruined-orgasm-m-to-f ↔ ruined-orgasm-m-to-f-receive 🔒[bondage] ← [edging-he-controls-her, bondage-he-ties-her]
-✓ ♀ ruined-orgasm-m-to-f-receive ↔ ruined-orgasm-m-to-f 🔒[bondage] ← [edging-he-controls-her-receive, bondage-he-ties-her-receive]
-✓ ⚥ sex-tasks 🔒[bondage|dirty_talk] ← [bondage-he-ties-her, bondage-she-ties-him, dirty-talk]
-
-### impact-pain (26/27)
-
-✓ ♀ cbt 🔒[rough&bondage]
-✓ ♂ choking-f-to-m-receive ↔ choking-she-chokes-him ← [spanking-f-to-m-receive]
-✓ ♂ choking-he-chokes-her ↔ choking-m-to-f-receive 🔒[rough] ← [spanking-he-spanks-her]
-✓ ♀ choking-m-to-f-receive ↔ choking-he-chokes-her ← [spanking-m-to-f-receive]
-✓ ♀ choking-she-chokes-him ↔ choking-f-to-m-receive 🔒[rough] ← [spanking-she-spanks-him]
-✓ ♂ face-slapping-f-to-m-receive ↔ face-slapping-she-slaps-him ← [spanking-f-to-m-receive]
-✓ ♂ face-slapping-he-slaps-her ↔ face-slapping-m-to-f-receive 🔒![rough] ← [spanking-he-spanks-her, dirty-talk]
-✓ ♀ face-slapping-m-to-f-receive ↔ face-slapping-he-slaps-her ← [spanking-m-to-f-receive, dirty-talk]
-✓ ♀ face-slapping-she-slaps-him ↔ face-slapping-f-to-m-receive 🔒![rough] ← [spanking-she-spanks-him]
-✗ ⚥ nipple-play
-✓ ♂ nipple-play-f-to-m-receive ↔ nipple-play-she-on-him
-✓ ♂ nipple-play-he-on-her ↔ nipple-play-m-to-f-receive 🔒[rough]
-✓ ♀ nipple-play-m-to-f-receive ↔ nipple-play-he-on-her
-✓ ♀ nipple-play-she-on-him ↔ nipple-play-f-to-m-receive 🔒[rough]
-✓ ♂ spanking-f-to-m-receive ↔ spanking-she-spanks-him 🔓rough
-✓ ♂ spanking-he-spanks-her ↔ spanking-m-to-f-receive 🔓rough
-✓ ♀ spanking-m-to-f-receive ↔ spanking-he-spanks-her 🔓rough
-✓ ♀ spanking-she-spanks-him ↔ spanking-f-to-m-receive 🔓rough
-✓ ⚥ wax-play
-✓ ♂ wax-play-f-to-m-receive ↔ wax-play-she-on-him
-✓ ♂ wax-play-he-on-her ↔ wax-play-m-to-f-receive 🔒[rough|toys]
-✓ ♀ wax-play-m-to-f-receive ↔ wax-play-he-on-her
-✓ ♀ wax-play-she-on-him ↔ wax-play-f-to-m-receive 🔒[rough|toys]
-✓ ♀ whipping-f-to-m ↔ whipping-f-to-m-receive 🔒[rough&bondage] ← [spanking-she-spanks-him]
-✓ ♂ whipping-f-to-m-receive ↔ whipping-f-to-m 🔒[rough&bondage] ← [spanking-f-to-m-receive]
-✓ ♂ whipping-m-to-f ↔ whipping-m-to-f-receive 🔒[rough&bondage] ← [spanking-he-spanks-her]
-✓ ♀ whipping-m-to-f-receive ↔ whipping-m-to-f 🔒[rough&bondage] ← [spanking-m-to-f-receive]
-
-### verbal (26/26)
-
-✓ ♂ anal-wording-he-says ↔ anal-wording-she-says
-✓ ♀ anal-wording-she-says ↔ anal-wording-he-says
-✓ ♂ body-writing-he-writes-on-her ↔ body-writing-she-writes-on-him
-✓ ♀ body-writing-she-writes-on-him ↔ body-writing-he-writes-on-her
-✓ ⚥ body-writing-words
-✓ ♂ degradation-f-to-m-receive ↔ degradation-she-degrades-him 🔒[dirty_talk&rough] ← [dirty-talk, spanking-f-to-m-receive]
-✓ ♂ degradation-he-degrades-her ↔ degradation-m-to-f-receive
-✓ ♀ degradation-m-to-f-receive ↔ degradation-he-degrades-her 🔒[dirty_talk&rough] ← [dirty-talk, spanking-m-to-f-receive]
-✓ ♀ degradation-she-degrades-him ↔ degradation-f-to-m-receive
-✓ ⚥ dirty-talk 🔓dirty_talk
-✓ ♂ dirty-words-he-likes ↔ dirty-words-she-likes
-✓ ♀ dirty-words-she-likes ↔ dirty-words-he-likes
-✓ ♂ genital-naming-he-names-hers ↔ genital-naming-she-names-his
-✓ ♀ genital-naming-she-names-his ↔ genital-naming-he-names-hers
-✓ ♂ oral-wording-he-says ↔ oral-wording-she-says
-✓ ♀ oral-wording-she-says ↔ oral-wording-he-says
-✓ ♂ praise-f-to-m-receive ↔ praise-she-praises-him 🔓praise
-✓ ♂ praise-he-praises-her ↔ praise-m-to-f-receive 🔓praise
-✓ ♀ praise-m-to-f-receive ↔ praise-he-praises-her 🔓praise
-✓ ♀ praise-she-praises-him ↔ praise-f-to-m-receive 🔓praise
-✓ ♂ praise-words-he-likes ↔ praise-words-she-likes
-✓ ♀ praise-words-she-likes ↔ praise-words-he-likes
-✓ ♂ sex-initiation-he-says-dirty ↔ sex-initiation-she-says-dirty
-✓ ♂ sex-initiation-he-says-soft ↔ sex-initiation-she-says-soft
-✓ ♀ sex-initiation-she-says-dirty ↔ sex-initiation-he-says-dirty
-✓ ♀ sex-initiation-she-says-soft ↔ sex-initiation-he-says-soft
-
-### _archive (0/24)
-
-✗ ⚥ anal-interest 🔓anal
-✗ ⚥ body-fetishes
-✗ ⚥ clothing-preference
-✗ ♀ clothing-preference-f ↔ clothing-preference-m
-✗ ♂ clothing-preference-m ↔ clothing-preference-f
-✗ ⚥ dirty-talk-interest 🔓dirty_talk
-✗ ⚥ exhibitionism 🔒[exhibitionism]
-✗ ⚥ fantasy-reality
-✗ ⚥ group-interest 🔓group
-✗ ⚥ intensity
-✗ ⚥ openness
-✗ ⚥ oral-preference 🔓oral
-✗ ⚥ pain-tolerance 🔓rough
-✗ ♀ pain-tolerance-f ↔ pain-tolerance-m 🔓rough
-✗ ♂ pain-tolerance-m ↔ pain-tolerance-f 🔓rough
-✗ ⚥ power-dynamic 🔓power_dynamic
-✗ ♀ power-dynamic-f ↔ power-dynamic-m 🔓power_dynamic
-✗ ♂ power-dynamic-m ↔ power-dynamic-f 🔓power_dynamic
-✗ ⚥ praise-interest
-✗ ⚥ roleplay-interest 🔓roleplay
-✗ ⚥ toys-interest 🔓toys
-✗ ⚥ verbal-preference
-✗ ⚥ voyeurism 🔒[exhibitionism]
-✗ ⚥ watching-showing 🔓exhibitionism
-
-### body-fluids (16/20)
-
-✗ ⚥ cum-where-to-finish
-✓ ♀ finish-preference-f ↔ finish-preference-m
-✓ ♂ finish-preference-m ↔ finish-preference-f
-✗ ⚥ golden-shower
-✓ ♀ golden-shower-f-to-m ↔ golden-shower-f-to-m-receive 🔒[body_fluids]
-✓ ♂ golden-shower-f-to-m-receive ↔ golden-shower-f-to-m 🔒[body_fluids]
-✓ ♂ golden-shower-m-to-f ↔ golden-shower-m-to-f-receive 🔒[body_fluids]
-✓ ♀ golden-shower-m-to-f-receive ↔ golden-shower-m-to-f 🔒[body_fluids]
-✗ ⚥ spitting
-✓ ♀ spitting-f-to-m ↔ spitting-f-to-m-receive 🔒[body_fluids&rough]
-✓ ♂ spitting-f-to-m-receive ↔ spitting-f-to-m 🔒[body_fluids&rough]
-✓ ♂ spitting-m-to-f ↔ spitting-m-to-f-receive 🔒[body_fluids&rough]
-✓ ♀ spitting-m-to-f-receive ↔ spitting-m-to-f 🔒[body_fluids&rough]
-✗ ♂ squirt-receiving ↔ squirting 🔒[body_fluids&oral] ← [cunnilingus, vibrator-play]
-✓ ♂ squirt-receiving-body ↔ squirting-on-him
-✓ ♂ squirt-receiving-mouth ↔ squirting-in-mouth
-✓ ♀ squirting ↔ squirting-watch 🔒[body_fluids] ← [cunnilingus, vibrator-play]
-✓ ♀ squirting-in-mouth ↔ squirt-receiving-mouth
-✓ ♀ squirting-on-him ↔ squirt-receiving-body
-✓ ♂ squirting-watch ↔ squirting
-
-### clothing (16/16)
-
-✓ ♂ female-harness ↔ harness-f-wear
-✓ ♂ female-lingerie ↔ lingerie-f-wear
-✓ ♂ female-uniforms ↔ uniforms-f-wear
-✓ ♀ harness-f-wear ↔ female-harness
-✓ ♂ harness-m-wear ↔ male-harness
-✓ ⚥ heels-only 🔒[lingerie] ← [lingerie-lace]
-✓ ⚥ latex-leather 🔒[lingerie] ← [lingerie-lace]
-✓ ♀ lingerie-f-wear ↔ female-lingerie
-✓ ♂ lingerie-m-wear ↔ male-lingerie
-✓ ♀ male-harness ↔ harness-m-wear
-✓ ♀ male-lingerie ↔ lingerie-m-wear
-✓ ♀ male-uniforms ↔ uniforms-m-wear
-✓ ⚥ stockings-garters
-✓ ⚥ torn-clothes 🔒[rough] ← [spanking-he-spanks-her, spanking-she-spanks-him]
-✓ ♀ uniforms-f-wear ↔ female-uniforms
-✓ ♂ uniforms-m-wear ↔ male-uniforms
-
-### oral (15/15)
-
-✓ ♀ blowjob ↔ blowjob-receive 🔓oral
-✓ ♂ blowjob-receive ↔ blowjob 🔓oral
-✓ ♂ cunnilingus ↔ cunnilingus-receive 🔓oral
-✓ ♀ cunnilingus-receive ↔ cunnilingus 🔓oral
-✓ ♀ deepthroat ↔ deepthroat-receive 🔒[oral] ← [blowjob]
-✓ ♂ deepthroat-receive ↔ deepthroat 🔒[oral]
-✓ ♂ facesitting-f-on-m-receive ↔ facesitting-she-on-him
-✓ ♂ facesitting-he-on-her ↔ facesitting-m-on-f-receive 🔒[oral]
-✓ ♀ facesitting-m-on-f-receive ↔ facesitting-he-on-her
-✓ ♀ facesitting-she-on-him ↔ facesitting-f-on-m-receive 🔒[oral]
-✓ ⚥ finger-sucking ← [blowjob, cunnilingus]
-✓ ♂ rimming-f-to-m-receive ↔ rimming-she-to-him 🔒[oral&anal] ← [anal-play-on-him-receive, blowjob-receive]
-✓ ♂ rimming-he-to-her ↔ rimming-m-to-f-receive
-✓ ♀ rimming-m-to-f-receive ↔ rimming-he-to-her 🔒[oral&anal] ← [anal-play-on-her-receive, cunnilingus-receive]
-✓ ♀ rimming-she-to-him ↔ rimming-f-to-m-receive
-
-### exhibitionism (13/14)
-
-✓ ⚥ dress-code 🔒[exhibitionism&lingerie] ← [public-sex, lingerie-lace]
-✓ ⚥ exhibitionism 🔒[exhibitionism]
-✓ ♀ female-striptease ↔ female-striptease-watch
-✓ ♂ female-striptease-watch ↔ female-striptease
-✗ ⚥ glory-hole-blowjob
-✓ ♀ glory-hole-f-gives ↔ glory-hole-f-gives-receive 🔒[exhibitionism&oral]
-✓ ♂ glory-hole-f-gives-receive ↔ glory-hole-f-gives 🔒[exhibitionism&oral]
-✓ ♂ glory-hole-m-gives ↔ glory-hole-m-gives-receive 🔒[exhibitionism&oral]
-✓ ♀ glory-hole-m-gives-receive ↔ glory-hole-m-gives 🔒[exhibitionism&oral]
-✓ ♂ male-striptease ↔ male-striptease-watch
-✓ ♀ male-striptease-watch ↔ male-striptease
-✓ ⚥ no-panties-walk 🔒[exhibitionism] ← [public-sex, lingerie-lace]
-✓ ⚥ public-sex 🔓exhibitionism
-✓ ⚥ voyeurism 🔒[exhibitionism]
-
-### roleplay (13/13)
-
-✓ ♀ boss-f-subordinate-m ↔ boss-f-subordinate-m-receive 🔒[roleplay]
-✓ ♂ boss-f-subordinate-m-receive ↔ boss-f-subordinate-m 🔒[roleplay]
-✓ ♂ boss-m-secretary-f ↔ boss-m-secretary-f-receive 🔓roleplay
-✓ ♀ boss-m-secretary-f-receive ↔ boss-m-secretary-f 🔓roleplay
-✓ ⚥ doctor-patient 🔒[roleplay]
-✓ ⚥ service-roleplay 🔒[roleplay&bondage] ← [stranger-roleplay, bondage-he-ties-her]
-✓ ⚥ stranger-roleplay 🔓roleplay
-✓ ⚥ taboo-roleplay 🔒![roleplay] ← [stranger-roleplay]
-✓ ♀ teacher-f-student-m ↔ teacher-f-student-m-receive 🔒[roleplay]
-✓ ♂ teacher-f-student-m-receive ↔ teacher-f-student-m 🔒[roleplay]
-✓ ♂ teacher-m-student-f ↔ teacher-m-student-f-receive 🔒[roleplay]
-✓ ♀ teacher-m-student-f-receive ↔ teacher-m-student-f 🔒[roleplay]
-✓ ⚥ truth-or-dare 🔒[roleplay] ← [stranger-roleplay, dirty-talk]
-
-### toys (11/11)
-
-✓ ⚥ butt-plug 🔒[anal|toys] ← [anal-play-on-her, anal-play-on-him, vibrator-play]
-✓ ♀ cock-ring 🔓toys
-✓ ⚥ dildo-play
-✓ ⚥ nipple-clamps 🔒[toys&rough] ← [nipple-play-he-on-her, nipple-play-she-on-him, spanking-he-spanks-her]
-✓ ⚥ remote-control-toy
-✓ ⚥ toy-beads 🔒[toys&anal] ← [anal-play-on-her, anal-play-on-him]
-✓ ⚥ toy-clitoral 🔒[toys] ← [vibrator-play]
-✓ ⚥ toy-plug-large 🔒[toys&anal] ← [anal-play-on-her, anal-play-on-him]
-✓ ⚥ toy-plug-small 🔒[toys&anal] ← [anal-play-on-her, anal-play-on-him]
-✓ ⚥ toy-wand 🔒[toys] ← [vibrator-play]
-✓ ⚥ vibrator-play 🔓toys
-
-### worship-service (11/11)
-
-✓ ⚥ armpit
-✓ ♂ body-worship-f-to-m-receive ↔ body-worship-she-worships-him 🔒[romantic] ← [massage-f-to-m-receive]
-✓ ♂ body-worship-he-worships-her ↔ body-worship-m-to-f-receive
-✓ ♀ body-worship-m-to-f-receive ↔ body-worship-he-worships-her 🔒[romantic] ← [massage-m-to-f-receive]
-✓ ♀ body-worship-she-worships-him ↔ body-worship-f-to-m-receive
-✓ ♀ cock-worship 🔒[oral] ← [blowjob]
-✓ ♂ foot-worship-f-to-m-receive ↔ foot-worship-she-worships-his 🔒[foot] ← [bondage-she-ties-him-receive]
-✓ ♂ foot-worship-he-worships-her ↔ foot-worship-m-to-f-receive
-✓ ♀ foot-worship-m-to-f-receive ↔ foot-worship-he-worships-her 🔒[foot] ← [lingerie-lace, heels-only]
-✓ ♀ foot-worship-she-worships-his ↔ foot-worship-f-to-m-receive
-✓ ♂ pussy-worship 🔒[oral] ← [cunnilingus]
-
-### cnc-rough (9/10)
-
-✓ ♂ cnc-he-takes-her ↔ cnc-he-takes-her-receive 🔒![rough] ← [spanking-he-spanks-her, bondage-he-ties-her]
-✓ ♀ cnc-he-takes-her-receive ↔ cnc-he-takes-her 🔒![rough] ← [spanking-m-to-f-receive, bondage-he-ties-her-receive]
-✓ ♀ cnc-she-takes-him ↔ cnc-she-takes-him-receive 🔒![rough] ← [spanking-she-spanks-him, bondage-she-ties-him]
-✓ ♂ cnc-she-takes-him-receive ↔ cnc-she-takes-him 🔒![rough] ← [spanking-f-to-m-receive, bondage-she-ties-him-receive]
-✓ ⚥ primal 🔒[rough] ← [spanking-he-spanks-her, spanking-she-spanks-him]
-✗ ⚥ somnophilia
-✓ ♀ somnophilia-f-to-m ↔ somnophilia-f-to-m-receive 🔒![bondage] ← [free-use-m-available, bondage-she-ties-him]
-✓ ♂ somnophilia-f-to-m-receive ↔ somnophilia-f-to-m 🔒![bondage] ← [free-use-m-available-receive, bondage-she-ties-him-receive]
-✓ ♂ somnophilia-m-to-f ↔ somnophilia-m-to-f-receive 🔒![bondage] ← [free-use-f-available, bondage-he-ties-her]
-✓ ♀ somnophilia-m-to-f-receive ↔ somnophilia-m-to-f 🔒![bondage] ← [free-use-f-available-receive, bondage-he-ties-her-receive]
-
-### anal (8/8)
-
-✓ ♂ anal-play-on-her ↔ anal-play-on-her-receive 🔓anal
-✓ ♀ anal-play-on-her-receive ↔ anal-play-on-her 🔓anal
-✓ ♀ anal-play-on-him ↔ anal-play-on-him-receive 🔓anal
-✓ ♂ anal-play-on-him-receive ↔ anal-play-on-him 🔓anal
-✓ ♂ anal-sex-give ↔ anal-sex-receive
-✓ ♀ anal-sex-receive ↔ anal-sex-give
-✓ ♀ pegging ↔ pegging-receive 🔒[anal&bondage] ← [anal-play-on-him, bondage-she-ties-him]
-✓ ♂ pegging-receive ↔ pegging 🔒[anal&bondage] ← [anal-play-on-him-receive, bondage-she-ties-him-receive]
-
-### positions (8/8)
-
-✓ ⚥ position-69
-✓ ⚥ position-cowgirl
-✓ ⚥ position-doggy
-✓ ⚥ position-missionary
-✓ ⚥ position-reverse-cowgirl
-✓ ⚥ position-sitting
-✓ ⚥ position-spooning
-✓ ⚥ position-standing
-
-### bondage-types (7/7)
-
-✓ ⚥ anal-hook 🔒[anal&bondage] ← [anal-play-on-her, anal-play-on-him, bondage-he-ties-her]
-✓ ⚥ bondage-chains 🔒[bondage] ← [bondage-he-ties-her, bondage-she-ties-him]
-✓ ⚥ bondage-restraint 🔒[bondage] ← [bondage-he-ties-her, bondage-she-ties-him]
-✓ ⚥ bondage-shibari 🔒[bondage] ← [bondage-he-ties-her, bondage-she-ties-him]
-✓ ⚥ bondage-spreader-bar 🔒[bondage] ← [bondage-he-ties-her, bondage-she-ties-him]
-✓ ⚥ bondage-st-andrews-cross
-✓ ⚥ bondage-suspension
-
-### intimacy-outside (7/7)
-
-✓ ⚥ casual-intimate-touch
-✓ ⚥ kitchen-counter
-✓ ⚥ morning-teasing
-✓ ⚥ secret-touch
-✓ ⚥ sexting 🔒[recording] ← [filming, dirty-talk]
-✓ ⚥ video-sex 🔒[recording] ← [filming]
-✓ ⚥ voice-instructions 🔒[recording&dirty_talk] ← [filming, dirty-talk]
-
-### manual (6/7)
-
-✓ ♂ fingering ↔ fingering-receive
-✓ ♀ fingering-receive ↔ fingering
-✓ ♀ handjob ↔ handjob-receive
-✓ ♂ handjob-receive ↔ handjob
-✗ ⚥ titfuck
-✓ ♂ titfuck-give ↔ titfuck-receive
-✓ ♀ titfuck-receive ↔ titfuck-give
-
-### age-play (4/6)
-
-✗ ⚥ daddy-dom-little-girl ↔ mommy-dom-little-boy
-✓ ♂ ddlg-daddy ↔ ddlg-little-girl 🔒[roleplay&bondage] ← [bondage-he-ties-her, praise-he-praises-her]
-✓ ♀ ddlg-little-girl ↔ ddlg-daddy 🔒[roleplay&bondage] ← [bondage-he-ties-her, praise-he-praises-her]
-✓ ♂ mdlb-little-boy ↔ mdlb-mommy 🔒[roleplay&bondage] ← [bondage-she-ties-him, praise-she-praises-him]
-✓ ♀ mdlb-mommy ↔ mdlb-little-boy 🔒[roleplay&bondage] ← [bondage-she-ties-him, praise-she-praises-him]
-✗ ⚥ mommy-dom-little-boy ↔ daddy-dom-little-girl
-
-### chastity (4/6)
-
-✗ ⚥ chastity-he-locked ↔ chastity-she-locked
-✓ ♀ chastity-he-locked-keyholder ↔ chastity-he-locked-wear
-✓ ♂ chastity-he-locked-wear ↔ chastity-he-locked-keyholder
-✗ ⚥ chastity-she-locked ↔ chastity-he-locked
-✓ ♂ chastity-she-locked-keyholder ↔ chastity-she-locked-wear
-✓ ♀ chastity-she-locked-wear ↔ chastity-she-locked-keyholder
-
-### cuckold (4/6)
-
-✗ ⚥ cuckold ↔ hotwife-vixen 🔒[group&bondage] ← [threesome-mfm]
-✓ ♀ cuckold-play ↔ cuckold-watch
-✓ ♂ cuckold-watch ↔ cuckold-play
-✓ ♂ hotwife-stag ↔ hotwife-vixen-f
-✗ ⚥ hotwife-vixen ↔ cuckold
-✓ ♀ hotwife-vixen-f ↔ hotwife-stag
-
-### group (6/6)
-
-✓ ⚥ double-penetration 🔒[group&anal] ← [threesome-mfm, anal-play-on-her]
-✓ ⚥ gangbang 🔒![group] ← [threesome-mfm]
-✓ ⚥ orgy 🔒![group] ← [threesome-fmf, threesome-mfm]
-✓ ⚥ swinging-partner-swap
-✓ ⚥ threesome-fmf ↔ threesome-mfm 🔓group
-✓ ⚥ threesome-mfm ↔ threesome-fmf 🔓group
-
-### locations (6/6)
-
-✓ ⚥ location-bedroom
-✓ ⚥ location-car
-✓ ⚥ location-hotel
-✓ ⚥ location-kitchen
-✓ ⚥ location-nature
-✓ ⚥ location-shower
-
-### pet-play (4/6)
-
-✗ ⚥ pet-play-he-is-pet ↔ pet-play-she-is-pet
-✓ ♀ pet-play-he-is-pet-owner ↔ pet-play-he-is-pet-sub
-✓ ♂ pet-play-he-is-pet-sub ↔ pet-play-he-is-pet-owner
-✗ ⚥ pet-play-she-is-pet ↔ pet-play-he-is-pet
-✓ ♂ pet-play-she-is-pet-owner ↔ pet-play-she-is-pet-sub
-✓ ♀ pet-play-she-is-pet-sub ↔ pet-play-she-is-pet-owner
-
-### emotional-context (5/5)
-
-✓ ⚥ angry-sex
-✓ ⚥ cheating-fantasy
-✓ ⚥ emotional-sex
-✓ ⚥ first-time-together
-✓ ⚥ makeup-sex
-
-### lingerie-styles (5/5)
-
-✓ ⚥ lingerie-corset 🔒[lingerie]
-✓ ⚥ lingerie-fishnet 🔒[lingerie]
-✓ ⚥ lingerie-lace 🔓lingerie
-✓ ⚥ lingerie-satin 🔒[lingerie]
-✓ ⚥ lingerie-sheer 🔒[lingerie]
-
-### massage (4/4)
-
-✓ ♂ massage-f-to-m-receive ↔ massage-she-massages-him 🔒[romantic]
-✓ ♂ massage-he-massages-her ↔ massage-m-to-f-receive
-✓ ♀ massage-m-to-f-receive ↔ massage-he-massages-her 🔒[romantic]
-✓ ♀ massage-she-massages-him ↔ massage-f-to-m-receive
-
-### sensory (4/4)
-
-✓ ⚥ blindfold 🔒[bondage] ← [bondage-he-ties-her, bondage-she-ties-him]
-✓ ⚥ electrostim 🔒[toys]
-✓ ⚥ feather-tickle
-✓ ⚥ ice-play
-
-### romantic (3/3)
-
-✓ ⚥ aftercare 🔒[romantic|rough]
-✓ ⚥ quickie
-✓ ⚥ romantic-sex
-
-### solo-mutual (2/2)
-
-✓ ⚥ joi
-✓ ⚥ mutual-masturbation
-
-### symmetric (2/2)
-
-✓ ⚥ sex-locations
-✓ ⚥ sex-positions
-
-### filming (1/1)
-
-✓ ⚥ filming 🔓recording
-
-### furniture (1/1)
-
-✓ ⚥ sex-swing
+### extreme (34 сцен)
+
+♀ breath-play-f-to-m ↔ breath-play-f-to-m-receive 🔒![rough] ← [face-slapping-she-slaps-him]
+♂ breath-play-f-to-m-receive ↔ breath-play-f-to-m 🔒![rough] ← [face-slapping-f-to-m-receive]
+♂ breath-play-m-to-f ↔ breath-play-m-to-f-receive 🔒![rough] ← [face-slapping-he-slaps-her]
+♀ breath-play-m-to-f-receive ↔ breath-play-m-to-f 🔒![rough] ← [face-slapping-m-to-f-receive]
+♀ breeding-kink-f ↔ breeding-kink-m
+♂ breeding-kink-m ↔ breeding-kink-f
+♀ figging-f-to-m ↔ figging-f-to-m-receive ← [anal-play-on-him, spanking-she-spanks-him]
+♂ figging-f-to-m-receive ↔ figging-f-to-m ← [anal-play-on-him-receive, spanking-f-to-m-receive]
+♂ figging-m-to-f ↔ figging-m-to-f-receive ← [anal-play-on-her, spanking-he-spanks-her]
+♀ figging-m-to-f-receive ↔ figging-m-to-f ← [anal-play-on-her-receive, spanking-m-to-f-receive]
+♀ fisting-anal-f-to-m ↔ fisting-anal-f-to-m-receive 🔒![anal] ← [anal-play-on-him]
+♂ fisting-anal-f-to-m-receive ↔ fisting-anal-f-to-m 🔒![anal] ← [anal-play-on-him-receive]
+♂ fisting-anal-m-to-f ↔ fisting-anal-m-to-f-receive 🔒![anal] ← [anal-play-on-her]
+♀ fisting-anal-m-to-f-receive ↔ fisting-anal-m-to-f 🔒![anal] ← [anal-play-on-her-receive]
+♂ fisting-vaginal-m-to-f ↔ fisting-vaginal-m-to-f-receive 🔒![rough] ← [vibrator-play]
+♀ fisting-vaginal-m-to-f-receive ↔ fisting-vaginal-m-to-f 🔒![rough] ← [vibrator-play]
+⚥ fucking-machine 🔒[toys]
+♀ knife-play-f-to-m ↔ knife-play-f-to-m-receive 🔒![rough] ← [whipping-f-to-m]
+♂ knife-play-f-to-m-receive ↔ knife-play-f-to-m 🔒![rough] ← [whipping-f-to-m-receive]
+♂ knife-play-m-to-f ↔ knife-play-m-to-f-receive 🔒![rough] ← [whipping-m-to-f]
+♀ knife-play-m-to-f-receive ↔ knife-play-m-to-f 🔒![rough] ← [whipping-m-to-f-receive]
+♀ lactation
+♂ mummification-f ↔ mummification-f-receive 🔒![bondage] ← [bondage-he-ties-her]
+♀ mummification-f-receive ↔ mummification-f 🔒![bondage] ← [bondage-he-ties-her-receive]
+♀ mummification-m ↔ mummification-m-receive 🔒![bondage] ← [bondage-she-ties-him]
+♂ mummification-m-receive ↔ mummification-m 🔒![bondage] ← [bondage-she-ties-him-receive]
+♀ needle-play-f-to-m ↔ needle-play-f-to-m-receive 🔒![rough] ← [whipping-f-to-m]
+♂ needle-play-f-to-m-receive ↔ needle-play-f-to-m 🔒![rough] ← [whipping-f-to-m-receive]
+♂ needle-play-m-to-f ↔ needle-play-m-to-f-receive 🔒![rough] ← [whipping-m-to-f]
+♀ needle-play-m-to-f-receive ↔ needle-play-m-to-f 🔒![rough] ← [whipping-m-to-f-receive]
+♂ objectification-f ↔ objectification-f-receive 🔒![bondage] ← [bondage-he-ties-her, free-use-f-available]
+♀ objectification-f-receive ↔ objectification-f 🔒![bondage] ← [bondage-he-ties-her-receive, free-use-f-available-receive]
+♀ objectification-m ↔ objectification-m-receive 🔒![bondage] ← [bondage-she-ties-him, free-use-m-available]
+♂ objectification-m-receive ↔ objectification-m 🔒![bondage] ← [bondage-she-ties-him-receive, free-use-m-available-receive]
+
+### control-power (28 сцен)
+
+♂ bondage-he-ties-her ↔ bondage-he-ties-her-receive 🔓bondage
+♀ bondage-he-ties-her-receive ↔ bondage-he-ties-her 🔓bondage
+♀ bondage-she-ties-him ↔ bondage-she-ties-him-receive 🔓bondage
+♂ bondage-she-ties-him-receive ↔ bondage-she-ties-him 🔓bondage
+♂ collar-he-owns-her ↔ collar-he-owns-her-receive 🔒[bondage] ← [bondage-he-ties-her]
+♀ collar-he-owns-her-receive ↔ collar-he-owns-her 🔒[bondage] ← [bondage-he-ties-her-receive]
+♀ collar-she-owns-him ↔ collar-she-owns-him-receive 🔒[bondage] ← [bondage-she-ties-him]
+♂ collar-she-owns-him-receive ↔ collar-she-owns-him 🔒[bondage] ← [bondage-she-ties-him-receive]
+♂ edging-he-controls-her ↔ edging-he-controls-her-receive 🔒[bondage] ← [bondage-he-ties-her]
+♀ edging-he-controls-her-receive ↔ edging-he-controls-her 🔒[bondage] ← [bondage-he-ties-her-receive]
+♀ edging-she-controls-him ↔ edging-she-controls-him-receive 🔒[bondage] ← [bondage-she-ties-him]
+♂ edging-she-controls-him-receive ↔ edging-she-controls-him 🔒[bondage] ← [bondage-she-ties-him-receive]
+♀ feminization-do ↔ feminization-wear 🔒[bondage] ← [bondage-she-ties-him]
+♂ feminization-wear ↔ feminization-do 🔒[bondage] ← [bondage-she-ties-him-receive]
+♂ forced-orgasm-on-her ↔ forced-orgasm-on-her-receive 🔒[bondage] ← [bondage-he-ties-her, vibrator-play, edging-he-controls-her]
+♀ forced-orgasm-on-her-receive ↔ forced-orgasm-on-her 🔒[bondage] ← [bondage-he-ties-her-receive, vibrator-play]
+♀ forced-orgasm-on-him ↔ forced-orgasm-on-him-receive 🔒[bondage] ← [bondage-she-ties-him, edging-she-controls-him]
+♂ forced-orgasm-on-him-receive ↔ forced-orgasm-on-him 🔒[bondage] ← [bondage-she-ties-him-receive]
+♂ free-use-f-available ↔ free-use-f-available-receive 🔒[bondage] ← [bondage-he-ties-her]
+♀ free-use-f-available-receive ↔ free-use-f-available 🔒[bondage] ← [bondage-he-ties-her-receive]
+♀ free-use-m-available ↔ free-use-m-available-receive 🔒[bondage] ← [bondage-she-ties-him]
+♂ free-use-m-available-receive ↔ free-use-m-available 🔒[bondage] ← [bondage-she-ties-him-receive]
+⚥ orgasm-control 🔒[bondage] ← [bondage-he-ties-her, bondage-she-ties-him]
+♀ ruined-orgasm-f-to-m ↔ ruined-orgasm-f-to-m-receive 🔒[bondage] ← [edging-she-controls-him, bondage-she-ties-him, forced-orgasm-on-him]
+♂ ruined-orgasm-f-to-m-receive ↔ ruined-orgasm-f-to-m 🔒[bondage] ← [edging-she-controls-him-receive, bondage-she-ties-him-receive, forced-orgasm-f-to-m-receive]
+♂ ruined-orgasm-m-to-f ↔ ruined-orgasm-m-to-f-receive 🔒[bondage] ← [edging-he-controls-her, bondage-he-ties-her, forced-orgasm-on-her]
+♀ ruined-orgasm-m-to-f-receive ↔ ruined-orgasm-m-to-f 🔒[bondage] ← [edging-he-controls-her-receive, bondage-he-ties-her-receive, forced-orgasm-m-to-f-receive]
+⚥ sex-tasks 🔒[bondage|dirty_talk] ← [bondage-he-ties-her, bondage-she-ties-him, dirty-talk]
+
+### impact-pain (26 сцен)
+
+♀ cbt 🔒[rough&bondage]
+♂ choking-f-to-m-receive ↔ choking-she-chokes-him ← [spanking-f-to-m-receive]
+♂ choking-he-chokes-her ↔ choking-m-to-f-receive 🔒[rough] ← [spanking-he-spanks-her]
+♀ choking-m-to-f-receive ↔ choking-he-chokes-her ← [spanking-m-to-f-receive]
+♀ choking-she-chokes-him ↔ choking-f-to-m-receive 🔒[rough] ← [spanking-she-spanks-him]
+♂ face-slapping-f-to-m-receive ↔ face-slapping-she-slaps-him ← [spanking-f-to-m-receive, choking-f-to-m-receive]
+♂ face-slapping-he-slaps-her ↔ face-slapping-m-to-f-receive 🔒![rough] ← [spanking-he-spanks-her, dirty-talk, choking-he-chokes-her]
+♀ face-slapping-m-to-f-receive ↔ face-slapping-he-slaps-her ← [spanking-m-to-f-receive, dirty-talk, choking-m-to-f-receive]
+♀ face-slapping-she-slaps-him ↔ face-slapping-f-to-m-receive 🔒![rough] ← [spanking-she-spanks-him, choking-she-chokes-him]
+♂ nipple-play-f-to-m-receive ↔ nipple-play-she-on-him
+♂ nipple-play-he-on-her ↔ nipple-play-m-to-f-receive 🔒[rough]
+♀ nipple-play-m-to-f-receive ↔ nipple-play-he-on-her
+♀ nipple-play-she-on-him ↔ nipple-play-f-to-m-receive 🔒[rough]
+♂ spanking-f-to-m-receive ↔ spanking-she-spanks-him 🔓rough
+♂ spanking-he-spanks-her ↔ spanking-m-to-f-receive 🔓rough
+♀ spanking-m-to-f-receive ↔ spanking-he-spanks-her 🔓rough
+♀ spanking-she-spanks-him ↔ spanking-f-to-m-receive 🔓rough
+⚥ wax-play
+♂ wax-play-f-to-m-receive ↔ wax-play-she-on-him
+♂ wax-play-he-on-her ↔ wax-play-m-to-f-receive 🔒[rough|toys]
+♀ wax-play-m-to-f-receive ↔ wax-play-he-on-her
+♀ wax-play-she-on-him ↔ wax-play-f-to-m-receive 🔒[rough|toys]
+♀ whipping-f-to-m ↔ whipping-f-to-m-receive 🔒[rough&bondage] ← [spanking-she-spanks-him]
+♂ whipping-f-to-m-receive ↔ whipping-f-to-m 🔒[rough&bondage] ← [spanking-f-to-m-receive]
+♂ whipping-m-to-f ↔ whipping-m-to-f-receive 🔒[rough&bondage] ← [spanking-he-spanks-her]
+♀ whipping-m-to-f-receive ↔ whipping-m-to-f 🔒[rough&bondage] ← [spanking-m-to-f-receive]
+
+### verbal (26 сцен)
+
+♂ anal-wording-he-says ↔ anal-wording-she-says
+♀ anal-wording-she-says ↔ anal-wording-he-says
+♂ body-writing-he-writes-on-her ↔ body-writing-she-writes-on-him
+♀ body-writing-she-writes-on-him ↔ body-writing-he-writes-on-her
+⚥ body-writing-words
+♂ degradation-f-to-m-receive ↔ degradation-she-degrades-him 🔒[dirty_talk&rough] ← [dirty-talk, spanking-f-to-m-receive, face-slapping-f-to-m-receive]
+♂ degradation-he-degrades-her ↔ degradation-m-to-f-receive ← [dirty-talk]
+♀ degradation-m-to-f-receive ↔ degradation-he-degrades-her 🔒[dirty_talk&rough] ← [dirty-talk, spanking-m-to-f-receive, face-slapping-m-to-f-receive]
+♀ degradation-she-degrades-him ↔ degradation-f-to-m-receive ← [dirty-talk]
+⚥ dirty-talk 🔓dirty_talk
+♂ dirty-words-he-likes ↔ dirty-words-she-likes
+♀ dirty-words-she-likes ↔ dirty-words-he-likes
+♂ genital-naming-he-names-hers ↔ genital-naming-she-names-his
+♀ genital-naming-she-names-his ↔ genital-naming-he-names-hers
+♂ oral-wording-he-says ↔ oral-wording-she-says
+♀ oral-wording-she-says ↔ oral-wording-he-says
+♂ praise-f-to-m-receive ↔ praise-she-praises-him 🔓praise
+♂ praise-he-praises-her ↔ praise-m-to-f-receive 🔓praise
+♀ praise-m-to-f-receive ↔ praise-he-praises-her 🔓praise
+♀ praise-she-praises-him ↔ praise-f-to-m-receive 🔓praise
+♂ praise-words-he-likes ↔ praise-words-she-likes
+♀ praise-words-she-likes ↔ praise-words-he-likes
+♂ sex-initiation-he-says-dirty ↔ sex-initiation-she-says-dirty
+♂ sex-initiation-he-says-soft ↔ sex-initiation-she-says-soft
+♀ sex-initiation-she-says-dirty ↔ sex-initiation-he-says-dirty
+♀ sex-initiation-she-says-soft ↔ sex-initiation-he-says-soft
+
+### body-fluids (16 сцен)
+
+♀ finish-preference-f ↔ finish-preference-m
+♂ finish-preference-m ↔ finish-preference-f
+♀ golden-shower-f-to-m ↔ golden-shower-f-to-m-receive
+♂ golden-shower-f-to-m-receive ↔ golden-shower-f-to-m
+♂ golden-shower-m-to-f ↔ golden-shower-m-to-f-receive
+♀ golden-shower-m-to-f-receive ↔ golden-shower-m-to-f
+♀ spitting-f-to-m ↔ spitting-f-to-m-receive
+♂ spitting-f-to-m-receive ↔ spitting-f-to-m
+♂ spitting-m-to-f ↔ spitting-m-to-f-receive
+♀ spitting-m-to-f-receive ↔ spitting-m-to-f
+♂ squirt-receiving-body ↔ squirting-on-him
+♂ squirt-receiving-mouth ↔ squirting-in-mouth
+♀ squirting ↔ squirting-watch ← [cunnilingus, vibrator-play]
+♀ squirting-in-mouth ↔ squirt-receiving-mouth
+♀ squirting-on-him ↔ squirt-receiving-body
+♂ squirting-watch ↔ squirting ← [cunnilingus, vibrator-play]
+
+### clothing (16 сцен)
+
+♂ female-harness ↔ harness-f-wear
+♂ female-lingerie ↔ lingerie-f-wear
+♂ female-uniforms ↔ uniforms-f-wear
+♀ harness-f-wear ↔ female-harness
+♂ harness-m-wear ↔ male-harness
+⚥ heels-only 🔒[lingerie] ← [lingerie-lace]
+⚥ latex-leather 🔒[lingerie] ← [lingerie-lace]
+♀ lingerie-f-wear ↔ female-lingerie
+♂ lingerie-m-wear ↔ male-lingerie
+♀ male-harness ↔ harness-m-wear
+♀ male-lingerie ↔ lingerie-m-wear
+♀ male-uniforms ↔ uniforms-m-wear
+⚥ stockings-garters
+⚥ torn-clothes 🔒[rough] ← [spanking-he-spanks-her, spanking-she-spanks-him]
+♀ uniforms-f-wear ↔ female-uniforms
+♂ uniforms-m-wear ↔ male-uniforms
+
+### oral (15 сцен)
+
+♀ blowjob ↔ blowjob-receive 🔓oral
+♂ blowjob-receive ↔ blowjob 🔓oral
+♂ cunnilingus ↔ cunnilingus-receive 🔓oral
+♀ cunnilingus-receive ↔ cunnilingus 🔓oral
+♀ deepthroat ↔ deepthroat-receive 🔒[oral] ← [blowjob]
+♂ deepthroat-receive ↔ deepthroat 🔒[oral]
+♂ facesitting-f-on-m-receive ↔ facesitting-she-on-him
+♂ facesitting-he-on-her ↔ facesitting-m-on-f-receive 🔒[oral]
+♀ facesitting-m-on-f-receive ↔ facesitting-he-on-her
+♀ facesitting-she-on-him ↔ facesitting-f-on-m-receive 🔒[oral]
+⚥ finger-sucking ← [blowjob, cunnilingus]
+♂ rimming-f-to-m-receive ↔ rimming-she-to-him 🔒[oral&anal] ← [anal-play-on-him-receive, blowjob-receive]
+♂ rimming-he-to-her ↔ rimming-m-to-f-receive
+♀ rimming-m-to-f-receive ↔ rimming-he-to-her 🔒[oral&anal] ← [anal-play-on-her-receive, cunnilingus-receive]
+♀ rimming-she-to-him ↔ rimming-f-to-m-receive
+
+### exhibitionism (13 сцен)
+
+⚥ dress-code 🔒[exhibitionism&lingerie] ← [public-sex, lingerie-lace]
+⚥ exhibitionism 🔒[exhibitionism]
+♀ female-striptease ↔ female-striptease-watch
+♂ female-striptease-watch ↔ female-striptease
+♀ glory-hole-f-gives ↔ glory-hole-f-gives-receive 🔒[exhibitionism&oral]
+♂ glory-hole-f-gives-receive ↔ glory-hole-f-gives 🔒[exhibitionism&oral]
+♂ glory-hole-m-gives ↔ glory-hole-m-gives-receive 🔒[exhibitionism&oral]
+♀ glory-hole-m-gives-receive ↔ glory-hole-m-gives 🔒[exhibitionism&oral]
+♂ male-striptease ↔ male-striptease-watch
+♀ male-striptease-watch ↔ male-striptease
+⚥ no-panties-walk 🔒[exhibitionism] ← [public-sex, lingerie-lace]
+⚥ public-sex 🔓exhibitionism
+⚥ voyeurism 🔒[exhibitionism]
+
+### roleplay (13 сцен)
+
+♀ boss-f-subordinate-m ↔ boss-f-subordinate-m-receive 🔒[roleplay]
+♂ boss-f-subordinate-m-receive ↔ boss-f-subordinate-m 🔒[roleplay]
+♂ boss-m-secretary-f ↔ boss-m-secretary-f-receive 🔓roleplay
+♀ boss-m-secretary-f-receive ↔ boss-m-secretary-f 🔓roleplay
+⚥ doctor-patient 🔒[roleplay]
+⚥ service-roleplay 🔒[roleplay] ← [stranger-roleplay, bondage-he-ties-her]
+⚥ stranger-roleplay 🔓roleplay
+⚥ taboo-roleplay 🔒![roleplay] ← [stranger-roleplay]
+♀ teacher-f-student-m ↔ teacher-f-student-m-receive 🔒[roleplay]
+♂ teacher-f-student-m-receive ↔ teacher-f-student-m 🔒[roleplay]
+♂ teacher-m-student-f ↔ teacher-m-student-f-receive 🔒[roleplay]
+♀ teacher-m-student-f-receive ↔ teacher-m-student-f 🔒[roleplay]
+⚥ truth-or-dare 🔒[roleplay] ← [stranger-roleplay, dirty-talk]
+
+### toys (11 сцен)
+
+⚥ butt-plug 🔒[anal|toys] ← [anal-play-on-her, anal-play-on-him, vibrator-play]
+♀ cock-ring 🔓toys
+⚥ dildo-play
+⚥ nipple-clamps 🔒[toys&rough] ← [nipple-play-he-on-her, nipple-play-she-on-him, spanking-he-spanks-her]
+⚥ remote-control-toy
+⚥ toy-beads 🔒[toys&anal] ← [anal-play-on-her, anal-play-on-him]
+⚥ toy-clitoral 🔒[toys] ← [vibrator-play]
+⚥ toy-plug-large 🔒[toys&anal] ← [anal-play-on-her, anal-play-on-him]
+⚥ toy-plug-small 🔒[toys&anal] ← [anal-play-on-her, anal-play-on-him]
+⚥ toy-wand 🔒[toys] ← [vibrator-play]
+⚥ vibrator-play 🔓toys
+
+### worship-service (11 сцен)
+
+⚥ armpit
+♂ body-worship-f-to-m-receive ↔ body-worship-she-worships-him ← [massage-f-to-m-receive]
+♂ body-worship-he-worships-her ↔ body-worship-m-to-f-receive ← [massage-he-massages-her]
+♀ body-worship-m-to-f-receive ↔ body-worship-he-worships-her ← [massage-m-to-f-receive]
+♀ body-worship-she-worships-him ↔ body-worship-f-to-m-receive ← [massage-she-massages-him]
+♀ cock-worship 🔒[oral] ← [blowjob]
+♂ foot-worship-f-to-m-receive ↔ foot-worship-she-worships-his ← [bondage-she-ties-him-receive]
+♂ foot-worship-he-worships-her ↔ foot-worship-m-to-f-receive
+♀ foot-worship-m-to-f-receive ↔ foot-worship-he-worships-her
+♀ foot-worship-she-worships-his ↔ foot-worship-f-to-m-receive
+♂ pussy-worship 🔒[oral] ← [cunnilingus]
+
+### cnc-rough (9 сцен)
+
+♂ cnc-he-takes-her ↔ cnc-he-takes-her-receive 🔒![rough] ← [spanking-he-spanks-her]
+♀ cnc-he-takes-her-receive ↔ cnc-he-takes-her 🔒![rough] ← [spanking-m-to-f-receive]
+♀ cnc-she-takes-him ↔ cnc-she-takes-him-receive 🔒![rough] ← [spanking-she-spanks-him]
+♂ cnc-she-takes-him-receive ↔ cnc-she-takes-him 🔒![rough] ← [spanking-f-to-m-receive]
+⚥ primal 🔒[rough] ← [spanking-he-spanks-her, spanking-she-spanks-him]
+♀ somnophilia-f-to-m ↔ somnophilia-f-to-m-receive 🔒![bondage] ← [free-use-m-available, bondage-she-ties-him]
+♂ somnophilia-f-to-m-receive ↔ somnophilia-f-to-m 🔒![bondage] ← [free-use-m-available-receive, bondage-she-ties-him-receive]
+♂ somnophilia-m-to-f ↔ somnophilia-m-to-f-receive 🔒![bondage] ← [free-use-f-available, bondage-he-ties-her]
+♀ somnophilia-m-to-f-receive ↔ somnophilia-m-to-f 🔒![bondage] ← [free-use-f-available-receive, bondage-he-ties-her-receive]
+
+### anal (8 сцен)
+
+♂ anal-play-on-her ↔ anal-play-on-her-receive 🔓anal
+♀ anal-play-on-her-receive ↔ anal-play-on-her 🔓anal
+♀ anal-play-on-him ↔ anal-play-on-him-receive 🔓anal
+♂ anal-play-on-him-receive ↔ anal-play-on-him 🔓anal
+♂ anal-sex-give ↔ anal-sex-receive 🔒[anal] ← [anal-play-on-her]
+♀ anal-sex-receive ↔ anal-sex-give 🔒[anal] ← [anal-play-on-her-receive]
+♀ pegging ↔ pegging-receive 🔒[anal] ← [anal-play-on-him, bondage-she-ties-him]
+♂ pegging-receive ↔ pegging 🔒[anal] ← [anal-play-on-him-receive, bondage-she-ties-him-receive]
+
+### positions (8 сцен)
+
+⚥ position-69
+⚥ position-cowgirl
+⚥ position-doggy
+⚥ position-missionary
+⚥ position-reverse-cowgirl
+⚥ position-sitting
+⚥ position-spooning
+⚥ position-standing
+
+### bondage-types (7 сцен)
+
+⚥ anal-hook 🔒[anal&bondage] ← [anal-play-on-her, anal-play-on-him, bondage-he-ties-her]
+⚥ bondage-chains 🔒[bondage] ← [bondage-he-ties-her, bondage-she-ties-him]
+⚥ bondage-restraint 🔒[bondage] ← [bondage-he-ties-her, bondage-she-ties-him]
+⚥ bondage-shibari 🔒[bondage] ← [bondage-he-ties-her, bondage-she-ties-him]
+⚥ bondage-spreader-bar 🔒[bondage] ← [bondage-he-ties-her, bondage-she-ties-him]
+⚥ bondage-st-andrews-cross 🔒[bondage]
+⚥ bondage-suspension 🔒![bondage]
+
+### intimacy-outside (7 сцен)
+
+⚥ casual-intimate-touch
+⚥ kitchen-counter
+⚥ morning-teasing
+⚥ secret-touch
+⚥ sexting 🔒[recording] ← [filming, dirty-talk]
+⚥ video-sex 🔒[recording] ← [filming]
+⚥ voice-instructions 🔒[recording&dirty_talk] ← [filming, dirty-talk]
+
+### manual (6 сцен)
+
+♂ fingering ↔ fingering-receive
+♀ fingering-receive ↔ fingering
+♀ handjob ↔ handjob-receive
+♂ handjob-receive ↔ handjob
+♂ titfuck-give ↔ titfuck-receive
+♀ titfuck-receive ↔ titfuck-give
+
+### age-play (4 сцен)
+
+♂ ddlg-daddy ↔ ddlg-little-girl 🔒[roleplay&bondage] ← [praise-he-praises-her]
+♀ ddlg-little-girl ↔ ddlg-daddy 🔒[roleplay&bondage] ← [praise-he-praises-her, praise-m-to-f-receive]
+♂ mdlb-little-boy ↔ mdlb-mommy 🔒[roleplay&bondage] ← [praise-she-praises-him, praise-f-to-m-receive]
+♀ mdlb-mommy ↔ mdlb-little-boy 🔒[roleplay&bondage] ← [praise-she-praises-him]
+
+### chastity (4 сцен)
+
+♀ chastity-he-locked-keyholder ↔ chastity-he-locked-wear
+♂ chastity-he-locked-wear ↔ chastity-he-locked-keyholder
+♂ chastity-she-locked-keyholder ↔ chastity-she-locked-wear
+♀ chastity-she-locked-wear ↔ chastity-she-locked-keyholder
+
+### cuckold (4 сцен)
+
+♀ cuckold-play ↔ cuckold-watch 🔒[group] ← [threesome-mfm]
+♂ cuckold-watch ↔ cuckold-play 🔒[group] ← [threesome-mfm]
+♂ hotwife-stag ↔ hotwife-vixen-f 🔒[group] ← [threesome-mfm]
+♀ hotwife-vixen-f ↔ hotwife-stag 🔒[group] ← [threesome-mfm]
+
+### group (6 сцен)
+
+⚥ double-penetration 🔒[group&anal] ← [threesome-mfm, anal-play-on-her]
+⚥ gangbang 🔒![group] ← [threesome-mfm]
+⚥ orgy 🔒![group] ← [threesome-fmf, threesome-mfm]
+⚥ swinging-partner-swap
+⚥ threesome-fmf ↔ threesome-mfm 🔓group
+⚥ threesome-mfm ↔ threesome-fmf 🔓group
+
+### locations (6 сцен)
+
+⚥ location-bedroom
+⚥ location-car
+⚥ location-hotel
+⚥ location-kitchen
+⚥ location-nature
+⚥ location-shower
+
+### pet-play (4 сцен)
+
+♀ pet-play-he-is-pet-owner ↔ pet-play-he-is-pet-sub ← [collar-she-owns-him-receive]
+♂ pet-play-he-is-pet-sub ↔ pet-play-he-is-pet-owner ← [collar-she-owns-him]
+♂ pet-play-she-is-pet-owner ↔ pet-play-she-is-pet-sub ← [collar-he-owns-her-receive]
+♀ pet-play-she-is-pet-sub ↔ pet-play-she-is-pet-owner ← [collar-he-owns-her]
+
+### emotional-context (5 сцен)
+
+⚥ angry-sex
+⚥ cheating-fantasy
+⚥ emotional-sex
+⚥ first-time-together
+⚥ makeup-sex
+
+### lingerie-styles (5 сцен)
+
+⚥ lingerie-corset 🔒[lingerie]
+⚥ lingerie-fishnet 🔒[lingerie]
+⚥ lingerie-lace 🔓lingerie
+⚥ lingerie-satin 🔒[lingerie]
+⚥ lingerie-sheer 🔒[lingerie]
+
+### massage (4 сцен)
+
+♂ massage-f-to-m-receive ↔ massage-she-massages-him
+♂ massage-he-massages-her ↔ massage-m-to-f-receive
+♀ massage-m-to-f-receive ↔ massage-he-massages-her
+♀ massage-she-massages-him ↔ massage-f-to-m-receive
+
+### sensory (4 сцен)
+
+⚥ blindfold 🔒[bondage] ← [bondage-he-ties-her, bondage-she-ties-him]
+⚥ electrostim 🔒[toys]
+⚥ feather-tickle
+⚥ ice-play
+
+### romantic (3 сцен)
+
+⚥ aftercare
+⚥ quickie
+⚥ romantic-sex
+
+### solo-mutual (2 сцен)
+
+⚥ joi
+⚥ mutual-masturbation
+
+### symmetric (2 сцен)
+
+⚥ sex-locations
+⚥ sex-positions
+
+### filming (1 сцен)
+
+⚥ filming 🔓recording
+
+### furniture (1 сцен)
+
+⚥ sex-swing
 
 ## ОНБОРДИНГ СЦЕНЫ (is_onboarding: true)
 
@@ -526,35 +476,34 @@
 
 ## CLARIFICATION АНАЛИЗ
 
-### bondage-he-ties-her (20 clarifications)
-  - ddlg-daddy
-  - ddlg-little-girl
-  - anal-hook
-  - bondage-chains
-  - bondage-restraint
-  - bondage-shibari
-  - bondage-spreader-bar
-  - cnc-he-takes-her
-  - somnophilia-m-to-f
-  - collar-he-owns-her
-  ... и ещё 10
-
-### bondage-she-ties-him (20 clarifications)
-  - mdlb-little-boy
-  - mdlb-mommy
+### bondage-she-ties-him (17 clarifications)
   - pegging
   - bondage-chains
   - bondage-restraint
   - bondage-shibari
   - bondage-spreader-bar
-  - cnc-she-takes-him
   - somnophilia-f-to-m
   - collar-she-owns-him
-  ... и ещё 10
+  - edging-she-controls-him
+  - feminization-do
+  - forced-orgasm-on-him
+  ... и ещё 7
 
-### bondage-she-ties-him-receive (12 clarifications)
+### bondage-he-ties-her (17 clarifications)
+  - anal-hook
+  - bondage-chains
+  - bondage-restraint
+  - bondage-shibari
+  - bondage-spreader-bar
+  - somnophilia-m-to-f
+  - collar-he-owns-her
+  - edging-he-controls-her
+  - forced-orgasm-on-her
+  - free-use-f-available
+  ... и ещё 7
+
+### bondage-she-ties-him-receive (11 clarifications)
   - pegging-receive
-  - cnc-she-takes-him-receive
   - somnophilia-f-to-m-receive
   - collar-she-owns-him-receive
   - edging-she-controls-him-receive
@@ -563,43 +512,34 @@
   - free-use-m-available-receive
   - ruined-orgasm-f-to-m-receive
   - mummification-m-receive
-  ... и ещё 2
-
-### lingerie-lace (11 clarifications)
-  - heels-only
-  - latex-leather
-  - collar-she-owns-him-receive
-  - collar-she-owns-him
-  - collar-he-owns-her-receive
-  - collar-he-owns-her
-  - feminization-do
-  - feminization-wear
-  - dress-code
-  - no-panties-walk
+  - objectification-m-receive
   ... и ещё 1
 
-### bondage-he-ties-her-receive (9 clarifications)
-  - cnc-he-takes-her-receive
-  - somnophilia-m-to-f-receive
-  - collar-he-owns-her-receive
-  - edging-he-controls-her-receive
-  - forced-orgasm-on-her-receive
-  - free-use-f-available-receive
-  - ruined-orgasm-m-to-f-receive
-  - mummification-f-receive
-  - objectification-f-receive
+### dirty-talk (10 clarifications)
+  - sex-tasks
+  - face-slapping-m-to-f-receive
+  - face-slapping-he-slaps-her
+  - sexting
+  - voice-instructions
+  - truth-or-dare
+  - degradation-f-to-m-receive
+  - degradation-she-degrades-him
+  - degradation-m-to-f-receive
+  - degradation-he-degrades-her
 
-### anal-play-on-him (8 clarifications)
-  - pegging
+### anal-play-on-her (9 clarifications)
+  - anal-sex-give
   - anal-hook
-  - figging-f-to-m
-  - fisting-anal-f-to-m
+  - figging-m-to-f
+  - fisting-anal-m-to-f
+  - double-penetration
   - butt-plug
   - toy-beads
   - toy-plug-large
   - toy-plug-small
 
-### vibrator-play (8 clarifications)
+### vibrator-play (9 clarifications)
+  - squirting-watch
   - squirting
   - forced-orgasm-on-her-receive
   - forced-orgasm-on-her
@@ -609,11 +549,11 @@
   - toy-clitoral
   - toy-wand
 
-### anal-play-on-her (8 clarifications)
+### anal-play-on-him (8 clarifications)
+  - pegging
   - anal-hook
-  - figging-m-to-f
-  - fisting-anal-m-to-f
-  - double-penetration
+  - figging-f-to-m
+  - fisting-anal-f-to-m
   - butt-plug
   - toy-beads
   - toy-plug-large
@@ -629,15 +569,15 @@
   - whipping-m-to-f
   - nipple-clamps
 
-### dirty-talk (8 clarifications)
-  - sex-tasks
-  - face-slapping-m-to-f-receive
-  - face-slapping-he-slaps-her
-  - sexting
-  - voice-instructions
-  - truth-or-dare
-  - degradation-f-to-m-receive
-  - degradation-m-to-f-receive
+### bondage-he-ties-her-receive (8 clarifications)
+  - somnophilia-m-to-f-receive
+  - collar-he-owns-her-receive
+  - edging-he-controls-her-receive
+  - forced-orgasm-on-her-receive
+  - free-use-f-available-receive
+  - ruined-orgasm-m-to-f-receive
+  - mummification-f-receive
+  - objectification-f-receive
 
 ### spanking-she-spanks-him (7 clarifications)
   - torn-clothes
@@ -647,6 +587,15 @@
   - choking-she-chokes-him
   - face-slapping-she-slaps-him
   - whipping-f-to-m
+
+### threesome-mfm (7 clarifications)
+  - cuckold-play
+  - cuckold-watch
+  - hotwife-stag
+  - hotwife-vixen-f
+  - double-penetration
+  - gangbang
+  - orgy
 
 ### spanking-f-to-m-receive (6 clarifications)
   - cnc-she-takes-him-receive
@@ -664,26 +613,29 @@
   - whipping-m-to-f-receive
   - degradation-m-to-f-receive
 
+### anal-play-on-her-receive (4 clarifications)
+  - anal-sex-receive
+  - figging-m-to-f-receive
+  - fisting-anal-m-to-f-receive
+  - rimming-m-to-f-receive
+
 ### anal-play-on-him-receive (4 clarifications)
   - pegging-receive
   - figging-f-to-m-receive
   - fisting-anal-f-to-m-receive
   - rimming-f-to-m-receive
 
-### cunnilingus (3 clarifications)
+### cunnilingus (4 clarifications)
+  - squirting-watch
   - squirting
   - finger-sucking
   - pussy-worship
 
-### anal-play-on-her-receive (3 clarifications)
-  - figging-m-to-f-receive
-  - fisting-anal-m-to-f-receive
-  - rimming-m-to-f-receive
-
-### threesome-mfm (3 clarifications)
-  - double-penetration
-  - gangbang
-  - orgy
+### lingerie-lace (4 clarifications)
+  - heels-only
+  - latex-leather
+  - dress-code
+  - no-panties-walk
 
 ### filming (3 clarifications)
   - sexting
@@ -706,8 +658,6 @@
 - anal/anal-play-on-her: "Анальные игры"
 - anal/anal-play-on-him-receive: "Анальные игры"
 - anal/anal-play-on-him: "Анальные игры"
-- anal/anal-sex-give: "Анальный секс"
-- anal/anal-sex-receive: "Анальный секс"
 - body-fluids/finish-preference-f: "Куда ему кончить"
 - body-fluids/finish-preference-m: "Куда кончить"
 - body-fluids/golden-shower-f-to-m: "Золотой дождь"
@@ -722,7 +672,6 @@
 - body-fluids/squirt-receiving-mouth: "Сквирт в рот"
 - body-fluids/squirting-in-mouth: "Сквирт ему в рот"
 - body-fluids/squirting-on-him: "Сквирт на него"
-- body-fluids/squirting-watch: "Смотреть как она сквиртует"
 - bondage-types/bondage-st-andrews-cross: "Андреевский крест"
 - bondage-types/bondage-suspension: "Подвешивание"
 - chastity/chastity-she-locked-keyholder: "Chastity"
@@ -746,10 +695,6 @@
 - control-power/bondage-she-ties-him: "Бондаж"
 - control-power/bondage-he-ties-her-receive: "Бондаж"
 - control-power/bondage-he-ties-her: "Бондаж"
-- cuckold/cuckold-play: "Cuckold"
-- cuckold/cuckold-watch: "Cuckold"
-- cuckold/hotwife-stag: "Hotwife"
-- cuckold/hotwife-vixen-f: "Vixen"
 - emotional-context/angry-sex: "Злой секс"
 - emotional-context/cheating-fantasy: "Фантазия об измене"
 - emotional-context/emotional-sex: "Эмоциональный контекст"
@@ -766,22 +711,10 @@
 - exhibitionism/male-striptease-watch: "Мужской стриптиз"
 - exhibitionism/male-striptease: "Мужской стриптиз"
 - exhibitionism/voyeurism: "Вуайеризм"
-- extreme/breath-play-f-to-m-receive: "Контроль дыхания"
-- extreme/breath-play-f-to-m: "Контроль дыхания (она контролирует)"
-- extreme/breath-play-m-to-f-receive: "Контроль дыхания"
-- extreme/breath-play-m-to-f: "Контроль дыхания (он контролирует)"
 - extreme/breeding-kink-f: "Бридинг-кинк"
 - extreme/breeding-kink-m: "Бридинг-кинк"
 - extreme/fucking-machine: "Секс-машина"
-- extreme/knife-play-f-to-m-receive: "Ножевые игры"
-- extreme/knife-play-f-to-m: "Ножевые игры (она ведёт)"
-- extreme/knife-play-m-to-f-receive: "Ножевые игры"
-- extreme/knife-play-m-to-f: "Ножевые игры (он ведёт)"
 - extreme/lactation: "Лактация"
-- extreme/needle-play-f-to-m-receive: "Игры с иглами"
-- extreme/needle-play-f-to-m: "Игры с иглами"
-- extreme/needle-play-m-to-f-receive: "Игры с иглами"
-- extreme/needle-play-m-to-f: "Игры с иглами"
 - filming/filming: "Съёмка"
 - furniture/sex-swing: "Секс-качели"
 - group/swinging-partner-swap: "Свингинг"
@@ -837,10 +770,6 @@
 - oral/facesitting-he-on-her: "Facesitting"
 - oral/rimming-she-to-him: "Римминг"
 - oral/rimming-he-to-her: "Римминг"
-- pet-play/pet-play-she-is-pet-owner: "Pet play"
-- pet-play/pet-play-she-is-pet-sub: "Pet play"
-- pet-play/pet-play-he-is-pet-owner: "Pet play"
-- pet-play/pet-play-he-is-pet-sub: "Pet play"
 - positions/position-69: "69"
 - positions/position-cowgirl: "Наездница"
 - positions/position-doggy: "Догги-стайл"
@@ -878,8 +807,6 @@
 - verbal/body-writing-she-writes-on-him: "Надписи на теле"
 - verbal/body-writing-he-writes-on-her: "Надписи на теле"
 - verbal/body-writing-words: "Какие надписи?"
-- verbal/degradation-she-degrades-him: "Унижение"
-- verbal/degradation-he-degrades-her: "Унижение"
 - verbal/dirty-talk: "Dirty Talk"
 - verbal/dirty-words-he-likes: "Грязные слова"
 - verbal/dirty-words-she-likes: "Грязные слова"
@@ -898,51 +825,50 @@
 - verbal/sex-initiation-she-says-dirty: "Как предложить секс"
 - verbal/sex-initiation-she-says-soft: "Как предложить близость"
 - worship-service/armpit: "Подмышки"
-- worship-service/body-worship-she-worships-him: "Поклонение телу"
-- worship-service/body-worship-he-worships-her: "Поклонение телу"
 - worship-service/foot-worship-she-worships-his: "Поклонение ступням"
+- worship-service/foot-worship-m-to-f-receive: "Поклонение ногам"
 - worship-service/foot-worship-he-worships-her: "Поклонение ногам"
 
 ## ГЕЙТЫ И СЦЕНЫ
 
-### bondage (58 сцен)
+### bondage (57 сцен)
   - ddlg-daddy
   - ddlg-little-girl
   - mdlb-little-boy
   - mdlb-mommy
-  - pegging-receive
-  - pegging
   - anal-hook
   - bondage-chains
   - bondage-restraint
   - bondage-shibari
-  ... и ещё 48
+  - bondage-spreader-bar
+  - bondage-st-andrews-cross
+  ... и ещё 47
 
-### rough (41 сцен)
-  - spitting-f-to-m
-  - spitting-m-to-f
-  - spitting-m-to-f-receive
-  - spitting-f-to-m-receive
+### rough (38 сцен)
   - torn-clothes
   - cnc-she-takes-him-receive
   - cnc-she-takes-him
   - cnc-he-takes-her-receive
   - cnc-he-takes-her
   - primal
-  ... и ещё 31
+  - breath-play-f-to-m-receive
+  - breath-play-f-to-m
+  - breath-play-m-to-f-receive
+  - breath-play-m-to-f
+  ... и ещё 28
 
-### anal (18 сцен)
+### anal (20 сцен)
   - anal-play-on-her-receive
   - anal-play-on-her
   - anal-play-on-him-receive
   - anal-play-on-him
+  - anal-sex-give
+  - anal-sex-receive
   - pegging-receive
   - pegging
   - anal-hook
   - fisting-anal-f-to-m-receive
-  - fisting-anal-f-to-m
-  - fisting-anal-m-to-f-receive
-  ... и ещё 8
+  ... и ещё 10
 
 ### roleplay (17 сцен)
   - ddlg-daddy
@@ -970,9 +896,7 @@
   - deepthroat
   ... и ещё 6
 
-### toys (15 сцен)
-  - fisting-vaginal-m-to-f-receive
-  - fisting-vaginal-m-to-f
+### toys (13 сцен)
   - fucking-machine
   - wax-play-she-on-him
   - wax-play-he-on-her
@@ -981,19 +905,20 @@
   - cock-ring
   - nipple-clamps
   - toy-beads
-  ... и ещё 5
+  - toy-clitoral
+  - toy-plug-large
+  ... и ещё 3
 
-### body_fluids (10 сцен)
-  - golden-shower-f-to-m
-  - golden-shower-m-to-f
-  - golden-shower-m-to-f-receive
-  - golden-shower-f-to-m-receive
-  - spitting-f-to-m
-  - spitting-m-to-f
-  - spitting-m-to-f-receive
-  - spitting-f-to-m-receive
-  - squirting
-  - lactation
+### group (9 сцен)
+  - cuckold-play
+  - cuckold-watch
+  - hotwife-stag
+  - hotwife-vixen-f
+  - double-penetration
+  - gangbang
+  - orgy
+  - threesome-fmf
+  - threesome-mfm
 
 ### exhibitionism (9 сцен)
   - dress-code
@@ -1023,20 +948,6 @@
   - degradation-m-to-f-receive
   - dirty-talk
 
-### group (5 сцен)
-  - double-penetration
-  - gangbang
-  - orgy
-  - threesome-fmf
-  - threesome-mfm
-
-### romantic (5 сцен)
-  - massage-f-to-m-receive
-  - massage-m-to-f-receive
-  - aftercare
-  - body-worship-f-to-m-receive
-  - body-worship-m-to-f-receive
-
 ### recording (4 сцен)
   - filming
   - sexting
@@ -1047,25 +958,26 @@
   - praise-she-praises-him
   - praise-he-praises-her
 
-### foot (2 сцен)
-  - foot-worship-f-to-m-receive
-  - foot-worship-m-to-f-receive
-
 ## СЦЕНЫ БЕЗ ГЕЙТОВ (показываются всем)
 
-Всего: 131
+Всего: 140
 
-- anal/anal-sex-give
-- anal/anal-sex-receive
 - body-fluids/finish-preference-f
 - body-fluids/finish-preference-m
+- body-fluids/golden-shower-f-to-m
+- body-fluids/golden-shower-m-to-f
+- body-fluids/golden-shower-m-to-f-receive
+- body-fluids/golden-shower-f-to-m-receive
+- body-fluids/spitting-f-to-m
+- body-fluids/spitting-m-to-f
+- body-fluids/spitting-m-to-f-receive
+- body-fluids/spitting-f-to-m-receive
 - body-fluids/squirt-receiving-body
 - body-fluids/squirt-receiving-mouth
 - body-fluids/squirting-in-mouth
 - body-fluids/squirting-on-him
 - body-fluids/squirting-watch
-- bondage-types/bondage-st-andrews-cross
-- bondage-types/bondage-suspension
+- body-fluids/squirting
 - chastity/chastity-she-locked-keyholder
 - chastity/chastity-she-locked-wear
 - chastity/chastity-he-locked-keyholder
@@ -1080,18 +992,12 @@
 - clothing/male-lingerie
 - clothing/stockings-garters
 - clothing/uniforms-f-wear
-- clothing/female-uniforms
-- clothing/uniforms-m-wear
-- clothing/male-uniforms
-- cuckold/cuckold-play
-- cuckold/cuckold-watch
-... и ещё 101
+... и ещё 110
 
 ## ВСЕ SLUG-и (для поиска)
 
 aftercare
 anal-hook
-anal-interest
 anal-play-on-her
 anal-play-on-her-receive
 anal-play-on-him
@@ -1105,7 +1011,6 @@ armpit
 blindfold
 blowjob
 blowjob-receive
-body-fetishes
 body-worship-f-to-m-receive
 body-worship-he-worships-her
 body-worship-m-to-f-receive
@@ -1127,21 +1032,17 @@ boss-f-subordinate-m
 boss-f-subordinate-m-receive
 boss-m-secretary-f
 boss-m-secretary-f-receive
-breath-play
 breath-play-f-to-m
 breath-play-f-to-m-receive
 breath-play-m-to-f
 breath-play-m-to-f-receive
-breeding-kink
 breeding-kink-f
 breeding-kink-m
 butt-plug
 casual-intimate-touch
 cbt
-chastity-he-locked
 chastity-he-locked-keyholder
 chastity-he-locked-wear
-chastity-she-locked
 chastity-she-locked-keyholder
 chastity-she-locked-wear
 cheating-fantasy
@@ -1149,9 +1050,6 @@ choking-f-to-m-receive
 choking-he-chokes-her
 choking-m-to-f-receive
 choking-she-chokes-him
-clothing-preference
-clothing-preference-f
-clothing-preference-m
 cnc-he-takes-her
 cnc-he-takes-her-receive
 cnc-she-takes-him
@@ -1162,13 +1060,10 @@ collar-he-owns-her
 collar-he-owns-her-receive
 collar-she-owns-him
 collar-she-owns-him-receive
-cuckold
 cuckold-play
 cuckold-watch
-cum-where-to-finish
 cunnilingus
 cunnilingus-receive
-daddy-dom-little-girl
 ddlg-daddy
 ddlg-little-girl
 deepthroat
@@ -1179,7 +1074,6 @@ degradation-m-to-f-receive
 degradation-she-degrades-him
 dildo-play
 dirty-talk
-dirty-talk-interest
 dirty-words-he-likes
 dirty-words-she-likes
 doctor-patient
@@ -1192,7 +1086,6 @@ edging-she-controls-him-receive
 electrostim
 emotional-sex
 exhibitionism
-exhibitionism
 face-slapping-f-to-m-receive
 face-slapping-he-slaps-her
 face-slapping-m-to-f-receive
@@ -1201,17 +1094,14 @@ facesitting-f-on-m-receive
 facesitting-he-on-her
 facesitting-m-on-f-receive
 facesitting-she-on-him
-fantasy-reality
 feather-tickle
 female-harness
 female-lingerie
 female-striptease
 female-striptease-watch
 female-uniforms
-feminization
 feminization-do
 feminization-wear
-figging
 figging-f-to-m
 figging-f-to-m-receive
 figging-m-to-f
@@ -1223,7 +1113,6 @@ fingering-receive
 finish-preference-f
 finish-preference-m
 first-time-together
-fisting
 fisting-anal-f-to-m
 fisting-anal-f-to-m-receive
 fisting-anal-m-to-f
@@ -1246,30 +1135,24 @@ fucking-machine
 gangbang
 genital-naming-he-names-hers
 genital-naming-she-names-his
-glory-hole-blowjob
 glory-hole-f-gives
 glory-hole-f-gives-receive
 glory-hole-m-gives
 glory-hole-m-gives-receive
-golden-shower
 golden-shower-f-to-m
 golden-shower-f-to-m-receive
 golden-shower-m-to-f
 golden-shower-m-to-f-receive
-group-interest
 handjob
 handjob-receive
 harness-f-wear
 harness-m-wear
 heels-only
 hotwife-stag
-hotwife-vixen
 hotwife-vixen-f
 ice-play
-intensity
 joi
 kitchen-counter
-knife-play
 knife-play-f-to-m
 knife-play-f-to-m-receive
 knife-play-m-to-f
@@ -1301,20 +1184,17 @@ massage-m-to-f-receive
 massage-she-massages-him
 mdlb-little-boy
 mdlb-mommy
-mommy-dom-little-boy
 morning-teasing
 mummification-f
 mummification-f-receive
 mummification-m
 mummification-m-receive
 mutual-masturbation
-needle-play
 needle-play-f-to-m
 needle-play-f-to-m-receive
 needle-play-m-to-f
 needle-play-m-to-f-receive
 nipple-clamps
-nipple-play
 nipple-play-f-to-m-receive
 nipple-play-he-on-her
 nipple-play-m-to-f-receive
@@ -1324,21 +1204,14 @@ objectification-f
 objectification-f-receive
 objectification-m
 objectification-m-receive
-openness
-oral-preference
 oral-wording-he-says
 oral-wording-she-says
 orgasm-control
 orgy
-pain-tolerance
-pain-tolerance-f
-pain-tolerance-m
 pegging
 pegging-receive
-pet-play-he-is-pet
 pet-play-he-is-pet-owner
 pet-play-he-is-pet-sub
-pet-play-she-is-pet
 pet-play-she-is-pet-owner
 pet-play-she-is-pet-sub
 position-69
@@ -1349,12 +1222,8 @@ position-reverse-cowgirl
 position-sitting
 position-spooning
 position-standing
-power-dynamic
-power-dynamic-f
-power-dynamic-m
 praise-f-to-m-receive
 praise-he-praises-her
-praise-interest
 praise-m-to-f-receive
 praise-she-praises-him
 praise-words-he-likes
@@ -1368,9 +1237,7 @@ rimming-f-to-m-receive
 rimming-he-to-her
 rimming-m-to-f-receive
 rimming-she-to-him
-roleplay-interest
 romantic-sex
-ruined-orgasm
 ruined-orgasm-f-to-m
 ruined-orgasm-f-to-m-receive
 ruined-orgasm-m-to-f
@@ -1386,7 +1253,6 @@ sex-positions
 sex-swing
 sex-tasks
 sexting
-somnophilia
 somnophilia-f-to-m
 somnophilia-f-to-m-receive
 somnophilia-m-to-f
@@ -1395,12 +1261,10 @@ spanking-f-to-m-receive
 spanking-he-spanks-her
 spanking-m-to-f-receive
 spanking-she-spanks-him
-spitting
 spitting-f-to-m
 spitting-f-to-m-receive
 spitting-m-to-f
 spitting-m-to-f-receive
-squirt-receiving
 squirt-receiving-body
 squirt-receiving-mouth
 squirting
@@ -1417,7 +1281,6 @@ teacher-m-student-f
 teacher-m-student-f-receive
 threesome-fmf
 threesome-mfm
-titfuck
 titfuck-give
 titfuck-receive
 torn-clothes
@@ -1426,17 +1289,13 @@ toy-clitoral
 toy-plug-large
 toy-plug-small
 toy-wand
-toys-interest
 truth-or-dare
 uniforms-f-wear
 uniforms-m-wear
-verbal-preference
 vibrator-play
 video-sex
 voice-instructions
 voyeurism
-voyeurism
-watching-showing
 wax-play
 wax-play-f-to-m-receive
 wax-play-he-on-her
@@ -1446,3 +1305,57 @@ whipping-f-to-m
 whipping-f-to-m-receive
 whipping-m-to-f
 whipping-m-to-f-receive
+
+
+## АРХИВ (неактивные сцены)
+
+Всего: 48
+
+- _archive/anal-interest
+- _archive/body-fetishes
+- extreme/breath-play
+- extreme/breeding-kink
+- chastity/chastity-he-locked
+- chastity/chastity-she-locked
+- _archive/clothing-preference
+- _archive/clothing-preference-f
+- _archive/clothing-preference-m
+- cuckold/cuckold
+- body-fluids/cum-where-to-finish
+- age-play/daddy-dom-little-girl
+- _archive/dirty-talk-interest
+- _archive/exhibitionism
+- _archive/fantasy-reality
+- control-power/feminization
+- extreme/figging
+- extreme/fisting
+- exhibitionism/glory-hole-blowjob
+- body-fluids/golden-shower
+- _archive/group-interest
+- cuckold/hotwife-vixen
+- _archive/intensity
+- extreme/knife-play
+- age-play/mommy-dom-little-boy
+- extreme/needle-play
+- impact-pain/nipple-play
+- _archive/openness
+- _archive/oral-preference
+- _archive/pain-tolerance
+- _archive/pain-tolerance-f
+- _archive/pain-tolerance-m
+- pet-play/pet-play-he-is-pet
+- pet-play/pet-play-she-is-pet
+- _archive/power-dynamic
+- _archive/power-dynamic-f
+- _archive/power-dynamic-m
+- _archive/praise-interest
+- _archive/roleplay-interest
+- control-power/ruined-orgasm
+- cnc-rough/somnophilia
+- body-fluids/spitting
+- body-fluids/squirt-receiving
+- manual/titfuck
+- _archive/toys-interest
+- _archive/verbal-preference
+- _archive/voyeurism
+- _archive/watching-showing
