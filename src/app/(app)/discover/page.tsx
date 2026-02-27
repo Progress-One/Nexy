@@ -1,13 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createClient } from '@/lib/supabase/client';
 import { SwipeableSceneCard, type SwipeResponseValue } from '@/components/discovery/SwipeableSceneCard';
 import { type ExperienceLevel } from '@/components/discovery/ExperienceSelector';
 import { BodyMapAnswer } from '@/components/discovery/BodyMapAnswer';
-import { ExclusionDialog } from '@/components/discovery/ExclusionDialog';
 import { SceneRendererV3, type SceneV3Response } from '@/components/discovery/SceneRendererV3';
 import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCw } from 'lucide-react';
@@ -29,11 +27,6 @@ import type {
   Profile,
   BodyGender,
 } from '@/lib/types';
-
-interface CategoryInfo {
-  slug: string;
-  name: string;
-}
 
 type DiscoveryStage = 'onboarding_intro' | 'onboarding' | 'onboarding_results' | 'body_map' | 'scenes';
 
@@ -62,10 +55,6 @@ export default function DiscoverPage() {
 
   const [locale, setLocale] = useState<Locale>('ru');
 
-  // Exclusion dialog state
-  const [showExclusionDialog, setShowExclusionDialog] = useState(false);
-  const [detectedCategory, setDetectedCategory] = useState<CategoryInfo | null>(null);
-
   // User profile state
   const [userProfile, setUserProfile] = useState<Profile | null>(null);
 
@@ -77,7 +66,6 @@ export default function DiscoverPage() {
   const [experience, setExperience] = useState<ExperienceLevel>(null);
 
   const supabase = createClient();
-  const router = useRouter();
 
   // Get current scene based on stage
   const currentScene = discoveryStage === 'onboarding'
@@ -397,7 +385,7 @@ export default function DiscoverPage() {
     } finally {
       setLoading(false);
     }
-  }, [supabase, checkBodyMapStatus, fetchBodyMapActivities, fetchRegularScenes, router]);
+  }, [supabase, checkBodyMapStatus, fetchBodyMapActivities, fetchRegularScenes]);
 
   useEffect(() => {
     fetchScenes();
@@ -741,31 +729,6 @@ export default function DiscoverPage() {
       console.error('Error submitting V3 response:', error);
     } finally {
       setSubmitting(false);
-    }
-  };
-
-  // Handle exclusion confirm
-  const handleExclusionConfirm = async (type: 'category' | 'tag' | 'scene', value: string, level: 'soft' | 'hard') => {
-    try {
-      if (type === 'category' || type === 'tag') {
-        await fetch('/api/exclusions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(type === 'category' ? { categorySlug: value, level } : { tag: value, level }),
-        });
-      }
-
-      if (discoveryStage === 'scenes') {
-        if (currentIndex < scenes.length - 1) {
-          setCurrentIndex(prev => prev + 1);
-        } else {
-          await fetchScenes();
-        }
-      } else {
-        await moveToNextScene();
-      }
-    } catch (error) {
-      console.error('Error saving exclusion:', error);
     }
   };
 
@@ -1119,14 +1082,6 @@ export default function DiscoverPage() {
         </div>
       )}
 
-      {/* Exclusion Dialog */}
-      <ExclusionDialog
-        isOpen={showExclusionDialog}
-        onClose={() => setShowExclusionDialog(false)}
-        category={detectedCategory}
-        tags={currentScene?.tags || []}
-        onConfirm={handleExclusionConfirm}
-      />
     </div>
   );
 }
