@@ -33,7 +33,7 @@ export function Testimonials() {
             >
               <Quote className="w-8 h-8 text-primary/20 absolute top-4 right-4" />
               <blockquote className="text-foreground mb-4 relative z-10">
-                "{testimonial.quote}"
+                &quot;{testimonial.quote}&quot;
               </blockquote>
               <cite className="text-sm text-muted-foreground not-italic">
                 — {testimonial.author}

@@ -41,7 +41,7 @@ export function Pricing() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Start free, upgrade when you're ready
+            Start free, upgrade when you&apos;re ready
           </h2>
         </div>
 

@@ -31,8 +31,9 @@ export function ZoneCalibrationTool({
   useEffect(() => {
     const key = `${gender}-${view}` as const;
     const newZones = [...(ZONE_REGIONS[key] || [])];
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sync state reset on prop change
     setZones(newZones);
-    setSelectedZoneIndex(null); // Reset selection when switching
+    setSelectedZoneIndex(null);
     setHoveredZoneIndex(null);
     setDraggingZone(null);
   }, [gender, view]);

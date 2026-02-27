@@ -77,7 +77,7 @@ export default function BodyMapCalibrationPage() {
           <p><strong>2. Перетащите зону</strong> за центр для перемещения</p>
           <p><strong>3. Перетащите края</strong> (верх, низ, лево, право) для изменения размера</p>
           <p><strong>4. Перетащите углы</strong> для точной настройки</p>
-          <p><strong>5. Нажмите "Сохранить"</strong> — код скопируется в буфер обмена</p>
+          <p><strong>5. Нажмите &quot;Сохранить&quot;</strong> — код скопируется в буфер обмена</p>
           <p className="text-muted-foreground mt-4">
             Скопированный код можно вставить в <code className="bg-muted px-1 py-0.5 rounded">zone-detection.ts</code> в соответствующий массив зон.
           </p>

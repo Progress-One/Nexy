@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, Check, Image as ImageIcon, Link2, Search, X, ChevronLeft, ChevronRight, SkipForward, Grid, Layers, Sparkles, Eye, EyeOff, Zap, StopCircle } from 'lucide-react';
+import { Loader2, Check, Image as ImageIcon, Link2, Search, X, ChevronLeft, ChevronRight, SkipForward, Grid, Layers, Sparkles, Eye, EyeOff, Zap, StopCircle, Unlink, Trash2, Star, AlertTriangle, RotateCcw } from 'lucide-react';
 
 interface StorageFile {
   name: string;
@@ -26,10 +26,12 @@ interface SceneData {
   category: string;
   tags?: string[];
   ai_description?: { ru: string; en: string };
+  user_description?: { ru: string; en: string };
   image_prompt?: string;
   image_url?: string;
   image_variants?: ImageVariant[];
   generation_prompt?: string;
+  paired_scene?: string; // slug of paired scene
 }
 
 interface SceneSearchResult extends SceneData {
@@ -46,6 +48,13 @@ interface SceneSuggestion {
   matchReasons: string[];
 }
 
+interface ImageAnalysisFlags {
+  anatomyIssues?: boolean;
+  anatomyDetails?: string;
+  sameGenderOnly?: boolean;
+  nonSexual?: boolean;
+}
+
 interface ImageAnalysis {
   participants: { count: number; genders: string[] };
   activity: string;
@@ -53,6 +62,9 @@ interface ImageAnalysis {
   mood: string;
   setting: string;
   elements: string[];
+  bodyParts?: string[];
+  clothing?: string[];
+  flags?: ImageAnalysisFlags;
 }
 
 type ViewMode = 'grid' | 'gallery';
@@ -64,6 +76,7 @@ export default function LinkImagesPage() {
   const [linking, setLinking] = useState<string | null>(null);
   const [selectedScene, setSelectedScene] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [imageSearchTerm, setImageSearchTerm] = useState('');
   const [showAll, setShowAll] = useState(true);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -73,12 +86,20 @@ export default function LinkImagesPage() {
   const [sceneSearch, setSceneSearch] = useState('');
   const [linkedCount, setLinkedCount] = useState(0);
   const [skippedFiles, setSkippedFiles] = useState<Set<string>>(new Set());
+  const [savedFiles, setSavedFiles] = useState<Set<string>>(new Set());
 
   // AI suggestion state
   const [aiSuggestions, setAiSuggestions] = useState<SceneSuggestion[]>([]);
   const [imageAnalysis, setImageAnalysis] = useState<ImageAnalysis | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [showLinked, setShowLinked] = useState(false);
+
+  // Lightbox state
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+
+  // Jump to position state
+  const [showJumpInput, setShowJumpInput] = useState(false);
+  const [jumpValue, setJumpValue] = useState('');
 
   // Batch analysis state
   const [batchAnalyzing, setBatchAnalyzing] = useState(false);
@@ -91,7 +112,180 @@ export default function LinkImagesPage() {
   useEffect(() => {
     loadData();
     loadImageAnalysis();
+    loadHiddenFiles();
+    loadSavedFiles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Load hidden files from database (with pagination for large sets)
+  async function loadHiddenFiles() {
+    try {
+      const allFilenames: string[] = [];
+      const pageSize = 1000;
+      let offset = 0;
+      let hasMore = true;
+
+      while (hasMore) {
+        const { data, error } = await supabase
+          .from('hidden_storage_images')
+          .select('filename')
+          .range(offset, offset + pageSize - 1);
+
+        if (error) {
+          console.error('Failed to load hidden files:', error);
+          return;
+        }
+
+        if (data && data.length > 0) {
+          allFilenames.push(...data.map(d => d.filename));
+          offset += pageSize;
+          hasMore = data.length === pageSize;
+        } else {
+          hasMore = false;
+        }
+      }
+
+      console.log(`[LoadHidden] Loaded ${allFilenames.length} hidden files`);
+      setSkippedFiles(new Set(allFilenames));
+    } catch (e) {
+      console.error('Failed to load hidden files:', e);
+    }
+  }
+
+  // Hide a file (save to DB)
+  async function hideFile(filename: string) {
+    try {
+      const { error } = await supabase
+        .from('hidden_storage_images')
+        .upsert({ filename }, { onConflict: 'filename' });
+
+      if (error) {
+        console.error('Failed to hide file:', error);
+        setMessage({ type: 'error', text: 'Failed to save hidden state' });
+        return false;
+      }
+
+      setSkippedFiles(prev => new Set([...prev, filename]));
+      return true;
+    } catch (e) {
+      console.error('Failed to hide file:', e);
+      return false;
+    }
+  }
+
+  // Unhide a specific file (remove from DB)
+  async function unhideFile(filename: string) {
+    try {
+      const { error } = await supabase
+        .from('hidden_storage_images')
+        .delete()
+        .eq('filename', filename);
+
+      if (error) {
+        console.error('Failed to unhide file:', error);
+        setMessage({ type: 'error', text: 'Failed to unhide file' });
+        return false;
+      }
+
+      setSkippedFiles(prev => {
+        const next = new Set(prev);
+        next.delete(filename);
+        return next;
+      });
+      return true;
+    } catch (e) {
+      console.error('Failed to unhide file:', e);
+      return false;
+    }
+  }
+
+  // Toggle to show hidden files in the view
+  const [showHiddenFiles, setShowHiddenFiles] = useState(false);
+  const [showSavedFiles, setShowSavedFiles] = useState(false);
+  const [showFlagged, setShowFlagged] = useState<'anatomy' | 'sameGender' | 'nonSexual' | null>(null);
+
+  // Load saved files from database (with pagination for large sets)
+  async function loadSavedFiles() {
+    try {
+      const allFilenames: string[] = [];
+      const pageSize = 1000;
+      let offset = 0;
+      let hasMore = true;
+
+      while (hasMore) {
+        const { data, error } = await supabase
+          .from('saved_storage_images')
+          .select('filename')
+          .range(offset, offset + pageSize - 1);
+
+        if (error) {
+          console.error('Failed to load saved files:', error);
+          return;
+        }
+
+        if (data && data.length > 0) {
+          allFilenames.push(...data.map(d => d.filename));
+          offset += pageSize;
+          hasMore = data.length === pageSize;
+        } else {
+          hasMore = false;
+        }
+      }
+
+      console.log(`[LoadSaved] Loaded ${allFilenames.length} saved files`);
+      setSavedFiles(new Set(allFilenames));
+    } catch (e) {
+      console.error('Failed to load saved files:', e);
+    }
+  }
+
+  // Save a file for later (add to DB)
+  async function saveFileForLater(filename: string) {
+    try {
+      const { error } = await supabase
+        .from('saved_storage_images')
+        .upsert({ filename }, { onConflict: 'filename' });
+
+      if (error) {
+        console.error('Failed to save file:', error);
+        setMessage({ type: 'error', text: 'Failed to save file' });
+        return false;
+      }
+
+      setSavedFiles(prev => new Set([...prev, filename]));
+      setMessage({ type: 'success', text: 'Saved for later ⭐' });
+      return true;
+    } catch (e) {
+      console.error('Failed to save file:', e);
+      return false;
+    }
+  }
+
+  // Unsave a file (remove from DB)
+  async function unsaveFile(filename: string) {
+    try {
+      const { error } = await supabase
+        .from('saved_storage_images')
+        .delete()
+        .eq('filename', filename);
+
+      if (error) {
+        console.error('Failed to unsave file:', error);
+        setMessage({ type: 'error', text: 'Failed to unsave file' });
+        return false;
+      }
+
+      setSavedFiles(prev => {
+        const next = new Set(prev);
+        next.delete(filename);
+        return next;
+      });
+      return true;
+    } catch (e) {
+      console.error('Failed to unsave file:', e);
+      return false;
+    }
+  }
 
   // Load existing image analysis from database
   async function loadImageAnalysis() {
@@ -105,6 +299,36 @@ export default function LinkImagesPage() {
       setImageAnalysisMap(map);
     } catch (e) {
       console.error('Failed to load image analysis:', e);
+    }
+  }
+
+  // Clear AI flags for a file (restore from flagged state)
+  async function clearAnalysisFlags(filename: string) {
+    try {
+      const res = await fetch(`/api/admin/batch-analyze?file_name=${encodeURIComponent(filename)}&clear_flags=true`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        setMessage({ type: 'error', text: err.error || 'Failed to clear flags' });
+        return false;
+      }
+
+      const result = await res.json();
+
+      // Update local state with cleared flags
+      setImageAnalysisMap(prev => ({
+        ...prev,
+        [filename]: result.analysis
+      }));
+
+      setMessage({ type: 'success', text: `Restored: ${filename.substring(0, 30)}...` });
+      return true;
+    } catch (e) {
+      console.error('Failed to clear flags:', e);
+      setMessage({ type: 'error', text: 'Failed to clear flags' });
+      return false;
     }
   }
 
@@ -128,6 +352,7 @@ export default function LinkImagesPage() {
         }
 
         const data = await res.json();
+        console.log('[batch-analyze frontend] API response:', { total: data.total, analyzed: data.analyzed, remaining: data.remaining, done: data.done });
         setBatchProgress({
           total: data.total,
           analyzed: data.analyzed,
@@ -167,14 +392,35 @@ export default function LinkImagesPage() {
   async function loadData() {
     setLoading(true);
     try {
-      // Load storage files
-      const { data: files, error: storageError } = await supabase.storage
-        .from('scenes')
-        .list('', { limit: 2000, sortBy: { column: 'created_at', order: 'desc' } });
+      // Load ALL storage files with pagination (Supabase limit is 1000 per request)
+      const allFiles: Array<{ name: string; created_at: string | null }> = [];
+      const pageSize = 1000;
+      let offset = 0;
+      let hasMore = true;
 
-      if (storageError) throw storageError;
+      while (hasMore) {
+        const { data: files, error: storageError } = await supabase.storage
+          .from('scenes')
+          .list('', {
+            limit: pageSize,
+            offset,
+            sortBy: { column: 'created_at', order: 'desc' }
+          });
 
-      const storageFilesWithUrls: StorageFile[] = (files || [])
+        if (storageError) throw storageError;
+
+        if (files && files.length > 0) {
+          allFiles.push(...files);
+          offset += pageSize;
+          hasMore = files.length === pageSize;
+        } else {
+          hasMore = false;
+        }
+      }
+
+      console.log(`[LoadData] Loaded ${allFiles.length} files from storage`);
+
+      const storageFilesWithUrls: StorageFile[] = allFiles
         .filter(f => !f.name.startsWith('.')) // Skip system files like .emptyFolderPlaceholder
         .map(f => ({
           name: f.name,
@@ -184,11 +430,12 @@ export default function LinkImagesPage() {
 
       setStorageFiles(storageFilesWithUrls);
 
-      // Load ALL scenes with tags and ai_description for better search
+      // Load ALL active scenes with tags and ai_description for better search
       const { data: scenesData, error: scenesError } = await supabase
         .from('scenes')
-        .select('id, slug, title, category, tags, ai_description, image_prompt, image_url, image_variants, generation_prompt')
+        .select('id, slug, title, category, tags, ai_description, user_description, image_prompt, image_url, image_variants, generation_prompt, paired_scene')
         .gte('version', 2)
+        .eq('is_active', true)
         .order('category')
         .order('slug');
 
@@ -201,10 +448,12 @@ export default function LinkImagesPage() {
       if (analysisRes.ok) {
         const analysisData = await analysisRes.json();
         const analyzedCount = (analysisData.data || []).length;
+        // Don't set total here - we don't know how many files are hidden yet
+        // The correct total will be set when batch analysis runs
         setBatchProgress({
-          total: storageFilesWithUrls.length,
+          total: 0, // Will be set correctly when batch runs
           analyzed: analyzedCount,
-          remaining: storageFilesWithUrls.length - analyzedCount
+          remaining: 0
         });
 
         // Load analysis map
@@ -222,59 +471,141 @@ export default function LinkImagesPage() {
     }
   }
 
+  // Get scenes linked to a specific image URL
+  const getScenesLinkedToImage = useCallback((imageUrl: string): SceneData[] => {
+    const baseUrl = imageUrl.split('?')[0];
+    return scenes.filter(s =>
+      s.image_variants?.some(v => v.url.split('?')[0] === baseUrl)
+    );
+  }, [scenes]);
+
+  // Unlink image from scene (and its paired scene)
+  async function unlinkImageFromScene(fileUrl: string, sceneId: string) {
+    setLinking(sceneId);
+    try {
+      // Find the scene and its paired scene
+      const scene = scenes.find(s => s.id === sceneId);
+      const pairedScene = scene?.paired_scene ? scenes.find(s => s.slug === scene.paired_scene) : null;
+
+      // Unlink from main scene
+      const response = await fetch('/api/admin/save-variant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sceneId, action: 'delete', variantUrl: fileUrl }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to unlink');
+      }
+
+      // Also unlink from paired scene if exists
+      let pairedResult = null;
+      if (pairedScene) {
+        const pairedResponse = await fetch('/api/admin/save-variant', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sceneId: pairedScene.id, action: 'delete', variantUrl: fileUrl }),
+        });
+        pairedResult = await pairedResponse.json();
+      }
+
+      const pairedMsg = pairedScene ? ` + paired ${pairedScene.slug}` : '';
+      setMessage({ type: 'success', text: `Unlinked from scene${pairedMsg}` });
+
+      // Update local scenes state for both scenes
+      setScenes(prev => prev.map(s => {
+        if (s.id === sceneId) {
+          return {
+            ...s,
+            image_variants: result.variants,
+            image_url: s.image_url === fileUrl ? (result.variants?.[0]?.url || null) : s.image_url
+          };
+        }
+        if (pairedScene && s.id === pairedScene.id && pairedResult?.variants) {
+          return {
+            ...s,
+            image_variants: pairedResult.variants,
+            image_url: s.image_url === fileUrl ? (pairedResult.variants?.[0]?.url || null) : s.image_url
+          };
+        }
+        return s;
+      }));
+    } catch (error) {
+      console.error('Error unlinking image:', error);
+      setMessage({ type: 'error', text: 'Failed to unlink image' });
+    } finally {
+      setLinking(null);
+    }
+  }
+
   async function linkImageToScene(fileUrl: string, sceneId: string, autoAdvance = false) {
     setLinking(sceneId);
     try {
-      const { data: scene, error: selectError } = await supabase
-        .from('scenes')
-        .select('image_variants, generation_prompt')
-        .eq('id', sceneId)
-        .single();
+      // Find the scene and its paired scene
+      const scene = scenes.find(s => s.id === sceneId);
+      const pairedScene = scene?.paired_scene ? scenes.find(s => s.slug === scene.paired_scene) : null;
 
-      if (selectError) throw selectError;
+      // Use API route with service role key to bypass RLS
+      const response = await fetch('/api/admin/save-variant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sceneId,
+          action: 'save',
+          imageUrl: fileUrl,
+          prompt: 'Linked from storage'
+        }),
+      });
 
-      const currentVariants: ImageVariant[] = scene?.image_variants || [];
-      const getBaseUrl = (url: string) => url.split('?')[0];
-      const baseImageUrl = getBaseUrl(fileUrl);
+      const result = await response.json();
 
-      if (currentVariants.some(v => getBaseUrl(v.url) === baseImageUrl)) {
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to link');
+      }
+
+      // Also link to paired scene if exists
+      let pairedResult = null;
+      if (pairedScene) {
+        const pairedResponse = await fetch('/api/admin/save-variant', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sceneId: pairedScene.id,
+            action: 'save',
+            imageUrl: fileUrl,
+            prompt: 'Linked from storage'
+          }),
+        });
+        pairedResult = await pairedResponse.json();
+      }
+
+      if (result.message === 'Image already saved as variant') {
         setMessage({ type: 'success', text: 'Already linked!' });
         if (autoAdvance) goToNextImage();
         return;
       }
 
-      const newVariant: ImageVariant = {
-        url: fileUrl,
-        prompt: scene?.generation_prompt || 'Linked from storage',
-        created_at: new Date().toISOString(),
-        qa_status: null,
-      };
-      const updatedVariants = [...currentVariants, newVariant];
-
-      const { error } = await supabase
-        .from('scenes')
-        .update({
-          image_url: fileUrl,
-          image_variants: updatedVariants,
-        })
-        .eq('id', sceneId);
-
-      if (error) throw error;
-
       setLinkedCount(prev => prev + 1);
-      setMessage({ type: 'success', text: `Linked! (${linkedCount + 1} total)` });
-      setSceneSearch('');
+      const pairedMsg = pairedScene ? ` + paired ${pairedScene.slug}` : '';
+      setMessage({ type: 'success', text: `Linked! (${linkedCount + 1} total)${pairedMsg}` });
+      // Don't clear scene search - keep it for linking multiple images to similar scenes
 
       if (autoAdvance) {
         goToNextImage();
       }
 
-      // Update local scenes state
-      setScenes(prev => prev.map(s =>
-        s.id === sceneId
-          ? { ...s, image_url: fileUrl, image_variants: updatedVariants }
-          : s
-      ));
+      // Update local scenes state with the variants returned from API
+      setScenes(prev => prev.map(s => {
+        if (s.id === sceneId) {
+          return { ...s, image_url: fileUrl, image_variants: result.variants };
+        }
+        if (pairedScene && s.id === pairedScene.id && pairedResult?.variants) {
+          return { ...s, image_url: fileUrl, image_variants: pairedResult.variants };
+        }
+        return s;
+      }));
     } catch (error) {
       console.error('Error linking image:', error);
       setMessage({ type: 'error', text: 'Failed to link image' });
@@ -289,19 +620,43 @@ export default function LinkImagesPage() {
   );
 
   const unlinkedFiles = storageFiles.filter(f => {
+    if (skippedFiles.has(f.name) || savedFiles.has(f.name)) return false;
     const baseUrl = f.url.split('?')[0];
-    return !allLinkedUrls.has(baseUrl) && !skippedFiles.has(f.name);
+    return !allLinkedUrls.has(baseUrl);
   });
 
   const linkedFiles = storageFiles.filter(f => {
+    if (skippedFiles.has(f.name) || savedFiles.has(f.name)) return false;
     const baseUrl = f.url.split('?')[0];
     return allLinkedUrls.has(baseUrl);
   });
 
-  // Display files: unlinked first, then linked (if showLinked is true)
-  const displayFiles = showLinked
-    ? [...unlinkedFiles, ...linkedFiles]
-    : unlinkedFiles;
+  // Special views for saved/hidden files
+  const savedFilesList = storageFiles.filter(f => savedFiles.has(f.name));
+  const hiddenFilesList = storageFiles.filter(f => skippedFiles.has(f.name));
+
+  // Flagged files based on analysis
+  const flaggedFiles = {
+    anatomy: storageFiles.filter(f => imageAnalysisMap[f.name]?.flags?.anatomyIssues),
+    sameGender: storageFiles.filter(f => imageAnalysisMap[f.name]?.flags?.sameGenderOnly),
+    nonSexual: storageFiles.filter(f => imageAnalysisMap[f.name]?.flags?.nonSexual),
+  };
+  const totalFlagged = new Set([
+    ...flaggedFiles.anatomy.map(f => f.name),
+    ...flaggedFiles.sameGender.map(f => f.name),
+    ...flaggedFiles.nonSexual.map(f => f.name),
+  ]).size;
+
+  // Display files based on view mode
+  const displayFiles = showFlagged
+    ? flaggedFiles[showFlagged]
+    : showSavedFiles
+      ? savedFilesList
+      : showHiddenFiles
+        ? hiddenFilesList
+        : showLinked
+          ? [...unlinkedFiles, ...linkedFiles]
+          : unlinkedFiles;
 
   const goToNextImage = useCallback(() => {
     setCurrentImageIndex(prev => {
@@ -309,7 +664,7 @@ export default function LinkImagesPage() {
       const next = prev + 1;
       return next >= maxIndex ? 0 : next;
     });
-    setSceneSearch('');
+    // Don't clear scene search - keep it for linking multiple images to similar scenes
   }, [displayFiles.length]);
 
   const goToPrevImage = useCallback(() => {
@@ -318,16 +673,35 @@ export default function LinkImagesPage() {
       const next = prev - 1;
       return next < 0 ? maxIndex - 1 : next;
     });
-    setSceneSearch('');
+    // Don't clear scene search - keep it for linking multiple images to similar scenes
   }, [displayFiles.length]);
 
-  const skipImage = useCallback(() => {
-    const currentFile = storageFiles[currentImageIndex];
-    if (currentFile) {
-      setSkippedFiles(prev => new Set([...prev, currentFile.name]));
+  // Hide current image (removes from list, saves to DB, next image appears at same index)
+  const hideCurrentImage = useCallback(async () => {
+    const file = displayFiles[currentImageIndex];
+    if (!file) return;
+
+    // Save to database
+    const success = await hideFile(file.name);
+
+    if (success) {
+      setMessage({ type: 'success', text: `Hidden: ${file.name.substring(0, 30)}...` });
     }
+
+    // If we're at the last image, move back one (or to 0 if list becomes empty)
+    if (currentImageIndex >= displayFiles.length - 1) {
+      setCurrentImageIndex(prev => Math.max(0, prev - 1));
+    }
+    // Otherwise, stay at same index - next file will shift into this position
+    // Don't clear scene search - keep it persistent
+    setImageAnalysis(null);
+    setAiSuggestions([]);
+  }, [currentImageIndex, displayFiles, hideFile]);
+
+  // Skip to next image without hiding
+  const skipImage = useCallback(() => {
     goToNextImage();
-  }, [currentImageIndex, storageFiles, goToNextImage]);
+  }, [goToNextImage]);
 
   // AI suggestion handler
   async function handleAiSuggest() {
@@ -520,6 +894,18 @@ export default function LinkImagesPage() {
         <span>Total images: <strong>{storageFiles.length}</strong></span>
         <span>Unlinked: <strong>{unlinkedFiles.length}</strong></span>
         <span className="text-green-600">Linked: <strong>{linkedFiles.length}</strong></span>
+        {savedFiles.size > 0 && (
+          <span className="text-yellow-600">
+            <Star className="h-3 w-3 inline mr-1" />
+            Saved: <strong>{savedFiles.size}</strong>
+          </span>
+        )}
+        {skippedFiles.size > 0 && (
+          <span className="text-orange-600">
+            <Trash2 className="h-3 w-3 inline mr-1" />
+            Hidden: <strong>{skippedFiles.size}</strong>
+          </span>
+        )}
         <span className="text-purple-600">Analyzed: <strong>{Object.keys(imageAnalysisMap).length}</strong></span>
         <span>This session: <strong>{linkedCount}</strong></span>
         <div className="ml-auto flex gap-2">
@@ -545,6 +931,104 @@ export default function LinkImagesPage() {
             {showLinked ? <Eye className="h-4 w-4 mr-1" /> : <EyeOff className="h-4 w-4 mr-1" />}
             {showLinked ? 'Showing Linked' : 'Show Linked'}
           </Button>
+          {savedFiles.size > 0 && (
+            <Button
+              size="sm"
+              variant={showSavedFiles ? 'default' : 'outline'}
+              className={showSavedFiles ? 'bg-yellow-500 hover:bg-yellow-600' : ''}
+              onClick={() => {
+                setShowSavedFiles(!showSavedFiles);
+                setShowHiddenFiles(false);
+                setShowFlagged(null);
+                setCurrentImageIndex(0);
+              }}
+            >
+              <Star className="h-4 w-4 mr-1" />
+              {showSavedFiles ? `Viewing ${savedFiles.size} Saved` : `View ${savedFiles.size} Saved`}
+            </Button>
+          )}
+          {skippedFiles.size > 0 && (
+            <Button
+              size="sm"
+              variant={showHiddenFiles ? 'default' : 'outline'}
+              className={showHiddenFiles ? 'bg-orange-500 hover:bg-orange-600' : ''}
+              onClick={() => {
+                setShowHiddenFiles(!showHiddenFiles);
+                setShowSavedFiles(false);
+                setShowFlagged(null);
+                setCurrentImageIndex(0);
+              }}
+            >
+              <Trash2 className="h-4 w-4 mr-1" />
+              {showHiddenFiles ? `Viewing ${skippedFiles.size} Hidden` : `View ${skippedFiles.size} Hidden`}
+            </Button>
+          )}
+          {/* Flagged files dropdown */}
+          {totalFlagged > 0 && (
+            <div className="relative group">
+              <Button
+                size="sm"
+                variant={showFlagged ? 'default' : 'outline'}
+                className={showFlagged ? 'bg-red-500 hover:bg-red-600' : 'text-red-600 border-red-300'}
+              >
+                <AlertTriangle className="h-4 w-4 mr-1" />
+                {showFlagged ? `Viewing Flagged` : `⚠️ ${totalFlagged} Flagged`}
+              </Button>
+              <div className="absolute right-0 top-full mt-1 bg-white border rounded-lg shadow-lg p-2 hidden group-hover:block z-50 min-w-[180px]">
+                <div className="text-xs text-gray-500 mb-2 px-2">View flagged images:</div>
+                {flaggedFiles.anatomy.length > 0 && (
+                  <button
+                    className={`w-full text-left px-3 py-1.5 text-sm rounded hover:bg-red-50 ${showFlagged === 'anatomy' ? 'bg-red-100' : ''}`}
+                    onClick={() => {
+                      setShowFlagged(showFlagged === 'anatomy' ? null : 'anatomy');
+                      setShowSavedFiles(false);
+                      setShowHiddenFiles(false);
+                      setCurrentImageIndex(0);
+                    }}
+                  >
+                    🖐️ Anatomy issues ({flaggedFiles.anatomy.length})
+                  </button>
+                )}
+                {flaggedFiles.sameGender.length > 0 && (
+                  <button
+                    className={`w-full text-left px-3 py-1.5 text-sm rounded hover:bg-red-50 ${showFlagged === 'sameGender' ? 'bg-red-100' : ''}`}
+                    onClick={() => {
+                      setShowFlagged(showFlagged === 'sameGender' ? null : 'sameGender');
+                      setShowSavedFiles(false);
+                      setShowHiddenFiles(false);
+                      setCurrentImageIndex(0);
+                    }}
+                  >
+                    👥 Same gender only ({flaggedFiles.sameGender.length})
+                  </button>
+                )}
+                {flaggedFiles.nonSexual.length > 0 && (
+                  <button
+                    className={`w-full text-left px-3 py-1.5 text-sm rounded hover:bg-red-50 ${showFlagged === 'nonSexual' ? 'bg-red-100' : ''}`}
+                    onClick={() => {
+                      setShowFlagged(showFlagged === 'nonSexual' ? null : 'nonSexual');
+                      setShowSavedFiles(false);
+                      setShowHiddenFiles(false);
+                      setCurrentImageIndex(0);
+                    }}
+                  >
+                    🚫 Non-sexual ({flaggedFiles.nonSexual.length})
+                  </button>
+                )}
+                {showFlagged && (
+                  <button
+                    className="w-full text-left px-3 py-1.5 text-sm rounded hover:bg-gray-100 mt-1 border-t"
+                    onClick={() => {
+                      setShowFlagged(null);
+                      setCurrentImageIndex(0);
+                    }}
+                  >
+                    ✕ Clear filter
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -576,10 +1060,73 @@ export default function LinkImagesPage() {
           <div className="border rounded-lg p-4">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-semibold">
-                  Image {currentImageIndex + 1} / {displayFiles.length}
+                <h2 className="text-lg font-semibold flex items-center gap-1">
+                  {showFlagged === 'anatomy' ? '🖐️ Anatomy' :
+                   showFlagged === 'sameGender' ? '👥 Same Gender' :
+                   showFlagged === 'nonSexual' ? '🚫 Non-Sexual' :
+                   showSavedFiles ? '⭐ Saved' :
+                   showHiddenFiles ? '🗑️ Hidden' : 'Image'}{' '}
+                  {showJumpInput ? (
+                    <input
+                      type="number"
+                      min={1}
+                      max={displayFiles.length}
+                      value={jumpValue}
+                      onChange={(e) => setJumpValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          const num = parseInt(jumpValue);
+                          if (num >= 1 && num <= displayFiles.length) {
+                            setCurrentImageIndex(num - 1);
+                          }
+                          setShowJumpInput(false);
+                          setJumpValue('');
+                        } else if (e.key === 'Escape') {
+                          setShowJumpInput(false);
+                          setJumpValue('');
+                        }
+                      }}
+                      onBlur={() => {
+                        const num = parseInt(jumpValue);
+                        if (num >= 1 && num <= displayFiles.length) {
+                          setCurrentImageIndex(num - 1);
+                        }
+                        setShowJumpInput(false);
+                        setJumpValue('');
+                      }}
+                      className="w-16 px-1 py-0 text-center border rounded text-lg font-semibold"
+                      autoFocus
+                    />
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setJumpValue(String(currentImageIndex + 1));
+                        setShowJumpInput(true);
+                      }}
+                      className="hover:bg-gray-100 px-1 rounded cursor-pointer"
+                      title="Click to jump to position"
+                    >
+                      {currentImageIndex + 1}
+                    </button>
+                  )}
+                  {' '}/ {displayFiles.length}
                 </h2>
-                {isCurrentFileLinked && (
+                {showFlagged && (
+                  <span className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded">
+                    ⚠️ Flagged: {showFlagged === 'anatomy' ? 'Anatomy Issues' : showFlagged === 'sameGender' ? 'Same Gender' : 'Non-Sexual'}
+                  </span>
+                )}
+                {showSavedFiles && (
+                  <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
+                    Viewing Saved
+                  </span>
+                )}
+                {showHiddenFiles && (
+                  <span className="text-xs bg-orange-100 text-orange-800 px-2 py-0.5 rounded">
+                    Viewing Hidden
+                  </span>
+                )}
+                {isCurrentFileLinked && !showSavedFiles && !showHiddenFiles && !showFlagged && (
                   <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded">
                     Already Linked
                   </span>
@@ -589,10 +1136,134 @@ export default function LinkImagesPage() {
                 <Button size="sm" variant="outline" onClick={goToPrevImage}>
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <Button size="sm" variant="outline" onClick={skipImage}>
-                  <SkipForward className="h-4 w-4" />
-                  Skip
-                </Button>
+
+                {showFlagged ? (
+                  /* Viewing flagged files (AI analysis flags) */
+                  <>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-green-600 hover:bg-green-50"
+                      onClick={async () => {
+                        if (currentFile) {
+                          const success = await clearAnalysisFlags(currentFile.name);
+                          if (success && currentImageIndex >= displayFiles.length - 1) {
+                            setCurrentImageIndex(prev => Math.max(0, prev - 1));
+                          }
+                        }
+                      }}
+                      title="Clear AI flags (restore)"
+                    >
+                      <RotateCcw className="h-4 w-4" />
+                      Restore
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-red-600 hover:bg-red-50"
+                      onClick={hideCurrentImage}
+                      title="Move to trash"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Hide
+                    </Button>
+                  </>
+                ) : showSavedFiles ? (
+                  /* Viewing saved files */
+                  <>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-gray-600 hover:bg-gray-50"
+                      onClick={async () => {
+                        if (currentFile) {
+                          await unsaveFile(currentFile.name);
+                          if (currentImageIndex >= displayFiles.length - 1) {
+                            setCurrentImageIndex(prev => Math.max(0, prev - 1));
+                          }
+                        }
+                      }}
+                      title="Remove from saved"
+                    >
+                      <X className="h-4 w-4" />
+                      Unsave
+                    </Button>
+                    {selectedScene && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-blue-600 hover:bg-blue-50"
+                        onClick={async () => {
+                          if (currentFile) {
+                            await unsaveFile(currentFile.name);
+                            linkImageToScene(currentFile.url, selectedScene, true);
+                          }
+                        }}
+                        title="Link to selected scene"
+                      >
+                        <Link2 className="h-4 w-4" />
+                        Link
+                      </Button>
+                    )}
+                  </>
+                ) : showHiddenFiles ? (
+                  /* Viewing hidden files */
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-green-600 hover:bg-green-50"
+                    onClick={async () => {
+                      if (currentFile) {
+                        await unhideFile(currentFile.name);
+                        if (currentImageIndex >= displayFiles.length - 1) {
+                          setCurrentImageIndex(prev => Math.max(0, prev - 1));
+                        }
+                      }
+                    }}
+                    title="Restore from trash"
+                  >
+                    <Eye className="h-4 w-4" />
+                    Restore
+                  </Button>
+                ) : (
+                  /* Normal view */
+                  <>
+                    <Button size="sm" variant="outline" onClick={skipImage}>
+                      <SkipForward className="h-4 w-4" />
+                      Skip
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-yellow-600 hover:bg-yellow-50"
+                      onClick={async () => {
+                        if (currentFile) {
+                          await saveFileForLater(currentFile.name);
+                          if (currentImageIndex >= displayFiles.length - 1) {
+                            setCurrentImageIndex(prev => Math.max(0, prev - 1));
+                          }
+                          setImageAnalysis(null);
+                          setAiSuggestions([]);
+                        }
+                      }}
+                      title="Save for later"
+                    >
+                      <Star className="h-4 w-4" />
+                      Save
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-red-600 hover:bg-red-50"
+                      onClick={hideCurrentImage}
+                      title="Move to trash"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Hide
+                    </Button>
+                  </>
+                )}
+
                 <Button size="sm" variant="outline" onClick={goToNextImage}>
                   <ChevronRight className="h-4 w-4" />
                 </Button>
@@ -601,11 +1272,19 @@ export default function LinkImagesPage() {
 
             {currentFile ? (
               <div>
-                <img
-                  src={currentFile.url}
-                  alt={currentFile.name}
-                  className="w-full h-[400px] object-contain bg-gray-50 rounded-lg"
-                />
+                <div className="relative group">
+                  <img
+                    src={currentFile.url}
+                    alt={currentFile.name}
+                    className="w-full h-[600px] object-contain bg-gray-50 rounded-lg cursor-pointer"
+                    onClick={() => setLightboxImage(currentFile.url)}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <div className="bg-black/50 text-white px-3 py-1.5 rounded-full text-sm">
+                      Click to view full size
+                    </div>
+                  </div>
+                </div>
                 <div className="mt-2 flex items-center justify-between">
                   <div className="text-xs text-gray-500 truncate flex-1">
                     {currentFile.name}
@@ -633,8 +1312,8 @@ export default function LinkImagesPage() {
                       Previously Analyzed:
                     </div>
                     <div className="flex flex-wrap gap-1 mt-1">
-                      {imageAnalysisMap[currentFile.name].keywords?.map((kw: string) => (
-                        <span key={kw} className="bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">
+                      {imageAnalysisMap[currentFile.name].keywords?.map((kw: string, idx: number) => (
+                        <span key={`${kw}-${idx}`} className="bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">
                           {kw}
                         </span>
                       ))}
@@ -657,6 +1336,43 @@ export default function LinkImagesPage() {
                     </div>
                   </div>
                 )}
+
+                {/* Linked scenes - show which scenes this image is linked to */}
+                {currentFile && (() => {
+                  const linkedScenes = getScenesLinkedToImage(currentFile.url);
+                  if (linkedScenes.length === 0) return null;
+                  return (
+                    <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded-lg text-xs">
+                      <div className="font-semibold text-green-800 mb-2 flex items-center gap-2">
+                        <Link2 className="h-3 w-3" />
+                        Linked to {linkedScenes.length} scene{linkedScenes.length > 1 ? 's' : ''}:
+                      </div>
+                      <div className="space-y-1">
+                        {linkedScenes.map(scene => (
+                          <div key={scene.id} className="flex items-center justify-between bg-white rounded p-1.5">
+                            <div className="truncate flex-1">
+                              <span className="font-medium">{scene.slug}</span>
+                              <span className="text-gray-500 ml-1">• {scene.category}</span>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-6 px-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                              onClick={() => unlinkImageFromScene(currentFile.url, scene.id)}
+                              disabled={linking === scene.id}
+                            >
+                              {linking === scene.id ? (
+                                <Loader2 className="h-3 w-3 animate-spin" />
+                              ) : (
+                                <Unlink className="h-3 w-3" />
+                              )}
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             ) : (
               <div className="h-[400px] flex items-center justify-center bg-gray-50 rounded-lg">
@@ -755,7 +1471,7 @@ export default function LinkImagesPage() {
             {/* Search results info */}
             {sceneSearch && (
               <div className="text-xs text-gray-500 mb-2">
-                Found {filteredScenes.length} scenes matching "{sceneSearch}"
+                Found {filteredScenes.length} scenes matching &quot;{sceneSearch}&quot;
               </div>
             )}
 
@@ -801,6 +1517,12 @@ export default function LinkImagesPage() {
                           ))}
                         </div>
                       )}
+                      {/* Show description if available */}
+                      {(scene.user_description?.en || scene.user_description?.ru) && (
+                        <div className="text-xs text-gray-600 mt-1 line-clamp-2">
+                          {scene.user_description?.en || scene.user_description?.ru}
+                        </div>
+                      )}
                       {/* Show tags preview if searching */}
                       {sceneSearch && scene.tags && scene.tags.length > 0 && (
                         <div className="text-xs text-gray-400 mt-1 truncate">
@@ -830,7 +1552,7 @@ export default function LinkImagesPage() {
               )}
               {sceneSearch && filteredScenes.length === 0 && (
                 <div className="text-center text-sm text-gray-500 py-4">
-                  No scenes found for "{sceneSearch}"
+                  No scenes found for &quot;{sceneSearch}&quot;
                 </div>
               )}
             </div>
@@ -840,20 +1562,18 @@ export default function LinkImagesPage() {
         /* GRID MODE (original) */
         <div>
           <div className="flex gap-4 mb-6">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search by slug, title, or category..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
             <Button
               variant={showAll ? 'default' : 'outline'}
               onClick={() => setShowAll(!showAll)}
             >
-              {showAll ? 'Showing All' : 'Without Images Only'}
+              {showAll ? 'Showing All Scenes' : 'Without Images Only'}
+            </Button>
+            <Button
+              variant={showLinked ? 'default' : 'outline'}
+              onClick={() => setShowLinked(!showLinked)}
+            >
+              {showLinked ? <Eye className="h-4 w-4 mr-1" /> : <EyeOff className="h-4 w-4 mr-1" />}
+              {showLinked ? 'Showing Linked' : 'Hide Linked'}
             </Button>
             <Button variant="outline" onClick={loadData}>
               Refresh
@@ -863,20 +1583,33 @@ export default function LinkImagesPage() {
           <div className="grid grid-cols-2 gap-6">
             {/* Left: Scenes */}
             <div className="border rounded-lg p-4">
-              <h2 className="text-lg font-semibold mb-4">
-                Scenes ({scenes.filter(s =>
-                  showAll || !s.image_url
-                ).filter(s =>
-                  s.slug.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  s.title?.en?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  s.title?.ru?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  s.category?.toLowerCase().includes(searchTerm.toLowerCase())
-                ).length})
-              </h2>
-              <div className="space-y-2 max-h-[70vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">
+                  Scenes ({scenes.filter(s =>
+                    showAll || !s.image_url
+                  ).filter(s =>
+                    !searchTerm ||
+                    s.slug.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    s.title?.en?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    s.title?.ru?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    s.category?.toLowerCase().includes(searchTerm.toLowerCase())
+                  ).length})
+                </h2>
+              </div>
+              <div className="relative mb-3">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search scenes..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <div className="space-y-2 max-h-[60vh] overflow-y-auto">
                 {scenes
                   .filter(s => showAll || !s.image_url)
                   .filter(s =>
+                    !searchTerm ||
                     s.slug.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     s.title?.en?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     s.title?.ru?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -888,24 +1621,83 @@ export default function LinkImagesPage() {
                     return (
                       <div
                         key={scene.id}
-                        className={`p-3 border rounded cursor-pointer transition-colors ${
+                        className={`border rounded transition-colors ${
                           isSelected ? 'border-blue-500 bg-blue-50' : 'hover:bg-gray-50'
                         }`}
-                        onClick={() => setSelectedScene(isSelected ? null : scene.id)}
                       >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-medium">{scene.slug}</div>
-                            <div className="text-sm text-gray-500">
-                              {scene.category} • {scene.title?.en || scene.title?.ru}
+                        <div
+                          className="p-3 cursor-pointer"
+                          onClick={() => setSelectedScene(isSelected ? null : scene.id)}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 min-w-0">
+                              <div className="font-medium text-sm">{scene.slug}</div>
+                              <div className="text-xs text-gray-500">
+                                {scene.category}
+                              </div>
+                              {/* Description */}
+                              <div className="text-xs text-gray-600 mt-1 line-clamp-2">
+                                {scene.user_description?.ru || scene.ai_description?.ru || scene.title?.ru || scene.title?.en}
+                              </div>
+                              {/* Paired scene indicator */}
+                              {scene.paired_scene && (
+                                <div className="text-xs text-purple-600 mt-1">
+                                  ↔ paired: {scene.paired_scene}
+                                </div>
+                              )}
+                            </div>
+                            {(scene.image_variants?.length || 0) > 0 && (
+                              <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded ml-2 shrink-0">
+                                {scene.image_variants?.length} img
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        {/* Show linked images when selected */}
+                        {isSelected && scene.image_variants && scene.image_variants.length > 0 && (
+                          <div className="px-3 pb-3 border-t border-blue-200">
+                            <div className="text-xs text-gray-600 mt-2 mb-2">Linked images (click to unlink):</div>
+                            <div className="grid grid-cols-4 gap-2">
+                              {scene.image_variants.map((variant, idx) => (
+                                <div
+                                  key={variant.url}
+                                  className="relative group"
+                                >
+                                  <img
+                                    src={variant.url}
+                                    alt={`Variant ${idx + 1}`}
+                                    className="w-full aspect-square object-contain bg-white rounded border"
+                                  />
+                                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded flex items-center justify-center gap-2">
+                                    <button
+                                      className="p-2 bg-white/90 rounded-full hover:bg-white shadow-lg"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setLightboxImage(variant.url);
+                                      }}
+                                    >
+                                      <Eye className="h-5 w-5 text-gray-700" />
+                                    </button>
+                                    <button
+                                      className="p-2 bg-red-500 rounded-full hover:bg-red-600 shadow-lg"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        unlinkImageFromScene(variant.url, scene.id);
+                                      }}
+                                    >
+                                      <Unlink className="h-5 w-5 text-white" />
+                                    </button>
+                                  </div>
+                                  {linking === scene.id && (
+                                    <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded">
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
                             </div>
                           </div>
-                          {(scene.image_variants?.length || 0) > 0 && (
-                            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
-                              {scene.image_variants?.length} img
-                            </span>
-                          )}
-                        </div>
+                        )}
                       </div>
                     );
                   })}
@@ -914,22 +1706,110 @@ export default function LinkImagesPage() {
 
             {/* Right: Storage Files */}
             <div className="border rounded-lg p-4">
-              <h2 className="text-lg font-semibold mb-4">
-                Storage Images ({storageFiles.filter(f =>
-                  f.name.toLowerCase().includes(searchTerm.toLowerCase())
-                ).length})
-              </h2>
-              <div className="grid grid-cols-3 gap-2 max-h-[70vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">
+                  Storage Images ({storageFiles.filter(f => {
+                    if (skippedFiles.has(f.name)) return false;
+                    const baseUrl = f.url.split('?')[0];
+                    const isLinked = allLinkedUrls.has(baseUrl);
+                    if (isLinked && !showLinked) return false;
+
+                    if (!imageSearchTerm) return true;
+                    const terms = imageSearchTerm.toLowerCase().split(/\s+/);
+                    const analysis = imageAnalysisMap[f.name];
+                    if (!analysis) return f.name.toLowerCase().includes(imageSearchTerm.toLowerCase());
+                    const searchableText = [
+                      ...(analysis.keywords || []),
+                      analysis.activity || '',
+                      analysis.mood || '',
+                      analysis.setting || '',
+                      ...(analysis.elements || []),
+                      f.name
+                    ].join(' ').toLowerCase();
+                    return terms.every(term => searchableText.includes(term));
+                  }).length})
+                </h2>
+                <div className="flex gap-3">
+                  {savedFiles.size > 0 && (
+                    <button
+                      className={`text-xs flex items-center gap-1 ${showSavedFiles ? 'text-yellow-600 font-medium' : 'text-gray-500 hover:text-gray-700'}`}
+                      onClick={() => { setShowSavedFiles(!showSavedFiles); setShowHiddenFiles(false); }}
+                    >
+                      <Star className="h-3 w-3" />
+                      {showSavedFiles ? `${savedFiles.size} saved shown` : `${savedFiles.size} saved`}
+                    </button>
+                  )}
+                  {skippedFiles.size > 0 && (
+                    <button
+                      className={`text-xs flex items-center gap-1 ${showHiddenFiles ? 'text-orange-600 font-medium' : 'text-gray-500 hover:text-gray-700'}`}
+                      onClick={() => { setShowHiddenFiles(!showHiddenFiles); setShowSavedFiles(false); }}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                      {showHiddenFiles ? `${skippedFiles.size} hidden shown` : `${skippedFiles.size} hidden`}
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className="relative mb-3">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search by AI keywords..."
+                  value={imageSearchTerm}
+                  onChange={(e) => setImageSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <div className="grid grid-cols-3 gap-2 max-h-[60vh] overflow-y-auto">
                 {storageFiles
-                  .filter(f => f.name.toLowerCase().includes(searchTerm.toLowerCase()))
-                  .map((file) => (
+                  .filter(f => {
+                    const isHidden = skippedFiles.has(f.name);
+                    const isSaved = savedFiles.has(f.name);
+
+                    // Mode: viewing saved files
+                    if (showSavedFiles) {
+                      return isSaved;
+                    }
+                    // Mode: viewing hidden files
+                    if (showHiddenFiles) {
+                      return isHidden;
+                    }
+                    // Normal mode: hide hidden and saved files
+                    if (isHidden || isSaved) return false;
+
+                    // Hide already linked images (unless showLinked is true)
+                    const baseUrl = f.url.split('?')[0];
+                    const isLinked = allLinkedUrls.has(baseUrl);
+                    if (isLinked && !showLinked) return false;
+
+                    if (!imageSearchTerm) return true;
+                    const terms = imageSearchTerm.toLowerCase().split(/\s+/);
+                    const analysis = imageAnalysisMap[f.name];
+                    if (!analysis) return f.name.toLowerCase().includes(imageSearchTerm.toLowerCase());
+                    const searchableText = [
+                      ...(analysis.keywords || []),
+                      analysis.activity || '',
+                      analysis.mood || '',
+                      analysis.setting || '',
+                      ...(analysis.elements || []),
+                      f.name
+                    ].join(' ').toLowerCase();
+                    return terms.every(term => searchableText.includes(term));
+                  })
+                  .map((file) => {
+                    const baseUrl = file.url.split('?')[0];
+                    const isLinked = allLinkedUrls.has(baseUrl);
+                    const isHidden = skippedFiles.has(file.name);
+                    const isSaved = savedFiles.has(file.name);
+                    return (
                     <div
                       key={file.name}
                       className={`relative group cursor-pointer ${
-                        selectedScene ? 'hover:ring-2 ring-blue-500' : ''
+                        isHidden ? 'opacity-60' : ''
+                      } ${
+                        selectedScene && !isHidden && !isSaved ? 'hover:ring-2 ring-blue-500' : ''
                       }`}
                       onClick={() => {
-                        if (selectedScene) {
+                        if (selectedScene && !isHidden && !isSaved) {
                           linkImageToScene(file.url, selectedScene);
                         }
                       }}
@@ -937,18 +1817,121 @@ export default function LinkImagesPage() {
                       <img
                         src={file.url}
                         alt={file.name}
-                        className="w-full h-24 object-cover rounded"
+                        className={`w-full aspect-square object-contain rounded ${
+                          isHidden ? 'bg-orange-100 ring-2 ring-orange-400' :
+                          isSaved ? 'bg-yellow-100 ring-2 ring-yellow-400' :
+                          isLinked ? 'bg-green-100 ring-2 ring-green-400' : 'bg-gray-100'
+                        }`}
                       />
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white text-xs p-1 truncate opacity-0 group-hover:opacity-100 transition-opacity">
-                        {file.name}
-                      </div>
-                      {selectedScene && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Link2 className="h-6 w-6 text-white" />
+                      {isSaved && (
+                        <div className="absolute top-1 right-1 bg-yellow-500 text-white rounded-full p-0.5">
+                          <Star className="h-3 w-3" />
                         </div>
                       )}
+                      {isHidden && (
+                        <div className="absolute top-1 right-1 bg-orange-500 text-white rounded-full p-0.5">
+                          <EyeOff className="h-3 w-3" />
+                        </div>
+                      )}
+                      {isLinked && !isHidden && (
+                        <div className="absolute top-1 right-1 bg-green-500 text-white rounded-full p-0.5">
+                          <Check className="h-3 w-3" />
+                        </div>
+                      )}
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/80 text-white text-[10px] p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        {imageAnalysisMap[file.name] ? (
+                          <div className="truncate">
+                            {imageAnalysisMap[file.name].keywords?.slice(0, 4).join(', ')}
+                          </div>
+                        ) : (
+                          <div className="truncate text-gray-400">{file.name}</div>
+                        )}
+                      </div>
+                      {/* Hover overlay with actions */}
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                        <button
+                          className="p-2.5 bg-white/90 rounded-full hover:bg-white shadow-lg"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setLightboxImage(file.url);
+                          }}
+                          title="View full size"
+                        >
+                          <Eye className="h-5 w-5 text-gray-700" />
+                        </button>
+                        {isHidden ? (
+                          /* Hidden file - show restore button */
+                          <button
+                            className="p-2.5 bg-green-500 rounded-full hover:bg-green-600 shadow-lg"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              unhideFile(file.name);
+                            }}
+                            title="Restore from trash"
+                          >
+                            <Eye className="h-5 w-5 text-white" />
+                          </button>
+                        ) : isSaved ? (
+                          /* Saved file - show unsave and link buttons */
+                          <>
+                            <button
+                              className="p-2.5 bg-gray-500 rounded-full hover:bg-gray-600 shadow-lg"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                unsaveFile(file.name);
+                              }}
+                              title="Remove from saved"
+                            >
+                              <X className="h-5 w-5 text-white" />
+                            </button>
+                            {selectedScene && (
+                              <button
+                                className="p-2.5 bg-blue-500 rounded-full hover:bg-blue-600 shadow-lg"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  unsaveFile(file.name);
+                                  linkImageToScene(file.url, selectedScene);
+                                }}
+                                title="Link to scene"
+                              >
+                                <Link2 className="h-5 w-5 text-white" />
+                              </button>
+                            )}
+                          </>
+                        ) : (
+                          /* Normal file - show save, link, hide buttons */
+                          <>
+                            <button
+                              className="p-2.5 bg-yellow-500 rounded-full hover:bg-yellow-600 shadow-lg"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                saveFileForLater(file.name);
+                              }}
+                              title="Save for later"
+                            >
+                              <Star className="h-5 w-5 text-white" />
+                            </button>
+                            {selectedScene && (
+                              <button className="p-2.5 bg-blue-500 rounded-full hover:bg-blue-600 shadow-lg">
+                                <Link2 className="h-5 w-5 text-white" />
+                              </button>
+                            )}
+                            <button
+                              className="p-2.5 bg-red-500/90 rounded-full hover:bg-red-600 shadow-lg"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                hideFile(file.name);
+                              }}
+                              title="Move to trash"
+                            >
+                              <Trash2 className="h-5 w-5 text-white" />
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </div>
-                  ))}
+                  );
+                  })}
               </div>
             </div>
           </div>
@@ -966,10 +1949,31 @@ export default function LinkImagesPage() {
           <li>Use Skip or hotkeys (←→ AD S) to navigate</li>
         </ol>
         <div className="mt-3 text-xs text-gray-500">
-          <strong>Search tips:</strong> Type multiple words (e.g. "bondage rope" or "oral blowjob").
+          <strong>Search tips:</strong> Type multiple words (e.g. &quot;bondage rope&quot; or &quot;oral blowjob&quot;).
           Results are sorted by relevance score. Matching fields are highlighted.
         </div>
       </div>
+
+      {/* Lightbox Modal */}
+      {lightboxImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          onClick={() => setLightboxImage(null)}
+        >
+          <button
+            className="absolute top-4 right-4 text-white hover:text-gray-300"
+            onClick={() => setLightboxImage(null)}
+          >
+            <X className="h-8 w-8" />
+          </button>
+          <img
+            src={lightboxImage}
+            alt="Full size"
+            className="max-w-[90vw] max-h-[90vh] object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 }

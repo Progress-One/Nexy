@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Non-production scripts (dev/migration tooling)
+    "scripts/**",
+    "scenes/v2/scripts/**",
+    "supabase/*.js",
+    "supabase/*.ts",
   ]),
 ]);
 

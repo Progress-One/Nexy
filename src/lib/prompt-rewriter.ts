@@ -115,7 +115,7 @@ export function improvePromptFromHints(
   }
 
   // Split into parts
-  let parts = improved.split(',').map(p => p.trim()).filter(p => p.length > 0);
+  const parts = improved.split(',').map(p => p.trim()).filter(p => p.length > 0);
 
   // Shuffle parts (Fisher-Yates) to create variety
   for (let i = parts.length - 1; i > 0; i--) {

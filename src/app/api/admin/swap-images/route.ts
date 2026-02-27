@@ -190,7 +190,7 @@ export async function GET() {
     }
 
     // Fetch shared source scenes
-    let sharedSourceMap: Record<string, any[]> = {};
+    const sharedSourceMap: Record<string, any[]> = {};
     if (allSceneIds.size > 0) {
       const { data: sharedSources } = await supabase
         .from('scenes')

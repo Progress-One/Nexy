@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -30,15 +30,7 @@ export function PartnerChat({ partnerId, partnerName }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    loadHistory();
-  }, [partnerId]);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  async function loadHistory() {
+  const loadHistory = useCallback(async () => {
     try {
       const res = await fetch(`/api/partner-chat/history?partnerId=${partnerId}`);
       const data = await res.json();
@@ -48,7 +40,15 @@ export function PartnerChat({ partnerId, partnerName }: Props) {
     } catch (error) {
       console.error('Failed to load chat history:', error);
     }
-  }
+  }, [partnerId]);
+
+  useEffect(() => {
+    loadHistory();
+  }, [loadHistory]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   async function clearHistory() {
     try {

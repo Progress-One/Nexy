@@ -63,10 +63,9 @@ export function ImageCarousel({
 
   // Reset index when images change
   useEffect(() => {
-    if (allImages.length > 0 && currentIndex >= allImages.length) {
-      setCurrentIndex(0);
-    }
-  }, [allImages.length, currentIndex]);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- bounds guard for external data
+    setCurrentIndex(prev => (allImages.length > 0 && prev >= allImages.length) ? 0 : prev);
+  }, [allImages.length]);
 
   // Auto-rotate
   useEffect(() => {

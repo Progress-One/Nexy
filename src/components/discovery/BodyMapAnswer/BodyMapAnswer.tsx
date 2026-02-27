@@ -60,57 +60,32 @@ export function BodyMapAnswer({
   const [showZoneBounds, setShowZoneBounds] = useState(false);
   const [lastClickPosition, setLastClickPosition] = useState<{ x: number; y: number } | null>(null);
 
-  // Guard against empty passes array
-  if (!config.passes || config.passes.length === 0) {
-    console.error('[BodyMapAnswer] No passes configured');
-    return null;
-  }
+  // Derived state (safe for hooks — fallbacks prevent crashes)
+  const currentPass = config.passes?.[currentPassIndex];
+  const isLastPass = currentPassIndex === (config.passes?.length ?? 0) - 1;
+  const currentGender = currentPass?.subject === 'give' ? partnerGender : userGender;
 
-  const currentPass = config.passes[currentPassIndex];
-
-  // Guard against undefined currentPass (index out of bounds)
-  if (!currentPass) {
-    console.error('[BodyMapAnswer] currentPass is undefined, index:', currentPassIndex, 'passes:', config.passes.length);
-    return null;
-  }
-
-  const isLastPass = currentPassIndex === config.passes.length - 1;
-
-  // Determine which body to show based on pass subject
-  const currentGender =
-    currentPass.subject === 'give' ? partnerGender : userGender;
+  // ─── All hooks MUST be above early returns ──────────
 
   const handleColorSelect = useCallback((color: ZonePreference) => {
     setSelectedColor(color);
   }, []);
 
-  // Zone-first mode: handle body tap to detect zone
   const handleZoneTap = useCallback(
     (x: number, y: number) => {
       const detected = detectZone(x, y, currentGender, currentView);
-      if (!detected) {
-        console.log('[BodyMapAnswer] No zone detected at', x, y);
-        return;
-      }
+      if (!detected) return;
 
-      console.log('[BodyMapAnswer] Detected zone:', detected.name, 'at', x, y, 'confidence:', detected.confidence);
-
-      // Store click position for marker placement
       setLastClickPosition({ x, y });
 
-      // Map detected zone name to ZoneId
       const zoneId = ZONE_NAME_TO_ID[detected.name.ru] || ZONE_NAME_TO_ID[detected.name.en];
       if (zoneId) {
-        console.log('[BodyMapAnswer] Mapped to ZoneId:', zoneId);
         setSelectedZone(zoneId);
-      } else {
-        console.warn('[BodyMapAnswer] Zone name not found in ZONE_NAME_TO_ID:', detected.name);
       }
     },
     [currentGender, currentView]
   );
 
-  // Zone-first mode: save preferences for a zone
   const handleZoneSave = useCallback(
     (zoneId: ZoneId, preferences: ZoneActionPreferences) => {
       setZonePreferences((prev) => ({
@@ -120,8 +95,6 @@ export function BodyMapAnswer({
       setConfiguredZones((prev) => new Set([...prev, zoneId]));
       setSelectedZone(null);
 
-      // Determine marker color based on preferences
-      // Count how many actions have each preference level
       const prefCounts = { love: 0, sometimes: 0, no: 0 };
       Object.values(preferences).forEach((pref) => {
         if (pref && prefCounts[pref] !== undefined) {
@@ -129,7 +102,6 @@ export function BodyMapAnswer({
         }
       });
 
-      // Choose color: love > sometimes > no (whichever has more selections)
       let markerColor: ZonePreference = 'love';
       if (prefCounts.no > prefCounts.love && prefCounts.no > prefCounts.sometimes) {
         markerColor = 'no';
@@ -137,7 +109,6 @@ export function BodyMapAnswer({
         markerColor = 'sometimes';
       }
 
-      // Use the actual click position, not approximate
       const position = lastClickPosition || getApproximateZonePosition(zoneId, currentGender, currentView);
 
       if (position) {
@@ -151,13 +122,11 @@ export function BodyMapAnswer({
         setMarkers((prev) => [...prev, newMarker]);
       }
 
-      // Clear the stored click position
       setLastClickPosition(null);
     },
     [currentGender, currentView, lastClickPosition]
   );
 
-  // Legacy mode: add colored markers
   const handleAddMarker = useCallback(
     (x: number, y: number) => {
       if (zoneFirstMode) {
@@ -182,7 +151,6 @@ export function BodyMapAnswer({
 
   const handleRemoveMarker = useCallback((markerId: string) => {
     setMarkers((prev) => prev.filter((m) => m.id !== markerId));
-    // If it's a zone marker, also remove from configured zones
     if (markerId.startsWith('zone-')) {
       const zoneId = markerId.replace('zone-', '') as ZoneId;
       setConfiguredZones((prev) => {
@@ -205,15 +173,15 @@ export function BodyMapAnswer({
   }, []);
 
   const handleNext = useCallback(() => {
+    if (!currentPass) return;
+
     if (zoneFirstMode) {
-      // Zone-first mode: submit zone+action preferences
       const passAnswer: BodyMapPassAnswer = {
         action: config.action,
         subject: currentPass.subject,
-        markings: [], // Not used in zone-first mode
+        markings: [],
         view: currentView,
         gender: currentGender,
-        // Store zone preferences as extended data
         zoneActionPreferences: zonePreferences,
       };
 
@@ -231,7 +199,6 @@ export function BodyMapAnswer({
       return;
     }
 
-    // Legacy mode: Convert markers to pass answer format
     const markersByPreference: Record<ZonePreference, Array<{ x: number; y: number }>> = {
       love: [],
       sometimes: [],
@@ -266,10 +233,10 @@ export function BodyMapAnswer({
       setCurrentView('front');
     }
   }, [
+    currentPass,
     zoneFirstMode,
     markers,
     config.action,
-    currentPass.subject,
     currentView,
     currentGender,
     isLastPass,
@@ -277,6 +244,18 @@ export function BodyMapAnswer({
     onSubmit,
     zonePreferences,
   ]);
+
+  // ─── Early returns AFTER all hooks ──────────────────
+
+  if (!config.passes || config.passes.length === 0) {
+    console.error('[BodyMapAnswer] No passes configured');
+    return null;
+  }
+
+  if (!currentPass) {
+    console.error('[BodyMapAnswer] currentPass is undefined, index:', currentPassIndex, 'passes:', config.passes.length);
+    return null;
+  }
 
   const canProceed = zoneFirstMode ? configuredZones.size > 0 : markers.length > 0;
 

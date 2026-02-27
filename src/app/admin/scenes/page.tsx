@@ -133,10 +133,12 @@ interface GlobalSettings {
 
 // Civitai models
 const CIVITAI_MODELS = [
+  { id: '827184', name: 'WAI-illustrious v16 (NEW)' },
+  { id: '439889', name: 'Prefect Pony XL v6 (NEW)' },
   { id: '795765', name: 'Illustrious XL v0.1' },
   { id: '1024144', name: 'NoobAI XL (Illustrious)' },
   { id: '2173364', name: 'CoMix v1.0 (Illustrious)' },
-  { id: '1022833', name: 'WAI-NSFW-illustrious' },
+  { id: '1022833', name: 'WAI-NSFW-illustrious (old)' },
   { id: '4201', name: 'Realistic Vision v5.1' },
   { id: '139562', name: 'RealVisXL V5.0 Lightning' },
   { id: '312530', name: 'CyberRealistic XL v8.0' },
@@ -150,18 +152,21 @@ const CIVITAI_MODELS = [
 
 // Replicate models
 const REPLICATE_MODELS = [
+  { id: 'flux-pro', name: 'FLUX 2 Pro (NEW, best quality)' },
+  { id: 'juggernaut', name: 'Juggernaut XI v11 (NEW)' },
   { id: 'pony-xl', name: 'Pony XL v5 (best for yaoi/bara)' },
   { id: 'pony-realism', name: 'Pony Realism v2.3 (realistic)' },
   { id: 'noobai-xl', name: 'NoobAI XL (Illustrious)' },
-  { id: 'wai-illustrious', name: 'WAI NSFW Illustrious v11' },
+  { id: 'wai-illustrious-v12', name: 'WAI NSFW Illustrious v12' },
+  { id: 'wai-illustrious', name: 'WAI NSFW Illustrious v11 (old)' },
   { id: 'z-image-turbo', name: 'Z Image Turbo (super fast)' },
   { id: 'flux-schnell', name: 'FLUX Schnell (fast)' },
   { id: 'flux-dev', name: 'FLUX Dev' },
-  { id: 'flux-pro', name: 'FLUX Pro' },
+  { id: 'flux-1.1-pro', name: 'FLUX 1.1 Pro (legacy)' },
   { id: 'sdxl-lightning', name: 'SDXL Lightning (fast)' },
   { id: 'sdxl', name: 'SDXL' },
   { id: 'realistic-vision', name: 'Realistic Vision v5.1' },
-  { id: 'juggernaut', name: 'Juggernaut XL' },
+  { id: 'juggernaut-v9', name: 'Juggernaut XL v9 (legacy)' },
 ];
 
 const SETTINGS_KEY = 'admin-scenes-settings';
@@ -1134,6 +1139,31 @@ export default function AdminScenesPage() {
     }
   };
 
+  // Update QA status of a variant (for restore/reject)
+  const updateVariantQaStatus = async (sceneId: string, variantUrl: string, qaStatus: 'passed' | 'failed' | null) => {
+    try {
+      const response = await fetch('/api/admin/save-variant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sceneId, action: 'update_qa_status', variantUrl, qa_status: qaStatus }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        addLog(`Error: ${result.error}`, 'error');
+        return;
+      }
+
+      setScenes((prev) =>
+        prev.map((s) => (s.id === sceneId ? { ...s, image_variants: result.variants } : s))
+      );
+      addLog(`QA status updated to ${qaStatus || 'none'}`, 'success');
+    } catch (error) {
+      addLog(`Error: ${(error as Error).message}`, 'error');
+    }
+  };
+
   // Save current image to gallery
   const saveToGallery = async (scene: SceneWithStatus) => {
     const currentUrl = scene.image_url;
@@ -1666,6 +1696,13 @@ export default function AdminScenesPage() {
             >
               Body Map
             </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.location.href = '/admin/verbal-options'}
+            >
+              Verbal Options
+            </Button>
           </div>
         </div>
 
@@ -1984,14 +2021,15 @@ export default function AdminScenesPage() {
           <tbody>
             {filteredScenes
               .filter((scene) => {
-                // Skip "receive" or "sub" scenes that have a paired "give"/"dom" scene - they'll be shown together
-                // Patterns: *-receive*, *-sub-*
-                const isSecondaryScene = scene.slug?.includes('-receive') || scene.slug?.includes('-sub-');
-                if (scene.paired_scene && isSecondaryScene) {
-                  // Check if paired "give/dom" scene exists AND is visible in current filter
-                  const primarySceneInList = filteredScenes.some(s => s.slug === scene.paired_scene);
-                  if (primarySceneInList) {
-                    return false; // Skip - will be shown with give/dom scene
+                // Skip one of paired scenes to avoid duplicates - they'll be shown together
+                // When both scenes reference each other, show only the one with alphabetically smaller slug
+                if (scene.paired_scene) {
+                  const pairedSceneInList = filteredScenes.find(s => s.slug === scene.paired_scene);
+                  if (pairedSceneInList) {
+                    // Both are in the list - show only the one with smaller slug
+                    if (scene.slug && scene.slug > scene.paired_scene) {
+                      return false; // Skip this one, the other will be shown
+                    }
                   }
                 }
                 return true;
@@ -2171,13 +2209,20 @@ export default function AdminScenesPage() {
                   {/* User Description RU/EN */}
                   {(() => {
                     const pairedScene = scene.paired_scene ? scenes.find(s => s.slug === scene.paired_scene) : null;
-                    // Check patterns: *-give/*-receive and *-dom-*/*-sub-*
-                    const isGiveScene = scene.slug?.includes('-give');
-                    const isDomScene = scene.slug?.includes('-dom-');
-                    const isReceiveScene = scene.slug?.includes('-receive');
-                    const isSubScene = scene.slug?.includes('-sub-');
-                    const thisLabel = isGiveScene ? 'GIVE' : isDomScene ? 'DOM' : isReceiveScene ? 'RECEIVE' : isSubScene ? 'SUB' : 'DESC';
-                    const pairedLabel = pairedScene?.slug?.includes('-give') ? 'GIVE' : pairedScene?.slug?.includes('-dom-') ? 'DOM' : pairedScene?.slug?.includes('-sub-') ? 'SUB' : 'RECEIVE';
+                    // Check patterns for scene labels
+                    const getLabel = (slug: string | undefined) => {
+                      if (slug?.includes('-give')) return 'GIVE';
+                      if (slug?.includes('-receive')) return 'RECEIVE';
+                      if (slug?.includes('-watch')) return 'WATCH';
+                      if (slug?.includes('-know')) return 'KNOW';
+                      if (slug?.startsWith('dom-')) return 'DOM';
+                      if (slug?.startsWith('sub-')) return 'SUB';
+                      if (slug?.includes('-leads')) return 'LEADS';
+                      if (slug?.includes('-follows')) return 'FOLLOWS';
+                      return 'DESC';
+                    };
+                    const thisLabel = getLabel(scene.slug);
+                    const pairedLabel = getLabel(pairedScene?.slug) === 'DESC' ? 'RECEIVE' : getLabel(pairedScene?.slug);
 
                     return (
                       <div className="mt-2 space-y-2 max-w-full overflow-hidden">
@@ -2699,6 +2744,18 @@ export default function AdminScenesPage() {
                             >
                               <Eye className="size-3" />
                             </Button>
+                            {/* Restore button for failed QA variants */}
+                            {variant.qa_status === 'failed' && (
+                              <Button
+                                variant="secondary"
+                                size="sm"
+                                className="h-7 text-xs bg-green-600 hover:bg-green-700 text-white"
+                                onClick={() => updateVariantQaStatus(scene.id, variant.url, null)}
+                                title="Restore (clear QA failed status)"
+                              >
+                                <RotateCcw className="size-3" />
+                              </Button>
+                            )}
                             <Button
                               variant="destructive"
                               size="sm"
@@ -2960,7 +3017,7 @@ export default function AdminScenesPage() {
                     Создать 6 сцен
                   </Button>
                 </div>
-                <p className="text-xs">Restrain, Шибари, St. Andrew's Cross, Spreader bar, Подвешивание, Цепи</p>
+                <p className="text-xs">Restrain, Шибари, St. Andrew&apos;s Cross, Spreader bar, Подвешивание, Цепи</p>
               </div>
 
               {/* Positions */}
