@@ -6,6 +6,8 @@ import { type SwipeResponseValue } from '@/components/discovery/SwipeableSceneCa
 import { type ExperienceLevel } from '@/components/discovery/ExperienceSelector';
 import { type SceneV3Response } from '@/components/discovery/SceneRendererV3';
 import { getFilteredScenesClient } from '@/lib/scenes.client';
+import { fetchPendingProposals, updateProposalStatus } from '@/lib/proposals.client';
+import { getBaselineGates, isSceneBlockedByGates } from '@/lib/scene-progression';
 import {
   calculateSignalUpdates,
   calculateTestScoreUpdates,
@@ -64,6 +66,9 @@ export function useDiscovery() {
 
   // Experience selector
   const [experience, setExperience] = useState<ExperienceLevel>(null);
+
+  // Proposals tracking: scene_id → proposal_id
+  const [proposalMap, setProposalMap] = useState<Map<string, string>>(new Map());
 
   const supabase = createClient();
 
@@ -251,9 +256,40 @@ export function useDiscovery() {
     return virtualScenes;
   }, [supabase]);
 
-  // Fetch regular scenes
+  // Fetch regular scenes (with proposals injected)
   const fetchRegularScenes = useCallback(async (userId: string, gender?: 'male' | 'female') => {
     try {
+      // Fetch pending proposals and validate against gates
+      let proposedScenes: Scene[] = [];
+      const newProposalMap = new Map<string, string>();
+
+      try {
+        const proposalsWithScenes = await fetchPendingProposals(supabase, userId);
+        if (proposalsWithScenes.length > 0) {
+          const gates = await getBaselineGates(supabase, userId);
+
+          for (const { proposal, scene } of proposalsWithScenes) {
+            const sceneV2 = scene as unknown as SceneV2;
+
+            // Respect safety gates — partner A never knows if gates blocked it
+            if (isSceneBlockedByGates(sceneV2, gates)) continue;
+
+            // Respect gender filter
+            const forGender = (scene as unknown as Record<string, unknown>).for_gender as string | undefined;
+            if (forGender && gender && forGender !== gender) continue;
+
+            proposedScenes.push(scene);
+            newProposalMap.set(scene.id, proposal.id);
+
+            // Mark as shown
+            await updateProposalStatus(supabase, proposal.id, 'shown');
+          }
+        }
+      } catch (err) {
+        console.error('[Discover] Error fetching proposals:', err);
+      }
+
+      // Fetch regular scenes
       const scenesData = await getFilteredScenesClient(supabase, userId, {
         limit: 20,
         orderByPriority: false,
@@ -262,22 +298,22 @@ export function useDiscovery() {
         userGender: gender,
       });
 
-      if (scenesData.length === 0) {
-        const fallbackScenes = await getFilteredScenesClient(supabase, userId, {
-          limit: 20,
-          orderByPriority: true,
-          enableAdaptiveFlow: false,
-          enableDedupe: true,
-          userGender: gender,
-        });
-        setScenes(fallbackScenes);
-        setCurrentIndex(0);
-        return fallbackScenes;
-      }
+      // Deduplicate: remove proposal scenes from regular results
+      const proposalSceneIds = new Set(proposedScenes.map(s => s.id));
+      const deduped = (scenesData.length > 0 ? scenesData : await getFilteredScenesClient(supabase, userId, {
+        limit: 20,
+        orderByPriority: true,
+        enableAdaptiveFlow: false,
+        enableDedupe: true,
+        userGender: gender,
+      })).filter(s => !proposalSceneIds.has(s.id));
 
-      setScenes(scenesData);
+      // Proposals first, then regular
+      const combined = [...proposedScenes, ...deduped];
+      setScenes(combined);
+      setProposalMap(newProposalMap);
       setCurrentIndex(0);
-      return scenesData;
+      return combined;
     } catch (error) {
       console.error('[Discover] Error fetching scenes:', error);
       return [];
@@ -564,6 +600,12 @@ export function useDiscovery() {
         }
       }
 
+      // Update proposal status if this was a proposed scene
+      const proposalId = proposalMap.get(currentScene.id);
+      if (proposalId) {
+        await updateProposalStatus(supabase, proposalId, 'answered');
+      }
+
       setExperience(null);
       await moveToNextScene();
     } catch (error) {
@@ -571,7 +613,7 @@ export function useDiscovery() {
     } finally {
       setSubmitting(false);
     }
-  }, [currentScene, experience, supabase, moveToNextScene]);
+  }, [currentScene, experience, supabase, moveToNextScene, proposalMap]);
 
   const handleOnboardingResponse = useCallback(async (value: SwipeResponseValue) => {
     const scene = onboardingScenes[currentOnboardingIndex];
@@ -714,13 +756,19 @@ export function useDiscovery() {
         answer,
       }, { onConflict: 'user_id,scene_id' });
 
+      // Update proposal status if this was a proposed scene
+      const proposalId = proposalMap.get(currentScene.id);
+      if (proposalId) {
+        await updateProposalStatus(supabase, proposalId, 'answered');
+      }
+
       await moveToNextScene();
     } catch (error) {
       console.error('Error submitting V3 response:', error);
     } finally {
       setSubmitting(false);
     }
-  }, [currentScene, supabase, moveToNextScene]);
+  }, [currentScene, supabase, moveToNextScene, proposalMap]);
 
   const refreshScenes = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -772,6 +820,9 @@ export function useDiscovery() {
     userProfile,
     userGender,
     partnerGender,
+
+    // Proposals
+    isProposedScene: (sceneId: string) => proposalMap.has(sceneId),
 
     // Navigation
     moveToNextScene,

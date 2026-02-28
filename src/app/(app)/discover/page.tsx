@@ -41,6 +41,7 @@ export default function DiscoverPage() {
     experience,
     setExperience,
     refreshScenes,
+    isProposedScene,
     userGender,
     partnerGender,
     moveToNextScene,
@@ -194,6 +195,15 @@ export default function DiscoverPage() {
                 locale={locale}
                 zoneFirstMode={true}
               />
+            )}
+
+            {/* Proposal badge */}
+            {!isBodyMapScene && currentScene && isProposedScene(currentScene.id) && (
+              <div className="flex justify-center mb-2">
+                <span className="text-xs bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full">
+                  {t('partnerSuggested', locale)}
+                </span>
+              </div>
             )}
 
             {/* V3 Special Scene Types */}

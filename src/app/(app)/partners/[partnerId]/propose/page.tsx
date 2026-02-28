@@ -48,11 +48,13 @@ export default function ProposePage({ params }: { params: Promise<{ partnerId: s
         ? partnership.partner_id
         : partnership.user_id;
 
-      // Find a scene with this dimension
+      // Find a V2 scene with this tag
       const { data: scenes } = await supabase
         .from('scenes')
         .select('id')
-        .contains('dimensions', [selectedDimension])
+        .eq('version', 2)
+        .eq('is_active', true)
+        .contains('tags', [selectedDimension])
         .limit(5);
 
       if (scenes && scenes.length > 0) {

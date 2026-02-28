@@ -103,6 +103,9 @@ export const UI_STRINGS: Record<string, LocalizedString> = {
   back: { ru: 'Назад', en: 'Back' },
   skip: { ru: 'Пропустить', en: 'Skip' },
 
+  // Proposals
+  partnerSuggested: { ru: 'Партнёр предложил эту тему', en: 'Your partner suggested this' },
+
   // Discovery
   questionsAnswered: {
     ru: '{count} вопросов отвечено',
