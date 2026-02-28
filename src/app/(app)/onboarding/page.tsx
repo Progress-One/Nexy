@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createClient } from '@/lib/supabase/client';
+import { trackEvent, EVENTS } from '@/lib/analytics';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Clock } from 'lucide-react';
@@ -24,9 +25,25 @@ export default function OnboardingPage() {
   const router = useRouter();
   const supabase = createClient();
 
+  // Track onboarding start
+  const tracked = useRef(false);
+  useEffect(() => {
+    if (tracked.current) return;
+    tracked.current = true;
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) trackEvent(supabase, user.id, EVENTS.ONBOARDING_START);
+    })();
+  }, [supabase]);
+
   const handleGenderSelect = (selected: Gender) => {
     setGender(selected);
     setStep(2);
+    // Track step 1 completion
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) trackEvent(supabase, user.id, EVENTS.ONBOARDING_STEP_GENDER, { gender: selected });
+    })();
   };
 
   // Determine which orientation would be requested based on gender and interest
@@ -88,6 +105,11 @@ export default function OnboardingPage() {
 
     setInterestedIn(selected);
     setStep(3);
+    // Track step 2 completion
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) trackEvent(supabase, user.id, EVENTS.ONBOARDING_STEP_INTERESTED, { interested_in: selected });
+    })();
   };
 
   const handleOpennessSelect = async (selected: OpennessLevel) => {
@@ -117,6 +139,9 @@ export default function OnboardingPage() {
         setError(updateError.message);
         return;
       }
+
+      trackEvent(supabase, user.id, EVENTS.ONBOARDING_STEP_OPENNESS, { openness: selected });
+      trackEvent(supabase, user.id, EVENTS.ONBOARDING_COMPLETE, { gender, interested_in: interestedIn, openness: selected });
 
       router.push('/discover');
     } catch {
