@@ -260,7 +260,7 @@ export function useDiscovery() {
   const fetchRegularScenes = useCallback(async (userId: string, gender?: 'male' | 'female') => {
     try {
       // Fetch pending proposals and validate against gates
-      let proposedScenes: Scene[] = [];
+      const proposedScenes: Scene[] = [];
       const newProposalMap = new Map<string, string>();
 
       try {
