@@ -1,54 +1,81 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+import { motion } from "framer-motion";
+import { t, getLocale } from "@/lib/locale";
 
-const plans = [
-  {
-    name: "Free",
-    price: "$0",
-    period: "forever",
-    description: "Get started and explore",
-    features: [
-      "50 scenarios",
-      "Basic matching",
-      "Invite 1 partner",
-    ],
-    cta: "Start Free",
-    href: "/signup",
-    popular: false,
-  },
-  {
-    name: "Premium",
-    price: "$6.99",
-    period: "/month",
-    yearlyPrice: "$39.99/year",
-    description: "Full experience",
-    features: [
-      "Full library (500+ scenarios)",
-      "AI personalization",
-      "Date night suggestions",
-      "New content weekly",
-    ],
-    cta: "Try Free",
-    href: "/signup?plan=premium",
-    popular: true,
-  },
-];
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.15 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
 
 export function Pricing() {
+  const locale = getLocale();
+
+  const plans = [
+    {
+      name: t('landing_pricing_free', locale),
+      price: t('landing_pricing_free_price', locale),
+      description: t('landing_pricing_free_desc', locale),
+      features: [
+        t('landing_pricing_free_f1', locale),
+        t('landing_pricing_free_f2', locale),
+        t('landing_pricing_free_f3', locale),
+      ],
+      cta: t('landing_pricing_free_cta', locale),
+      href: "/signup",
+      popular: false,
+    },
+    {
+      name: t('landing_pricing_premium', locale),
+      priceMonth: t('landing_pricing_premium_price_month', locale),
+      priceYear: t('landing_pricing_premium_price_year', locale),
+      description: t('landing_pricing_premium_desc', locale),
+      features: [
+        t('landing_pricing_premium_f1', locale),
+        t('landing_pricing_premium_f2', locale),
+        t('landing_pricing_premium_f3', locale),
+        t('landing_pricing_premium_f4', locale),
+      ],
+      cta: t('landing_pricing_premium_cta', locale),
+      href: "/signup?plan=premium",
+      popular: true,
+    },
+  ];
+
   return (
     <section id="pricing" className="py-20 md:py-32">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+        >
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Start free, upgrade when you&apos;re ready
+            {t('landing_pricing_title', locale)}
           </h2>
-        </div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+        <motion.div
+          className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           {plans.map((plan, index) => (
-            <div
+            <motion.div
               key={index}
+              variants={itemVariants}
               className={`relative p-8 rounded-2xl border ${
                 plan.popular
                   ? "border-primary bg-primary/5"
@@ -58,7 +85,7 @@ export function Pricing() {
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <span className="px-3 py-1 text-xs font-medium bg-primary text-primary-foreground rounded-full">
-                    Most Popular
+                    {t('landing_pricing_premium_badge', locale)}
                   </span>
                 </div>
               )}
@@ -67,18 +94,19 @@ export function Pricing() {
                 <h3 className="font-semibold text-lg text-foreground mb-2">
                   {plan.name}
                 </h3>
-                <div className="flex items-baseline justify-center gap-1">
-                  <span className="font-serif text-4xl font-bold text-foreground">
+                {plan.popular ? (
+                  <>
+                    <div className="font-serif text-4xl font-bold text-foreground">
+                      {plan.priceMonth}
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {t('landing_pricing_or', locale)} {plan.priceYear}
+                    </p>
+                  </>
+                ) : (
+                  <div className="font-serif text-4xl font-bold text-foreground">
                     {plan.price}
-                  </span>
-                  <span className="text-muted-foreground text-sm">
-                    {plan.period}
-                  </span>
-                </div>
-                {plan.yearlyPrice && (
-                  <p className="text-sm text-muted-foreground mt-1">
-                    or {plan.yearlyPrice}
-                  </p>
+                  </div>
                 )}
                 <p className="text-sm text-muted-foreground mt-2">
                   {plan.description}
@@ -101,9 +129,9 @@ export function Pricing() {
               >
                 <Link href={plan.href}>{plan.cta}</Link>
               </Button>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

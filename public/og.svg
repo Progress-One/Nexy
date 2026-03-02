@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0C0A0F"/>
+      <stop offset="100%" stop-color="#16121D"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E8747C"/>
+      <stop offset="100%" stop-color="#9B6B9E"/>
+    </linearGradient>
+    <linearGradient id="heart1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8747C" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#E8747C" stop-opacity="0.03"/>
+    </linearGradient>
+    <linearGradient id="heart2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9B6B9E" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#9B6B9E" stop-opacity="0.02"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Decorative heart shapes -->
+  <g transform="translate(180, 140) scale(1.8)" opacity="0.6">
+    <path d="M50 30 C50 15, 30 0, 15 0 C0 0, 0 15, 0 30 C0 50, 25 65, 50 80 C75 65, 100 50, 100 30 C100 15, 100 0, 85 0 C70 0, 50 15, 50 30Z" fill="url(#heart1)"/>
+  </g>
+  <g transform="translate(900, 350) scale(1.4)" opacity="0.5">
+    <path d="M50 30 C50 15, 30 0, 15 0 C0 0, 0 15, 0 30 C0 50, 25 65, 50 80 C75 65, 100 50, 100 30 C100 15, 100 0, 85 0 C70 0, 50 15, 50 30Z" fill="url(#heart2)"/>
+  </g>
+
+  <!-- Accent line -->
+  <rect x="500" y="280" width="200" height="3" rx="1.5" fill="url(#accent)" opacity="0.8"/>
+
+  <!-- Logo text -->
+  <text x="600" y="250" text-anchor="middle" font-family="serif" font-size="96" font-weight="700" fill="#E8747C">
+    Nexy
+  </text>
+
+  <!-- Tagline -->
+  <text x="600" y="340" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="400" fill="#F5F0F0" opacity="0.9">
+    Discover What You Both Really Want
+  </text>
+
+  <!-- Subtle bottom accent -->
+  <rect x="0" y="620" width="1200" height="10" fill="url(#accent)" opacity="0.4"/>
+</svg>

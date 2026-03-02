@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
+import { Providers } from "@/components/providers";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -38,11 +39,13 @@ export const metadata: Metadata = {
     url: "https://nexy.life",
     siteName: "Nexy",
     type: "website",
+    images: [{ url: '/og.svg', width: 1200, height: 630, alt: 'Nexy — Discover What You Both Really Want' }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Nexy — Discover What You Both Really Want",
     description: "The app that helps couples communicate desires without awkward conversations.",
+    images: ['/og.svg'],
   },
   // PWA / Mobile web app settings
   appleWebApp: {
@@ -68,7 +71,7 @@ export default function RootLayout({
       <body
         className={`${plusJakarta.variable} ${playfair.variable} font-sans antialiased no-overscroll-y`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

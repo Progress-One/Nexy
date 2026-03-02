@@ -5,12 +5,14 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { t, getLocale } from "@/lib/locale";
 import type { User } from "@supabase/supabase-js";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const locale = getLocale();
 
   useEffect(() => {
     const supabase = createClient();
@@ -38,13 +40,13 @@ export function Header() {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
           <Link href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            How it works
+            {t('landing_header_how', locale)}
           </Link>
           <Link href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            Features
+            {t('landing_header_features', locale)}
           </Link>
           <Link href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            Pricing
+            {t('landing_header_pricing', locale)}
           </Link>
         </nav>
 
@@ -54,15 +56,15 @@ export function Header() {
             <div className="w-24 h-9" />
           ) : user ? (
             <Button asChild>
-              <Link href="/discover">Open App</Link>
+              <Link href="/discover">{t('landing_header_open', locale)}</Link>
             </Button>
           ) : (
             <>
               <Button variant="ghost" asChild>
-                <Link href="/login">Log In</Link>
+                <Link href="/login">{t('landing_header_login', locale)}</Link>
               </Button>
               <Button asChild>
-                <Link href="/signup">Get Started</Link>
+                <Link href="/signup">{t('landing_header_start', locale)}</Link>
               </Button>
             </>
           )}
@@ -87,36 +89,36 @@ export function Header() {
               className="text-sm font-medium text-muted-foreground hover:text-foreground"
               onClick={() => setMobileMenuOpen(false)}
             >
-              How it works
+              {t('landing_header_how', locale)}
             </Link>
             <Link
               href="#features"
               className="text-sm font-medium text-muted-foreground hover:text-foreground"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Features
+              {t('landing_header_features', locale)}
             </Link>
             <Link
               href="#pricing"
               className="text-sm font-medium text-muted-foreground hover:text-foreground"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Pricing
+              {t('landing_header_pricing', locale)}
             </Link>
             <div className="flex flex-col gap-2 pt-4 border-t border-border/40">
               {loading ? (
                 <div className="h-10" />
               ) : user ? (
                 <Button asChild className="w-full">
-                  <Link href="/discover">Open App</Link>
+                  <Link href="/discover">{t('landing_header_open', locale)}</Link>
                 </Button>
               ) : (
                 <>
                   <Button variant="outline" asChild className="w-full">
-                    <Link href="/login">Log In</Link>
+                    <Link href="/login">{t('landing_header_login', locale)}</Link>
                   </Button>
                   <Button asChild className="w-full">
-                    <Link href="/signup">Get Started</Link>
+                    <Link href="/signup">{t('landing_header_start', locale)}</Link>
                   </Button>
                 </>
               )}

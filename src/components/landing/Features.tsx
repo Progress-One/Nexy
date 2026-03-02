@@ -1,43 +1,99 @@
-import { Sparkles, Library, Shield, Calendar } from "lucide-react";
+"use client";
+
+import { Brain, Flame, EyeOff, Moon } from "lucide-react";
+import { motion } from "framer-motion";
+import { t, getLocale } from "@/lib/locale";
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.15 } },
+} as const;
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+} as const;
+
+const titleVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+} as const;
+
+const mosaicVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.8, delay: 0.4, ease: "easeOut" as const } },
+} as const;
 
 const features = [
   {
-    icon: Sparkles,
-    title: "AI-Powered Discovery",
-    description: "Our AI learns your taste and surfaces scenarios you're likely to enjoy. No endless scrolling through things that don't interest you.",
+    icon: Brain,
+    titleKey: "landing_features_ai_title",
+    descKey: "landing_features_ai_desc",
   },
   {
-    icon: Library,
-    title: "500+ Scenarios",
-    description: "From romantic to adventurous. Gentle to intense. Curated library covering the full spectrum of intimacy.",
+    icon: Flame,
+    titleKey: "landing_features_library_title",
+    descKey: "landing_features_library_desc",
   },
   {
-    icon: Shield,
-    title: "Absolute Privacy",
-    description: "Your unmatched answers are never shown — not to your partner, not to anyone. What you explore stays yours.",
+    icon: EyeOff,
+    titleKey: "landing_features_privacy_title",
+    descKey: "landing_features_privacy_desc",
   },
   {
-    icon: Calendar,
-    title: "Date Night Mode",
-    description: "Matched on something? Get suggestions for how to bring it to life tonight.",
+    icon: Moon,
+    titleKey: "landing_features_date_title",
+    descKey: "landing_features_date_desc",
   },
+] as const;
+
+// Mosaic tile configurations for variety
+const mosaicTiles = [
+  { colSpan: "col-span-2", rowSpan: "row-span-2", bg: "bg-primary/10", rounded: "rounded-2xl" },
+  { colSpan: "col-span-1", rowSpan: "row-span-1", bg: "bg-secondary/15", rounded: "rounded-xl" },
+  { colSpan: "col-span-1", rowSpan: "row-span-1", bg: "bg-primary/20", rounded: "rounded-lg" },
+  { colSpan: "col-span-1", rowSpan: "row-span-2", bg: "bg-secondary/10", rounded: "rounded-2xl" },
+  { colSpan: "col-span-1", rowSpan: "row-span-1", bg: "bg-primary/5", rounded: "rounded-xl" },
+  { colSpan: "col-span-2", rowSpan: "row-span-1", bg: "bg-secondary/8", rounded: "rounded-lg" },
+  { colSpan: "col-span-1", rowSpan: "row-span-1", bg: "bg-primary/15", rounded: "rounded-2xl" },
+  { colSpan: "col-span-1", rowSpan: "row-span-1", bg: "bg-secondary/20", rounded: "rounded-xl" },
+  { colSpan: "col-span-1", rowSpan: "row-span-1", bg: "bg-primary/8", rounded: "rounded-lg" },
+  { colSpan: "col-span-2", rowSpan: "row-span-1", bg: "bg-primary/12", rounded: "rounded-2xl" },
 ];
 
+// Gradient overlays for select tiles
+const gradientTileIndices = new Set([0, 3, 9]);
+
 export function Features() {
+  const locale = getLocale();
+
   return (
     <section id="features" className="py-20 md:py-32">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={titleVariants}
+        >
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Why couples love it
+            {t("landing_features_title", locale)}
           </h2>
-        </div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto mb-16">
+        <motion.div
+          className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto mb-16"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={containerVariants}
+        >
           {features.map((feature, index) => (
-            <div
+            <motion.div
               key={index}
               className="flex gap-4 p-6 rounded-2xl bg-card border border-border/50 hover:border-primary/30 transition-colors"
+              variants={itemVariants}
             >
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -46,31 +102,37 @@ export function Features() {
               </div>
               <div>
                 <h3 className="font-semibold text-foreground mb-2">
-                  {feature.title}
+                  {t(feature.titleKey, locale)}
                 </h3>
                 <p className="text-muted-foreground text-sm">
-                  {feature.description}
+                  {t(feature.descKey, locale)}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* Variety Preview Placeholder */}
-        <div className="max-w-4xl mx-auto">
-          <div className="aspect-[21/9] bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 rounded-2xl flex items-center justify-center border border-border/50">
-            <div className="text-center p-8">
-              <div className="grid grid-cols-5 gap-3 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="aspect-square rounded-lg bg-primary/10" />
-                ))}
-              </div>
-              <p className="text-sm text-muted-foreground">
-                [Grid: Variety preview thumbnails]
-              </p>
-            </div>
+        {/* Variety Mosaic */}
+        <motion.div
+          className="max-w-4xl mx-auto"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={mosaicVariants}
+        >
+          <div className="grid grid-cols-5 auto-rows-[48px] md:auto-rows-[56px] gap-2.5 md:gap-3">
+            {mosaicTiles.map((tile, i) => (
+              <div
+                key={i}
+                className={`${tile.colSpan} ${tile.rowSpan} ${tile.rounded} transition-colors ${
+                  gradientTileIndices.has(i)
+                    ? "bg-gradient-to-br from-primary/10 to-secondary/15"
+                    : tile.bg
+                }`}
+              />
+            ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -172,6 +172,129 @@ export const UI_STRINGS: Record<string, LocalizedString> = {
     en: 'To delete your account, please contact support.',
   },
   language: { ru: 'Язык / Language', en: 'Language' },
+
+  // ==================== LANDING PAGE ====================
+
+  // Header
+  landing_header_how: { ru: 'Как это работает', en: 'How it works' },
+  landing_header_features: { ru: 'Возможности', en: 'Features' },
+  landing_header_pricing: { ru: 'Цены', en: 'Pricing' },
+  landing_header_login: { ru: 'Войти', en: 'Log In' },
+  landing_header_start: { ru: 'Начать', en: 'Get Started' },
+  landing_header_open: { ru: 'Открыть', en: 'Open App' },
+
+  // Hero
+  landing_hero_title: { ru: 'Узнайте тайные желания друг\u00A0друга', en: 'Uncover Each Other\'s Hidden Desires' },
+  landing_hero_subtitle: {
+    ru: 'Свайпайте сценарии. Совпавшие фантазии раскрываются. Несовпавшие — навсегда останутся тайной. Никакой неловкости, только\u00A0страсть.',
+    en: 'Swipe through fantasies. Mutual desires are revealed. Unmatched ones stay secret forever. No awkwardness, just passion.',
+  },
+  landing_hero_cta: { ru: 'Попробовать бесплатно', en: 'Explore Free' },
+  landing_hero_badge_private: { ru: 'Полная анонимность', en: 'Completely anonymous' },
+  landing_hero_badge_free: { ru: 'Без привязки карты', en: 'No credit card' },
+  landing_hero_badge_couples: { ru: '18+ для пар', en: '18+ for couples' },
+
+  // How it works
+  landing_how_title: { ru: 'Три шага к\u00A0откровенности', en: 'Three steps to intimacy' },
+  landing_how_step1_title: { ru: 'Исследуйте фантазии', en: 'Explore fantasies' },
+  landing_how_step1_desc: {
+    ru: 'Свайпайте провокационные сценарии — от нежных до самых дерзких. AI подстраивается под ваш вкус и показывает то, что заводит именно вас.',
+    en: 'Swipe through provocative scenarios — from tender to wild. AI adapts to your taste and surfaces what turns you on.',
+  },
+  landing_how_step2_title: { ru: 'Пригласите партнёра', en: 'Invite your partner' },
+  landing_how_step2_desc: {
+    ru: 'Отправьте приватную ссылку. Партнёр отвечает на те же вопросы отдельно. Никто не подглядывает.',
+    en: 'Send a secret link. They answer the same questions separately. No peeking allowed.',
+  },
+  landing_how_step3_title: { ru: 'Откройте совпадения', en: 'Reveal mutual desires' },
+  landing_how_step3_desc: {
+    ru: 'Оба хотите попробовать? Это матч. Не совпало — никто не узнает. Ваши тёмные уголки останутся только вашими.',
+    en: "Both into it? It's a match. Not mutual? Neither of you ever finds out. Your secret sides stay secret.",
+  },
+
+  // Features
+  landing_features_title: { ru: 'Почему это затягивает', en: 'Why it\'s addictive' },
+  landing_features_ai_title: { ru: 'AI знает, что вас заводит', en: 'AI knows what turns you on' },
+  landing_features_ai_desc: {
+    ru: 'Чем больше свайпаете, тем точнее AI подбирает сценарии под ваши скрытые желания. Он учится быстро.',
+    en: 'The more you swipe, the better AI learns your hidden desires. It picks up fast.',
+  },
+  landing_features_library_title: { ru: '500+ сценариев', en: '500+ Scenarios' },
+  landing_features_library_desc: {
+    ru: 'От нежной романтики до БДСМ и ролевых игр. Полный спектр — от ванили до самого острого.',
+    en: 'From soft romance to BDSM and role play. The full spectrum — from vanilla to the wildest.',
+  },
+  landing_features_privacy_title: { ru: 'Абсолютная тайна', en: 'Your dirty secret is safe' },
+  landing_features_privacy_desc: {
+    ru: 'Несовпавшие желания никогда не раскрываются. Ни партнёру, ни нам. Исследуйте без страха.',
+    en: 'Unmatched desires are never revealed. Not to your partner, not to us. Explore without fear.',
+  },
+  landing_features_date_title: { ru: 'Режим «Сегодня ночью»', en: 'Tonight Mode' },
+  landing_features_date_desc: {
+    ru: 'Нашли совпадение? Получите сценарий на вечер. От фантазии к\u00A0реальности за один тап.',
+    en: 'Found a match? Get a scenario for tonight. From fantasy to reality in one tap.',
+  },
+
+  // Testimonials
+  landing_testimonials_title: { ru: 'Что говорят пары', en: 'What couples say' },
+  landing_testimonials_1: {
+    ru: '8 лет вместе — и мы наконец узнали, чего хотим друг от друга в постели. Жалеем, что не попробовали раньше.',
+    en: "8 years together — and we finally learned what we both want in bed. Wish we'd tried this sooner.",
+  },
+  landing_testimonials_1_author: { ru: 'Саша и Миша', en: 'Sarah & Mike' },
+  landing_testimonials_2: {
+    ru: 'Я никогда бы не решилась сказать это вслух. А тут — свайпнула, и оказалось, он тоже хочет. Лучший вечер за долгое время.',
+    en: 'I\'d never dare say it out loud. Swiped it, turns out he\'s into it too. Best night in a long time.',
+  },
+  landing_testimonials_2_author: { ru: 'Катя', en: 'Jordan' },
+  landing_testimonials_3: {
+    ru: 'То, что несовпавшее остаётся тайной — гениально. Я была честна на 100%, потому что знала: он не узнает.',
+    en: 'The fact that unmatched stuff stays hidden is genius. I was 100% honest because I knew he\'d never see it.',
+  },
+  landing_testimonials_3_author: { ru: 'Анонимная', en: 'Anonymous' },
+
+  // Pricing
+  landing_pricing_title: { ru: 'Начните бесплатно. Подсядете — обновите.', en: 'Start free. Get hooked — upgrade.' },
+  landing_pricing_free: { ru: 'БЕСПЛАТНО', en: 'FREE' },
+  landing_pricing_free_price: { ru: '$0 / навсегда', en: '$0 / forever' },
+  landing_pricing_free_desc: { ru: 'Попробуйте на вкус', en: 'Get a taste' },
+  landing_pricing_free_f1: { ru: '50 сценариев', en: '50 scenarios' },
+  landing_pricing_free_f2: { ru: 'Базовый матчинг', en: 'Basic matching' },
+  landing_pricing_free_f3: { ru: '1 партнёр', en: '1 partner' },
+  landing_pricing_free_cta: { ru: 'Попробовать', en: 'Try It' },
+  landing_pricing_premium: { ru: 'ПРЕМИУМ', en: 'PREMIUM' },
+  landing_pricing_premium_badge: { ru: 'Популярный', en: 'Most Popular' },
+  landing_pricing_premium_price_month: { ru: '$6.99/мес', en: '$6.99/month' },
+  landing_pricing_premium_price_year: { ru: '$39.99/год', en: '$39.99/year' },
+  landing_pricing_premium_desc: { ru: 'Без ограничений', en: 'No limits' },
+  landing_pricing_premium_f1: { ru: '500+ сценариев без цензуры', en: '500+ uncensored scenarios' },
+  landing_pricing_premium_f2: { ru: 'AI подбирает под ваши кинки', en: 'AI tailored to your kinks' },
+  landing_pricing_premium_f3: { ru: 'Режим «Сегодня ночью»', en: 'Tonight Mode' },
+  landing_pricing_premium_f4: { ru: 'Новые сценарии каждую неделю', en: 'Fresh scenarios weekly' },
+  landing_pricing_premium_cta: { ru: 'Разблокировать всё', en: 'Unlock Everything' },
+  landing_pricing_or: { ru: 'или', en: 'or' },
+
+  // Final CTA
+  landing_cta_title: { ru: 'Готовы узнать, чего хочет ваш партнёр?', en: 'Ready to find out what your partner really wants?' },
+  landing_cta_subtitle: { ru: 'Бесплатно. Анонимно. Только между вами.', en: 'Free. Anonymous. Just between you two.' },
+  landing_cta_button: { ru: 'Начать исследовать', en: 'Start Exploring' },
+
+  // Footer
+  landing_footer_tagline: { ru: 'Ваши фантазии. Ваша тайна.', en: 'Your fantasies. Your secret.' },
+  landing_footer_product: { ru: 'Продукт', en: 'Product' },
+  landing_footer_legal: { ru: 'Правовая информация', en: 'Legal' },
+  landing_footer_how: { ru: 'Как это работает', en: 'How it works' },
+  landing_footer_pricing: { ru: 'Цены', en: 'Pricing' },
+  landing_footer_privacy: { ru: 'Политика конфиденциальности', en: 'Privacy Policy' },
+  landing_footer_terms: { ru: 'Условия использования', en: 'Terms of Service' },
+  landing_footer_contact: { ru: 'Контакты', en: 'Contact' },
+  landing_footer_copyright: { ru: '© {year} Nexy. 18+', en: '© {year} Nexy. Adults only.' },
+
+  // Legal pages
+  legal_privacy_title: { ru: 'Политика конфиденциальности', en: 'Privacy Policy' },
+  legal_terms_title: { ru: 'Условия использования', en: 'Terms of Service' },
+  legal_back: { ru: '← На главную', en: '← Back to home' },
+  legal_last_updated: { ru: 'Последнее обновление: {date}', en: 'Last updated: {date}' },
 };
 
 /**
