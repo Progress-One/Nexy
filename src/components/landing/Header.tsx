@@ -30,22 +30,22 @@ export function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-[#0C0A0F]/95 backdrop-blur supports-[backdrop-filter]:bg-[#0C0A0F]/80">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <span className="font-serif text-2xl font-bold text-primary">Nexy</span>
+          <span className="font-serif text-2xl font-bold text-[#E8747C]">Nexy</span>
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="#how-it-works" className="text-sm font-medium text-white/50 hover:text-white transition-colors">
             {t('landing_header_how', locale)}
           </Link>
-          <Link href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="#features" className="text-sm font-medium text-white/50 hover:text-white transition-colors">
             {t('landing_header_features', locale)}
           </Link>
-          <Link href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="#pricing" className="text-sm font-medium text-white/50 hover:text-white transition-colors">
             {t('landing_header_pricing', locale)}
           </Link>
         </nav>
@@ -86,21 +86,21 @@ export function Header() {
           <nav className="container mx-auto flex flex-col gap-4 p-4">
             <Link
               href="#how-it-works"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground"
+              className="text-sm font-medium text-white/50 hover:text-white"
               onClick={() => setMobileMenuOpen(false)}
             >
               {t('landing_header_how', locale)}
             </Link>
             <Link
               href="#features"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground"
+              className="text-sm font-medium text-white/50 hover:text-white"
               onClick={() => setMobileMenuOpen(false)}
             >
               {t('landing_header_features', locale)}
             </Link>
             <Link
               href="#pricing"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground"
+              className="text-sm font-medium text-white/50 hover:text-white"
               onClick={() => setMobileMenuOpen(false)}
             >
               {t('landing_header_pricing', locale)}

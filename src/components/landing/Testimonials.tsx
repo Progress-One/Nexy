@@ -33,7 +33,7 @@ export function Testimonials() {
   ];
 
   return (
-    <section className="py-20 md:py-32 bg-card">
+    <section className="py-20 md:py-32 bg-[#1A1720]">
       <div className="container mx-auto px-4">
         <motion.div
           className="text-center mb-16"
@@ -42,7 +42,7 @@ export function Testimonials() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mb-4">
             {t('landing_testimonials_title', locale)}
           </h2>
         </motion.div>
@@ -58,13 +58,13 @@ export function Testimonials() {
             <motion.div
               key={index}
               variants={itemVariants}
-              className="relative p-6 rounded-2xl bg-background border border-border/50"
+              className="relative p-6 rounded-2xl bg-white/5 border border-white/10"
             >
-              <Quote className="w-8 h-8 text-primary/20 absolute top-4 right-4" />
-              <blockquote className="text-foreground mb-4 relative z-10">
+              <Quote className="w-8 h-8 text-[#E8747C]/20 absolute top-4 right-4" />
+              <blockquote className="text-white/80 mb-4 relative z-10 italic">
                 &quot;{testimonial.quote}&quot;
               </blockquote>
-              <cite className="text-sm text-muted-foreground not-italic">
+              <cite className="text-sm text-white/40 not-italic">
                 — {testimonial.author}
               </cite>
             </motion.div>

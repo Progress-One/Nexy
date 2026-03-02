@@ -79,7 +79,7 @@ export function FinalCTA() {
   const locale = getLocale();
 
   return (
-    <section className="py-20 md:py-32 bg-gradient-to-b from-background to-primary/5">
+    <section className="py-20 md:py-32 bg-gradient-to-b from-[#0C0A0F] to-[#1A1720]">
       <div className="container mx-auto px-4">
         <motion.div
           className="max-w-3xl mx-auto text-center"
@@ -94,20 +94,20 @@ export function FinalCTA() {
           </motion.div>
 
           <motion.h2
-            className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4"
+            className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
             variants={childVariants}
           >
             {t("landing_cta_title", locale)}
           </motion.h2>
           <motion.p
-            className="text-lg text-muted-foreground mb-8"
+            className="text-lg text-white/50 mb-8"
             variants={childVariants}
           >
             {t("landing_cta_subtitle", locale)}
           </motion.p>
 
           <motion.div variants={childVariants}>
-            <Button size="lg" className="text-lg px-10 py-6" asChild>
+            <Button size="lg" className="text-lg px-10 py-6 bg-gradient-to-r from-[#E8747C] to-[#6B4E71] hover:from-[#E8747C]/90 hover:to-[#6B4E71]/90 border-0 text-white shadow-lg shadow-[#E8747C]/20" asChild>
               <Link href="/signup">{t("landing_cta_button", locale)}</Link>
             </Button>
           </motion.div>

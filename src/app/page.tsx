@@ -11,7 +11,7 @@ import {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#0C0A0F] text-[#F5F0F0]">
       <Header />
       <main>
         <Hero />

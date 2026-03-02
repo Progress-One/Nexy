@@ -60,7 +60,7 @@ export function Pricing() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mb-4">
             {t('landing_pricing_title', locale)}
           </h2>
         </motion.div>
@@ -78,37 +78,37 @@ export function Pricing() {
               variants={itemVariants}
               className={`relative p-8 rounded-2xl border ${
                 plan.popular
-                  ? "border-primary bg-primary/5"
-                  : "border-border/50 bg-card"
+                  ? "border-[#E8747C] bg-[#E8747C]/5"
+                  : "border-white/10 bg-white/5"
               }`}
             >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="px-3 py-1 text-xs font-medium bg-primary text-primary-foreground rounded-full">
+                  <span className="px-3 py-1 text-xs font-medium bg-[#E8747C] text-white rounded-full">
                     {t('landing_pricing_premium_badge', locale)}
                   </span>
                 </div>
               )}
 
               <div className="text-center mb-6">
-                <h3 className="font-semibold text-lg text-foreground mb-2">
+                <h3 className="font-semibold text-lg text-white mb-2">
                   {plan.name}
                 </h3>
                 {plan.popular ? (
                   <>
-                    <div className="font-serif text-4xl font-bold text-foreground">
+                    <div className="font-serif text-4xl font-bold text-white">
                       {plan.priceMonth}
                     </div>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-sm text-white/50 mt-1">
                       {t('landing_pricing_or', locale)} {plan.priceYear}
                     </p>
                   </>
                 ) : (
-                  <div className="font-serif text-4xl font-bold text-foreground">
+                  <div className="font-serif text-4xl font-bold text-white">
                     {plan.price}
                   </div>
                 )}
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-sm text-white/50 mt-2">
                   {plan.description}
                 </p>
               </div>
@@ -116,8 +116,8 @@ export function Pricing() {
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, i) => (
                   <li key={i} className="flex items-center gap-3 text-sm">
-                    <Check className="w-4 h-4 text-primary flex-shrink-0" />
-                    <span className="text-foreground">{feature}</span>
+                    <Check className="w-4 h-4 text-[#E8747C] flex-shrink-0" />
+                    <span className="text-white">{feature}</span>
                   </li>
                 ))}
               </ul>
