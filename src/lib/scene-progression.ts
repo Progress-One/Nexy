@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Scene, SceneV2 } from './types';
+import { fetchUserGates, isSceneAllowed } from './onboarding-gates';
 
 // ============================================================================
 // CONSTANTS
@@ -19,25 +20,6 @@ const EXPLOITATION_RATIO = 0.7;
  */
 const MILD_PHASE_SCENE_COUNT = 10;
 
-/**
- * Baseline scene slugs that act as gates for content filtering
- */
-const BASELINE_SCENE_SLUGS = [
-  'baseline-bdsm',
-  'baseline-anal',
-  'baseline-group',
-  'baseline-public',
-  'baseline-roleplay',
-  'baseline-fetish',
-  'baseline-pain',
-  'baseline-humiliation',
-  'baseline-bodyfluids',
-  'baseline-voyeur',
-  'baseline-exhib',
-  'baseline-toys',
-  'baseline-oral',
-  'baseline-vanilla',
-] as const;
 
 /**
  * Neutral role directions that match any preference
@@ -159,160 +141,6 @@ export function shouldSkipSceneByDedupe(
 // BASELINE GATES
 // ============================================================================
 
-/**
- * Mapping from baseline scene slugs to categories they gate
- * If user shows low interest (< 30) in baseline, related categories are filtered
- */
-const BASELINE_CATEGORY_GATES: Record<string, string[]> = {
-  'baseline-bdsm': ['control-power', 'bondage', 'discipline'],
-  'baseline-anal': ['anal', 'pegging', 'prostate'],
-  'baseline-group': ['threesome', 'gangbang', 'orgy', 'swinging'],
-  'baseline-public': ['public', 'exhibitionism', 'outdoor'],
-  'baseline-roleplay': ['roleplay', 'ageplay', 'petplay', 'uniform'],
-  'baseline-fetish': ['fetish', 'feet', 'latex', 'leather'],
-  'baseline-pain': ['impact', 'pain', 'cbt', 'nipple-torture'],
-  'baseline-humiliation': ['humiliation', 'degradation', 'verbal'],
-  'baseline-bodyfluids': ['watersports', 'spitting', 'cum'],
-  'baseline-voyeur': ['voyeur', 'watching'],
-  'baseline-exhib': ['exhib', 'showing-off'],
-  'baseline-toys': ['toys', 'vibrator', 'dildo'],
-  'baseline-oral': ['oral', 'blowjob', 'cunnilingus'],
-  'baseline-vanilla': ['romantic', 'tender', 'vanilla'],
-};
-
-/**
- * Categories that are blocked by default until user explicitly shows interest
- * These are more extreme/niche categories that shouldn't appear early
- */
-const HARDCORE_CATEGORIES_BLOCKED_BY_DEFAULT = [
-  'pain', 'cbt', 'nipple-torture', 'impact',
-  'humiliation', 'degradation',
-  'watersports', 'spitting',
-  'ageplay',
-  'gangbang', 'orgy',
-];
-
-/**
- * Get baseline responses to determine which categories are gated
- * Returns a map of category -> boolean (true = allowed, false = blocked)
- */
-export async function getBaselineGates(
-  supabase: SupabaseClient,
-  userId: string
-): Promise<Map<string, boolean>> {
-  const gates = new Map<string, boolean>();
-
-  // Default: most categories allowed, but hardcore blocked by default
-  for (const categories of Object.values(BASELINE_CATEGORY_GATES)) {
-    for (const cat of categories) {
-      // Block hardcore categories by default until user shows interest
-      const isHardcore = HARDCORE_CATEGORIES_BLOCKED_BY_DEFAULT.includes(cat);
-      gates.set(cat, !isHardcore);
-    }
-  }
-
-  // Get baseline scene responses
-  const { data: responses } = await supabase
-    .from('scene_responses')
-    .select('scene_slug, elements_selected, skipped')
-    .eq('user_id', userId)
-    .in('scene_slug', BASELINE_SCENE_SLUGS as unknown as string[]);
-
-  if (!responses) return gates;
-
-  // Process each baseline response
-  for (const response of responses) {
-    const sceneSlug = response.scene_slug;
-    const gatedCategories = BASELINE_CATEGORY_GATES[sceneSlug];
-
-    if (!gatedCategories) continue;
-
-    // If user selected elements, UNLOCK related categories (including hardcore)
-    const hasInterest = !response.skipped &&
-      response.elements_selected &&
-      response.elements_selected.length > 0;
-
-    if (hasInterest) {
-      // User showed interest - unlock all related categories
-      for (const cat of gatedCategories) {
-        gates.set(cat, true);
-      }
-    } else {
-      // User skipped or selected nothing - block categories
-      for (const cat of gatedCategories) {
-        gates.set(cat, false);
-      }
-    }
-  }
-
-  // Also check tag_preferences for interest signals
-  const { data: tagPrefs } = await supabase
-    .from('tag_preferences')
-    .select('tag_ref, interest_level, experience_level')
-    .eq('user_id', userId);
-
-  if (tagPrefs) {
-    for (const pref of tagPrefs) {
-      // Find categories related to this tag
-      for (const categories of Object.values(BASELINE_CATEGORY_GATES)) {
-        if (categories.some(cat => pref.tag_ref?.includes(cat))) {
-          // If user shows interest (tried, want_to_try, or interest >= 40), unlock
-          const showsInterest =
-            pref.experience_level === 'tried' ||
-            pref.experience_level === 'want_to_try' ||
-            (pref.interest_level && pref.interest_level >= 40);
-
-          // If user explicitly not interested, block
-          const notInterested =
-            pref.experience_level === 'not_interested' ||
-            (pref.interest_level && pref.interest_level < 20);
-
-          if (showsInterest) {
-            for (const cat of categories) {
-              gates.set(cat, true);
-            }
-          } else if (notInterested) {
-            for (const cat of categories) {
-              gates.set(cat, false);
-            }
-          }
-        }
-      }
-    }
-  }
-
-  return gates;
-}
-
-/**
- * Check if scene is blocked by baseline gates
- */
-export function isSceneBlockedByGates(
-  scene: SceneV2,
-  gates: Map<string, boolean>
-): boolean {
-  // Check scene category
-  if (scene.category && gates.has(scene.category) && !gates.get(scene.category)) {
-    return true;
-  }
-
-  // Check scene tags
-  if (scene.tags) {
-    for (const tag of scene.tags) {
-      if (gates.has(tag) && !gates.get(tag)) {
-        return true;
-      }
-    }
-  }
-
-  // Check first tag as cluster identifier (tags[0] often represents the main category)
-  const primaryTag = scene.tags?.[0];
-  if (primaryTag && gates.has(primaryTag) && !gates.get(primaryTag)) {
-    return true;
-  }
-
-  return false;
-}
 
 // ============================================================================
 // INTER-SCENE GATES CHECKING
@@ -863,12 +691,12 @@ export async function getAdaptiveScenes(
   let filteredScenes = v2Scenes.filter((s) => s.intensity <= maxIntensity);
 
   // ========================================
-  // 3. BASELINE GATES FILTERING
+  // 3. ONBOARDING GATES FILTERING
   // ========================================
   if (enableBaselineGates) {
-    const gates = await getBaselineGates(supabase, userId);
+    const userGates = await fetchUserGates(supabase, userId);
     filteredScenes = filteredScenes.filter(
-      (scene) => !isSceneBlockedByGates(scene, gates)
+      (scene) => isSceneAllowed(scene.slug, userGates)
     );
   }
 

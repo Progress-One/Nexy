@@ -8,7 +8,7 @@
 |----------|----------|
 | [architecture.md](architecture.md) | Архитектура Discovery системы, flow, компоненты |
 | [database.md](database.md) | Схема базы данных, таблицы, миграции |
-| [scenes.md](scenes.md) | Система сцен — 162 composite scenes, baseline gates |
+| [scenes.md](scenes.md) | Система сцен — 162 composite scenes, onboarding gates |
 | [body-map.md](body-map.md) | Body Map — интерактивный выбор зон тела |
 | [admin-panel.md](admin-panel.md) | Админ-панель — управление сценами и пользователями |
 | [content-guidelines.md](content-guidelines.md) | Правила написания контента: описания, промпты |

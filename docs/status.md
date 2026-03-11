@@ -138,11 +138,11 @@
   - `getAdaptiveScenes()` - получает адаптивно отсортированные сцены
   - Интегрировано в `getFilteredScenesClient()` с опцией `enableAdaptiveFlow`
 
-- ✅ **Baseline Gates Filtering** (NEW)
-  - Блокировка категорий на основе baseline ответов
-  - 14 baseline сцен → связанные категории
-  - Если user пропустил/не заинтересован → категория блокируется
-  - Функции: `getBaselineGates()`, `isSceneBlockedByGates()`
+- ✅ **Onboarding Gates Filtering**
+  - Блокировка сцен на основе onboarding ответов через DB trigger
+  - Сцены с `sets_gate` устанавливают гейты при YES/VERY ответе
+  - Детальный маппинг 150+ сцен → гейты с поддержкой AND/OR и level:'very'
+  - Функции: `fetchUserGates()`, `isSceneAllowed()` из `onboarding-gates.ts`
 
 - ✅ **Comfort Signals / Intensity Progression** (NEW)
   - Начало с мягких сцен (intensity 1-2)
