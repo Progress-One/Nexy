@@ -138,11 +138,6 @@ export function shouldSkipSceneByDedupe(
 }
 
 // ============================================================================
-// BASELINE GATES
-// ============================================================================
-
-
-// ============================================================================
 // INTER-SCENE GATES CHECKING
 // ============================================================================
 
@@ -357,24 +352,17 @@ export async function getSeenCategories(
 ): Promise<Set<string>> {
   const seenCategories = new Set<string>();
 
+  // Join with scenes table to get actual category field
   const { data: responses } = await supabase
     .from('scene_responses')
-    .select('scene_slug')
+    .select('scene_id, scenes!inner(category)')
     .eq('user_id', userId);
 
-  // We need to get category from scene data
-  // Extract from scene_slug pattern (e.g., "bondage-m-ties-f" -> "bondage")
   if (responses) {
     for (const r of responses) {
-      if (r.scene_slug) {
-        // Extract category from scene_slug (first part before hyphen)
-        // Pattern: "category-..." e.g., "bondage-m-ties-f", "oral-blowjob"
-        const firstDash = r.scene_slug.indexOf('-');
-        if (firstDash > 0) {
-          seenCategories.add(r.scene_slug.substring(0, firstDash));
-        } else {
-          seenCategories.add(r.scene_slug); // No dash = whole string is category
-        }
+      const category = (r.scenes as unknown as { category: string | null })?.category;
+      if (category) {
+        seenCategories.add(category);
       }
     }
   }

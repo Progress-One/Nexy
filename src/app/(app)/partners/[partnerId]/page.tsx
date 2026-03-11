@@ -3,10 +3,10 @@
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import { getMatchResults, getTagBasedMatches, type TagPreference } from '@/lib/matching';
+import { getTagBasedMatches, type TagPreference } from '@/lib/matching';
 import { MatchList } from '@/components/partners/MatchList';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Heart, Lightbulb, Lock, MessageCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { PartnerChat } from '@/components/partners/PartnerChat';
@@ -47,19 +47,8 @@ export default function PartnerDetailPage({ params }: { params: Promise<{ partne
           setPartnerName(partnership.nickname);
         }
 
-        // Get both users' preferences (legacy system)
-        const [myPrefs, partnerPrefs, myTags, partnerTagsResult] = await Promise.all([
-          supabase
-            .from('preference_profiles')
-            .select('preferences')
-            .eq('user_id', user.id)
-            .single(),
-          supabase
-            .from('preference_profiles')
-            .select('preferences')
-            .eq('user_id', partnerUserId)
-            .single(),
-          // New: fetch tag_preferences for role-based matching
+        // Fetch tag_preferences for role-based matching
+        const [myTags, partnerTagsResult] = await Promise.all([
           supabase
             .from('tag_preferences')
             .select('tag_ref, interest_level, role_preference')
@@ -70,26 +59,13 @@ export default function PartnerDetailPage({ params }: { params: Promise<{ partne
             .eq('user_id', partnerUserId),
         ]);
 
-        // Legacy matching (preference_profiles)
-        const legacyResults = getMatchResults(
-          (myPrefs.data?.preferences || {}) as Record<string, unknown>,
-          (partnerPrefs.data?.preferences || {}) as Record<string, unknown>
-        );
-
-        // New tag-based matching with role complementarity
+        // Tag-based matching with role complementarity
         const tagResults = getTagBasedMatches(
           (myTags.data || []) as TagPreference[],
           (partnerTagsResult.data || []) as TagPreference[]
         );
 
-        // Merge results: tag-based matches take priority, then add legacy matches
-        const tagMatchDimensions = new Set(tagResults.matches.map(m => m.dimension));
-        const combinedMatches = [
-          ...tagResults.matches,
-          ...legacyResults.matches.filter(m => !tagMatchDimensions.has(m.dimension)),
-        ];
-
-        setMatches(combinedMatches);
+        setMatches(tagResults.matches);
       } catch (error) {
         console.error('Error fetching matches:', error);
       } finally {
