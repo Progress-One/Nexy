@@ -87,12 +87,24 @@ export default function DateSessionPage({ params }: { params: Promise<{ dateId: 
         setPartnerCompleted(true);
       }
 
+      // Map mood to intensity range
+      const moodIntensity: Record<string, { min: number; max: number }> = {
+        tender:     { min: 1, max: 2 },
+        playful:    { min: 1, max: 3 },
+        passionate: { min: 2, max: 4 },
+        intense:    { min: 3, max: 5 },
+        surprise:   { min: 1, max: 5 },
+      };
+      const intensity = moodIntensity[dateData.mood || 'surprise'] || moodIntensity.surprise;
+
       // Fetch V2 scenes that match the shared interests via tags
       let query = supabase
         .from('scenes')
         .select('*')
         .eq('version', 2)
         .eq('is_active', true)
+        .gte('intensity', intensity.min)
+        .lte('intensity', intensity.max)
         .limit(5);
 
       if (matchedTags.length > 0) {
