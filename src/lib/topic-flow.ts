@@ -122,53 +122,6 @@ export function calculateSceneScore(
   };
 }
 
-// ============================================================================
-// INTEREST LEVEL FROM GATES (legacy, for topics)
-// ============================================================================
-
-/**
- * Get interest level for a topic based on onboarding gates
- * Returns: 'very', 'yes', 'unknown', or 'no'
- * @deprecated Use scene-level gate_keys instead
- */
-export async function getTopicInterestLevel(
-  supabase: SupabaseClient,
-  userId: string,
-  topic: Topic
-): Promise<InterestLevel> {
-  // Get user gates
-  const { data: userGates } = await supabase
-    .from('user_gates')
-    .select('gates, body_map_gates')
-    .eq('user_id', userId)
-    .single();
-
-  if (!userGates) {
-    return 'unknown';
-  }
-
-  const gates = (userGates.gates as Record<string, string>) || {};
-  const bodyMapGates = (userGates.body_map_gates as Record<string, boolean>) || {};
-
-  // For topics without gate_key, check if any scene has matching gates
-  // This is a simplified check - real logic is at scene level
-  const firstScene = topic.scenes[0];
-  if (firstScene?.gate_keys?.length > 0) {
-    const { score, allNo } = calculateSceneScore(firstScene, gates);
-    if (allNo) return 'no';
-    if (score >= 2) return 'very';
-    if (score >= 1) return 'yes';
-  }
-
-  // Check body map for skip condition
-  if (topic.skip_if_body_map) {
-    const shouldSkip = checkBodyMapSkipCondition(topic.skip_if_body_map, bodyMapGates);
-    if (shouldSkip) return 'no';
-  }
-
-  return 'unknown';
-}
-
 /**
  * Check if topic should be skipped based on body map responses
  */
@@ -405,10 +358,9 @@ export async function getScoredScenes(
 }
 
 /**
- * Get scenes for a topic with scores
- * @deprecated Use getScoredScenes for global scene list
+ * Get available scenes for a topic (filtered by gates)
  */
-export async function getAvailableScenesForTopic(
+async function getAvailableScenesForTopic(
   supabase: SupabaseClient,
   userId: string,
   topic: Topic

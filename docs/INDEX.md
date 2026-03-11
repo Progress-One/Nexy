@@ -1,6 +1,6 @@
 # Intimate Discovery — Documentation Index
 
-> Последнее обновление: 2025-01-19
+> Последнее обновление: 2026-03-11
 
 ## Quick Links
 
@@ -29,9 +29,11 @@ intimate-discovery/
 │   ├── components/
 │   │   └── discovery/          # UI компоненты для discovery
 │   └── lib/                    # Backend logic
-│       ├── question-v2.ts      # Обработка V2 вопросов
 │       ├── tag-preferences.ts  # Агрегация предпочтений
-│       └── scene-progression.ts # Адаптивный flow
+│       ├── scene-progression.ts # Адаптивный flow
+│       ├── topic-flow.ts       # Topic-based discovery flow
+│       ├── matching.ts         # Tag-based partner matching
+│       └── onboarding-gates.ts # Gates system for scene filtering
 │
 ├── scenes/
 │   └── v2/                     # АКТУАЛЬНЫЕ СЦЕНЫ
