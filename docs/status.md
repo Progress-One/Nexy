@@ -1,6 +1,6 @@
 # V2 Implementation Status
 
-## Дата обновления: 2026-01-18
+## Дата обновления: 2026-03-11
 
 > **Статус:** ✅ V2 Composite Scenes Flow полностью реализован с AI-траекторией и адаптивным flow
 
@@ -26,7 +26,7 @@
 
 | Модуль | Статус | Файл | Описание |
 |--------|--------|------|----------|
-| `question-v2.ts` | ✅ | `src/lib/question-v2.ts` | Обработка V2 вопросов и follow-up |
+| `topic-flow.ts` | ✅ | `src/lib/topic-flow.ts` | Topic-based discovery flow с gate scoring |
 | `tag-preferences.ts` | ✅ | `src/lib/tag-preferences.ts` | Агрегация предпочтений в `tag_preferences` |
 | `profile-signals.ts` | ✅ | `src/lib/profile-signals.ts` | Обновление психологического профиля |
 | `scene-progression.ts` | ✅ | `src/lib/scene-progression.ts` | Полный AI-flow: scoring, gates, exploration/exploitation |
@@ -36,9 +36,8 @@
 
 | Таблица | Статус | Миграция | Описание |
 |---------|--------|----------|----------|
-| `composite_scene_responses` | ✅ | `011_finalize_v2.sql` | Сохранение ответов на composite scenes |
+| `scene_responses` | ✅ | `005 + 021 + 033` | Единая таблица ответов (legacy + V2 + onboarding) |
 | `tag_preferences` | ✅ | `011_finalize_v2.sql` | Агрегированные предпочтения по тегам |
-| `scene_responses` | ✅ | `005_scenes_v2_composite.sql` | Legacy таблица (обновлена для совместимости) |
 
 ### Integration
 
@@ -71,12 +70,11 @@
    - Счетчик прогресса
 
 4. ✅ **Сохранение данных**
-   - Сохранение в `composite_scene_responses`:
-     - `selected_elements` - массив ID выбранных элементов
+   - Сохранение в `scene_responses` (единая таблица):
+     - `elements_selected` - массив ID выбранных элементов
      - `element_responses` - JSONB с ответами на follow-up
      - `skipped` - флаг пропуска сцены
    - Обновление `tag_preferences` автоматически
-   - Дублирование в `scene_responses` для совместимости
 
 ### Обработка всех случаев:
 
@@ -119,10 +117,9 @@
 
 ### Реализовано в `scene-progression.ts`:
 
-- ✅ **Dedupe_by_tag логика**
-  - Пропуск сцен, где все элементы уже были выбраны в других сценах
-  - Проверка по element ID и tag_ref
-  - Функции: `shouldSkipSceneByDedupe()`, `getAnsweredElementIds()`, `getAnsweredTagRefs()`
+- ⚠️ **Dedupe_by_tag логика** (отключена, возвращает false)
+  - Инфраструктура готова: `getAnsweredElementIds()`, `getAnsweredTagRefs()`
+  - `shouldSkipSceneByDedupe()` — заглушка, всегда возвращает false
 
 - ✅ **Адаптивная приоритизация**
   - Расчет score сцены на основе `tag_preferences`:
@@ -138,11 +135,11 @@
   - `getAdaptiveScenes()` - получает адаптивно отсортированные сцены
   - Интегрировано в `getFilteredScenesClient()` с опцией `enableAdaptiveFlow`
 
-- ✅ **Baseline Gates Filtering** (NEW)
-  - Блокировка категорий на основе baseline ответов
-  - 14 baseline сцен → связанные категории
-  - Если user пропустил/не заинтересован → категория блокируется
-  - Функции: `getBaselineGates()`, `isSceneBlockedByGates()`
+- ✅ **Onboarding Gates Filtering**
+  - Блокировка сцен на основе onboarding ответов через DB trigger
+  - Сцены с `sets_gate` устанавливают гейты при YES/VERY ответе
+  - Детальный маппинг 150+ сцен → гейты с поддержкой AND/OR и level:'very'
+  - Функции: `fetchUserGates()`, `isSceneAllowed()` из `onboarding-gates.ts`
 
 - ✅ **Comfort Signals / Intensity Progression** (NEW)
   - Начало с мягких сцен (intensity 1-2)
@@ -234,8 +231,9 @@
 
 ## Файлы для справки
 
-- `ANALYSIS_REPORT.md` - полный отчет о расхождениях
-- `DISCOVERY2_DESIGN.md` - спецификация V2
-- `DATABASE_SCHEMA_V2.md` - схема базы данных V2
+- `docs/database.md` - актуальная схема базы данных
+- `docs/architecture.md` - архитектура Discovery системы
 - `src/app/(app)/discover/page.tsx` - основной discovery flow
 - `src/lib/tag-preferences.ts` - агрегация tag preferences
+- `src/lib/scene-progression.ts` - адаптивный scoring и selection
+- `src/lib/matching.ts` - tag-based partner matching
