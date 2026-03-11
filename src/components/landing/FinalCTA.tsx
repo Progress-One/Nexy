@@ -107,7 +107,7 @@ export function FinalCTA() {
           </motion.p>
 
           <motion.div variants={childVariants}>
-            <Button size="lg" className="text-lg px-10 py-6 bg-gradient-to-r from-[#E8747C] to-[#6B4E71] hover:from-[#E8747C]/90 hover:to-[#6B4E71]/90 border-0 text-white shadow-lg shadow-[#E8747C]/20" asChild>
+            <Button size="lg" className="text-lg px-10 py-6 bg-gradient-to-r from-[#E8747C] to-[#6B4E71] hover:brightness-110 border-0 text-white shadow-lg shadow-[#E8747C]/20 transition-all duration-200" asChild>
               <Link href="/signup">{t("landing_cta_button", locale)}</Link>
             </Button>
           </motion.div>

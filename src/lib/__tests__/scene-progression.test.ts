@@ -1,68 +1,66 @@
 import { describe, it, expect } from 'vitest';
-import { isSceneBlockedByGates } from '../scene-progression';
-import type { SceneV2 } from '../types';
+import { isSceneAllowed, type OnboardingGates } from '../onboarding-gates';
 
-const makeScene = (overrides: Partial<SceneV2> = {}): SceneV2 => ({
-  id: 'test-scene',
-  slug: 'test-scene',
-  version: 2,
-  title: { ru: 'Test', en: 'Test' },
-  description: { ru: 'Test', en: 'Test' },
-  category: 'general',
-  tags: [],
-  intensity: 1,
-  is_active: true,
-  scene_type: 'swipe',
-  ...overrides,
-} as SceneV2);
+const emptyGates: OnboardingGates = {};
 
-describe('isSceneBlockedByGates', () => {
-  it('blocks scene when category gate is closed', () => {
-    const scene = makeScene({ category: 'bdsm', tags: ['bondage'] });
-    const gates = new Map([['bdsm', false]]);
+const fullGates: OnboardingGates = {
+  oral: true,
+  anal: true,
+  group: true,
+  toys: true,
+  roleplay: true,
+  rough: true,
+  bondage: true,
+  power_dynamic: true,
+  public: true,
+  exhibitionism: true,
+  body_fluids: true,
+  extreme: true,
+  foot: true,
+  dirty_talk: true,
+  praise: true,
+  lingerie: true,
+};
 
-    expect(isSceneBlockedByGates(scene, gates)).toBe(true);
+describe('isSceneAllowed', () => {
+  it('allows scene with no gate requirement (unknown slug)', () => {
+    expect(isSceneAllowed('nonexistent-slug', emptyGates)).toBe(true);
   });
 
-  it('allows scene when category gate is open', () => {
-    const scene = makeScene({ category: 'bdsm', tags: ['bondage'] });
-    const gates = new Map([['bdsm', true]]);
-
-    expect(isSceneBlockedByGates(scene, gates)).toBe(false);
+  it('blocks scene when required gate is missing', () => {
+    // blowjob requires oral gate
+    expect(isSceneAllowed('blowjob', { anal: true })).toBe(false);
   });
 
-  it('blocks scene when any tag gate is closed', () => {
-    const scene = makeScene({ category: 'general', tags: ['bondage', 'blindfold'] });
-    const gates = new Map([['blindfold', false]]);
-
-    expect(isSceneBlockedByGates(scene, gates)).toBe(true);
+  it('allows scene when required gate is present', () => {
+    expect(isSceneAllowed('blowjob', { oral: true })).toBe(true);
   });
 
-  it('allows scene when gates map is empty', () => {
-    const scene = makeScene({ category: 'bdsm', tags: ['bondage'] });
-    const gates = new Map<string, boolean>();
-
-    expect(isSceneBlockedByGates(scene, gates)).toBe(false);
+  it('allows all gated scenes when all gates are open', () => {
+    expect(isSceneAllowed('anal-play-on-her', fullGates)).toBe(true);
+    expect(isSceneAllowed('bondage-restraint', fullGates)).toBe(true);
+    expect(isSceneAllowed('threesome-mfm', fullGates)).toBe(true);
   });
 
-  it('allows scene when no gate matches', () => {
-    const scene = makeScene({ category: 'general', tags: ['kissing'] });
-    const gates = new Map([['bdsm', false], ['anal', false]]);
-
-    expect(isSceneBlockedByGates(scene, gates)).toBe(false);
+  it('strips -give/-receive suffix for gate lookup', () => {
+    expect(isSceneAllowed('blowjob-give', { oral: true })).toBe(true);
+    expect(isSceneAllowed('blowjob-receive', { oral: true })).toBe(true);
   });
 
-  it('handles scene with no tags', () => {
-    const scene = makeScene({ category: 'general', tags: [] });
-    const gates = new Map([['bdsm', false]]);
-
-    expect(isSceneBlockedByGates(scene, gates)).toBe(false);
+  it('blocks anal scene when only oral gate is open', () => {
+    expect(isSceneAllowed('anal-play-on-her', { oral: true })).toBe(false);
   });
 
-  it('blocks by primary tag (tags[0])', () => {
-    const scene = makeScene({ category: 'general', tags: ['bdsm', 'rope'] });
-    const gates = new Map([['bdsm', false]]);
+  it('respects OR operator — allows when any gate is open', () => {
+    // butt-plug requires anal OR toys
+    expect(isSceneAllowed('butt-plug', { toys: true })).toBe(true);
+    expect(isSceneAllowed('butt-plug', { anal: true })).toBe(true);
+    expect(isSceneAllowed('butt-plug', emptyGates)).toBe(false);
+  });
 
-    expect(isSceneBlockedByGates(scene, gates)).toBe(true);
+  it('respects AND operator — blocks when only one gate is open', () => {
+    // pegging requires anal AND power_dynamic
+    expect(isSceneAllowed('pegging', { anal: true })).toBe(false);
+    expect(isSceneAllowed('pegging', { anal: true, power_dynamic: true })).toBe(true);
   });
 });

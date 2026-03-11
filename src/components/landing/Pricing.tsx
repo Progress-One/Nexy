@@ -123,7 +123,10 @@ export function Pricing() {
               </ul>
 
               <Button
-                className="w-full"
+                className={plan.popular
+                  ? "w-full bg-gradient-to-r from-[#E8747C] to-[#6B4E71] hover:brightness-110 border-0 text-white transition-all duration-200"
+                  : "w-full border-white/20 text-white hover:bg-white/10 bg-transparent"
+                }
                 variant={plan.popular ? "default" : "outline"}
                 asChild
               >

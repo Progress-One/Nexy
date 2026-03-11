@@ -75,6 +75,7 @@ export function Header() {
           className="md:hidden p-2"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
+          aria-expanded={mobileMenuOpen}
         >
           {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
@@ -82,7 +83,7 @@ export function Header() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-border/40 bg-background">
+        <div className="md:hidden border-t border-white/10 bg-[#0C0A0F]">
           <nav className="container mx-auto flex flex-col gap-4 p-4">
             <Link
               href="#how-it-works"
@@ -105,7 +106,7 @@ export function Header() {
             >
               {t('landing_header_pricing', locale)}
             </Link>
-            <div className="flex flex-col gap-2 pt-4 border-t border-border/40">
+            <div className="flex flex-col gap-2 pt-4 border-t border-white/10">
               {loading ? (
                 <div className="h-10" />
               ) : user ? (
@@ -114,10 +115,10 @@ export function Header() {
                 </Button>
               ) : (
                 <>
-                  <Button variant="outline" asChild className="w-full">
+                  <Button variant="outline" asChild className="w-full border-white/20 text-white hover:bg-white/10">
                     <Link href="/login">{t('landing_header_login', locale)}</Link>
                   </Button>
-                  <Button asChild className="w-full">
+                  <Button asChild className="w-full bg-gradient-to-r from-[#E8747C] to-[#6B4E71] hover:brightness-110 border-0 text-white">
                     <Link href="/signup">{t('landing_header_start', locale)}</Link>
                   </Button>
                 </>

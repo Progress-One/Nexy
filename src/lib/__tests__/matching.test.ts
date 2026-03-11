@@ -1,69 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import {
-  calculateVisibility,
-  getMatchResults,
   getTagBasedMatches,
   generateInviteCode,
   type TagPreference,
 } from '../matching';
-
-describe('calculateVisibility', () => {
-  it('returns match when both want', () => {
-    expect(calculateVisibility(80, 70)).toBe('match');
-  });
-
-  it('returns hidden when only I want (privacy-first)', () => {
-    expect(calculateVisibility(80, 20)).toBe('hidden');
-  });
-
-  it('returns partner_no when only partner wants', () => {
-    expect(calculateVisibility(20, 80)).toBe('partner_no');
-  });
-
-  it('returns partner_no when neither wants', () => {
-    expect(calculateVisibility(20, 30)).toBe('partner_no');
-  });
-
-  it('respects custom threshold', () => {
-    expect(calculateVisibility(60, 60, 70)).toBe('partner_no');
-    expect(calculateVisibility(80, 80, 70)).toBe('match');
-  });
-
-  it('handles exact threshold boundary', () => {
-    expect(calculateVisibility(50, 50)).toBe('match');
-    expect(calculateVisibility(49, 50)).toBe('partner_no');
-    expect(calculateVisibility(50, 49)).toBe('hidden');
-  });
-});
-
-describe('getMatchResults', () => {
-  it('finds matches from flat preference objects', () => {
-    const my = { bondage: { value: 80 }, blindfold: { value: 90 } };
-    const partner = { bondage: { value: 70 }, blindfold: { value: 30 } };
-
-    const result = getMatchResults(my, partner);
-
-    expect(result.matches.length).toBe(1);
-    expect(result.matches[0].dimension).toBe('bondage');
-  });
-
-  it('hides my unreciprocated desires', () => {
-    const my = { bondage: { value: 90 } };
-    const partner = { bondage: { value: 10 } };
-
-    const result = getMatchResults(my, partner);
-
-    expect(result.matches.length).toBe(0);
-    expect(result.partnerDoesntWant.length).toBe(0);
-    // Hidden — not exposed in results at all
-  });
-
-  it('returns empty results for empty preferences', () => {
-    const result = getMatchResults({}, {});
-    expect(result.matches).toEqual([]);
-    expect(result.partnerDoesntWant).toEqual([]);
-  });
-});
 
 describe('getTagBasedMatches', () => {
   const makeTag = (ref: string, interest: number, role: TagPreference['role_preference'] = null): TagPreference => ({

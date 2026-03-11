@@ -39,7 +39,7 @@ export function Hero() {
     <section className="relative overflow-hidden py-20 md:py-32">
       {/* Hero background image — fills entire section */}
       <motion.div
-        className="absolute inset-0 -z-10"
+        className="absolute inset-0 z-0"
         initial="hidden"
         animate="visible"
         variants={imageVariants}
@@ -57,7 +57,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0C0A0F] via-transparent to-[#0C0A0F]/30" />
       </motion.div>
 
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-2xl">
           {/* Text Content */}
           <motion.div
@@ -84,7 +84,7 @@ export function Hero() {
               className="flex flex-col sm:flex-row gap-4 mb-10"
               variants={textItemVariants}
             >
-              <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-[#E8747C] to-[#6B4E71] hover:from-[#E8747C]/90 hover:to-[#6B4E71]/90 border-0 text-white shadow-lg shadow-[#E8747C]/20" asChild>
+              <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-[#E8747C] to-[#6B4E71] hover:brightness-110 border-0 text-white shadow-lg shadow-[#E8747C]/20 transition-all duration-200" asChild>
                 <Link href="/signup">{t("landing_hero_cta", locale)}</Link>
               </Button>
             </motion.div>

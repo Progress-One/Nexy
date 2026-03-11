@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { type SwipeResponseValue } from '@/components/discovery/SwipeableSceneCard';
 import { type ExperienceLevel } from '@/components/discovery/ExperienceSelector';
 import { type SceneV3Response } from '@/components/discovery/SceneRendererV3';
 import { getFilteredScenesClient } from '@/lib/scenes.client';
 import { fetchPendingProposals, updateProposalStatus } from '@/lib/proposals.client';
-import { getBaselineGates, isSceneBlockedByGates } from '@/lib/scene-progression';
+import { fetchUserGates, isSceneAllowed } from '@/lib/onboarding-gates';
 import {
   calculateSignalUpdates,
   calculateTestScoreUpdates,
@@ -70,7 +70,7 @@ export function useDiscovery() {
   // Proposals tracking: scene_id → proposal_id
   const [proposalMap, setProposalMap] = useState<Map<string, string>>(new Map());
 
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   // ─── Derived state ──────────────────────────────────
 
@@ -266,13 +266,11 @@ export function useDiscovery() {
       try {
         const proposalsWithScenes = await fetchPendingProposals(supabase, userId);
         if (proposalsWithScenes.length > 0) {
-          const gates = await getBaselineGates(supabase, userId);
+          const gates = await fetchUserGates(supabase, userId);
 
           for (const { proposal, scene } of proposalsWithScenes) {
-            const sceneV2 = scene as unknown as SceneV2;
-
             // Respect safety gates — partner A never knows if gates blocked it
-            if (isSceneBlockedByGates(sceneV2, gates)) continue;
+            if (scene.slug && !isSceneAllowed(scene.slug, gates)) continue;
 
             // Respect gender filter
             const forGender = (scene as unknown as Record<string, unknown>).for_gender as string | undefined;
