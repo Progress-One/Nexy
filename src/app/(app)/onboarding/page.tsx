@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Clock } from 'lucide-react';
 
-type Gender = 'male' | 'female' | 'other';
+type Gender = 'male' | 'female';
 type InterestedIn = 'male' | 'female' | 'both';
 type OpennessLevel = 'conservative' | 'moderate' | 'adventurous';
 type RequestedOrientation = 'gay_male' | 'gay_female' | 'bisexual';
@@ -129,7 +129,6 @@ export default function OnboardingPage() {
   const genderOptions = [
     { value: 'male' as Gender, label: 'Мужчина', labelEn: 'Male', emoji: '👨' },
     { value: 'female' as Gender, label: 'Женщина', labelEn: 'Female', emoji: '👩' },
-    { value: 'other' as Gender, label: 'Другое', labelEn: 'Other', emoji: '🌈' },
   ];
 
   const interestedOptions = [

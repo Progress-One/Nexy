@@ -1,7 +1,7 @@
 // User & Profile Types
 export interface Profile {
   id: string;
-  gender: 'male' | 'female' | 'other' | 'undisclosed';
+  gender: 'male' | 'female';
   interested_in: 'male' | 'female' | 'both';
   onboarding_completed: boolean;
   language?: 'en' | 'ru' | null;
