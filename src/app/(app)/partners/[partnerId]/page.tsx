@@ -17,7 +17,6 @@ export default function PartnerDetailPage({ params }: { params: Promise<{ partne
   const [loading, setLoading] = useState(true);
   const [partnerName, setPartnerName] = useState('Партнёр');
   const [matches, setMatches] = useState<MatchResult[]>([]);
-  const [partnerDoesntWant, setPartnerDoesntWant] = useState<MatchResult[]>([]);
   const [showChat, setShowChat] = useState(false);
   const [actualPartnerId, setActualPartnerId] = useState<string | null>(null);
   const supabase = createClient();
@@ -90,14 +89,7 @@ export default function PartnerDetailPage({ params }: { params: Promise<{ partne
           ...legacyResults.matches.filter(m => !tagMatchDimensions.has(m.dimension)),
         ];
 
-        const tagNoWantDimensions = new Set(tagResults.partnerDoesntWant.map(m => m.dimension));
-        const combinedPartnerDoesntWant = [
-          ...tagResults.partnerDoesntWant,
-          ...legacyResults.partnerDoesntWant.filter(m => !tagNoWantDimensions.has(m.dimension)),
-        ];
-
         setMatches(combinedMatches);
-        setPartnerDoesntWant(combinedPartnerDoesntWant);
       } catch (error) {
         console.error('Error fetching matches:', error);
       } finally {
@@ -136,30 +128,6 @@ export default function PartnerDetailPage({ params }: { params: Promise<{ partne
         </h2>
         <MatchList matches={matches} partnerName={partnerName} />
       </div>
-
-      {/* Partner doesn't want */}
-      {partnerDoesntWant.length > 0 && (
-        <div>
-          <h2 className="text-lg font-semibold mb-4 text-muted-foreground">
-            {partnerName} не интересует:
-          </h2>
-          <Card>
-            <CardContent className="p-4">
-              <ul className="space-y-2">
-                {partnerDoesntWant.slice(0, 5).map((item) => (
-                  <li
-                    key={item.dimension}
-                    className="text-sm text-muted-foreground flex items-center gap-2"
-                  >
-                    <span>•</span>
-                    <span className="capitalize">{item.dimension}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-      )}
 
       {/* Actions */}
       <div className="space-y-3">

@@ -4,11 +4,11 @@ import { useState, useEffect, useCallback, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
 import { createClient } from '@/lib/supabase/client';
-import { getMatchResults, getTagBasedMatches, type TagPreference } from '@/lib/matching';
+import { getTagBasedMatches, type TagPreference } from '@/lib/matching';
 import { QuickSceneCard } from '@/components/date/QuickSceneCard';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, Check } from 'lucide-react';
+import { Loader2, Check, Clock } from 'lucide-react';
 import type { Scene } from '@/lib/types';
 
 export default function DateSessionPage({ params }: { params: Promise<{ dateId: string }> }) {
@@ -18,6 +18,7 @@ export default function DateSessionPage({ params }: { params: Promise<{ dateId: 
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [partnerCompleted, setPartnerCompleted] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -51,19 +52,11 @@ export default function DateSessionPage({ params }: { params: Promise<{ dateId: 
         ? partnership.partner_id
         : partnership.user_id;
 
-      // Get both users' preferences
-      const [myPrefs, partnerPrefs, myTags, partnerTagsResult] = await Promise.all([
-        supabase.from('preference_profiles').select('preferences').eq('user_id', user.id).single(),
-        supabase.from('preference_profiles').select('preferences').eq('user_id', partnerId).single(),
+      // Get both users' tag preferences for matching
+      const [myTags, partnerTagsResult] = await Promise.all([
         supabase.from('tag_preferences').select('tag_ref, interest_level, role_preference').eq('user_id', user.id),
         supabase.from('tag_preferences').select('tag_ref, interest_level, role_preference').eq('user_id', partnerId),
       ]);
-
-      // Legacy matching
-      const legacyResults = getMatchResults(
-        (myPrefs.data?.preferences || {}) as Record<string, unknown>,
-        (partnerPrefs.data?.preferences || {}) as Record<string, unknown>
-      );
 
       // Tag-based matching with role complementarity
       const tagResults = getTagBasedMatches(
@@ -71,14 +64,8 @@ export default function DateSessionPage({ params }: { params: Promise<{ dateId: 
         (partnerTagsResult.data || []) as TagPreference[]
       );
 
-      // Combine matches
-      const tagMatchDimensions = new Set(tagResults.matches.map(m => m.dimension));
-      const combinedMatches = [
-        ...tagResults.matches,
-        ...legacyResults.matches.filter(m => !tagMatchDimensions.has(m.dimension)),
-      ];
-
-      const matchDimensions = combinedMatches.map(m => m.dimension);
+      // Get matched tag_refs to find relevant scenes
+      const matchedTags = tagResults.matches.map(m => m.dimension);
 
       // Get already answered scenes for this date
       const { data: answered } = await supabase
@@ -89,14 +76,27 @@ export default function DateSessionPage({ params }: { params: Promise<{ dateId: 
 
       const answeredIds = answered?.map(a => a.scene_id) || [];
 
-      // Fetch scenes from matched dimensions
+      // Check if partner has already completed their answers
+      const { data: partnerAnswered } = await supabase
+        .from('date_responses')
+        .select('scene_id')
+        .eq('date_id', dateId)
+        .eq('user_id', partnerId);
+
+      if (partnerAnswered && partnerAnswered.length > 0) {
+        setPartnerCompleted(true);
+      }
+
+      // Fetch V2 scenes that match the shared interests via tags
       let query = supabase
         .from('scenes')
         .select('*')
+        .eq('version', 2)
+        .eq('is_active', true)
         .limit(5);
 
-      if (matchDimensions.length > 0) {
-        query = query.overlaps('dimensions', matchDimensions);
+      if (matchedTags.length > 0) {
+        query = query.overlaps('tags', matchedTags);
       }
 
       if (answeredIds.length > 0) {
@@ -139,11 +139,42 @@ export default function DateSessionPage({ params }: { params: Promise<{ dateId: 
       if (currentIndex < scenes.length - 1) {
         setCurrentIndex(prev => prev + 1);
       } else {
-        // Update date status
-        await supabase
+        // Check if partner already answered — if so, mark date as ready
+        const { data: dateData } = await supabase
           .from('dates')
-          .update({ status: 'ready' })
-          .eq('id', dateId);
+          .select('partnership_id')
+          .eq('id', dateId)
+          .single();
+
+        if (dateData) {
+          const { data: partnership } = await supabase
+            .from('partnerships')
+            .select('user_id, partner_id')
+            .eq('id', dateData.partnership_id)
+            .single();
+
+          if (partnership) {
+            const partnerUserId = partnership.user_id === user.id
+              ? partnership.partner_id
+              : partnership.user_id;
+
+            const { data: partnerResponses } = await supabase
+              .from('date_responses')
+              .select('id')
+              .eq('date_id', dateId)
+              .eq('user_id', partnerUserId)
+              .limit(1);
+
+            if (partnerResponses && partnerResponses.length > 0) {
+              // Both answered — mark as ready
+              await supabase
+                .from('dates')
+                .update({ status: 'ready' })
+                .eq('id', dateId);
+              setPartnerCompleted(true);
+            }
+          }
+        }
 
         setCompleted(true);
       }
@@ -171,12 +202,26 @@ export default function DateSessionPage({ params }: { params: Promise<{ dateId: 
               <Check className="w-8 h-8 text-green-600" />
             </div>
             <h2 className="text-xl font-bold mb-2">Готово!</h2>
-            <p className="text-muted-foreground mb-6">
-              Ваши ответы сохранены. Когда партнёр тоже ответит, вы увидите результаты.
-            </p>
-            <Button onClick={() => router.push(`/date/${dateId}/results`)}>
-              Посмотреть результаты
-            </Button>
+            {partnerCompleted ? (
+              <>
+                <p className="text-muted-foreground mb-6">
+                  Оба ответили! Посмотрите ваши совпадения.
+                </p>
+                <Button onClick={() => router.push(`/date/${dateId}/results`)}>
+                  Посмотреть результаты
+                </Button>
+              </>
+            ) : (
+              <>
+                <p className="text-muted-foreground mb-6">
+                  Ваши ответы сохранены. Ждём, пока партнёр тоже ответит.
+                </p>
+                <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                  <Clock className="w-4 h-4 animate-pulse" />
+                  <span className="text-sm">Ожидание партнёра...</span>
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>
