@@ -19,7 +19,9 @@ CREATE TABLE profiles (
   id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
   gender TEXT CHECK (gender IN ('male', 'female', 'other', 'undisclosed')),
   interested_in TEXT CHECK (interested_in IN ('male', 'female', 'both')),
+  language TEXT DEFAULT 'ru',
   onboarding_completed BOOLEAN DEFAULT FALSE,
+  visual_onboarding_completed BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -126,6 +128,10 @@ CREATE TABLE scenes (
   question JSONB,                -- Question configuration
   ai_context JSONB NOT NULL DEFAULT '{"tests_primary": [], "tests_secondary": []}',
 
+  -- Gates & pairing
+  sets_gate TEXT,                                              -- Gate name set on YES/VERY response
+  paired_scene TEXT,                                           -- Slug of paired scene (same image, diff perspective)
+
   -- Admin workflow
   qa_status TEXT CHECK (qa_status IN ('passed', 'failed')),  -- QA validation
   qa_attempts INTEGER,                                        -- QA attempt count
@@ -171,27 +177,35 @@ CREATE TABLE scenes (
 
 ### scene_responses
 
-User responses to scenes (legacy + V2 compatible).
+Unified table for all scene responses (legacy V1 + V2 composite + onboarding).
 
 ```sql
 CREATE TABLE scene_responses (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
   scene_id UUID REFERENCES scenes(id) ON DELETE CASCADE,
-  
+
+  -- Scene identifier (denormalized for quick lookups)
+  scene_slug TEXT,
+
   -- Response data
   liked BOOLEAN,
   rating INTEGER CHECK (rating >= 1 AND rating <= 5),
-  elements_selected TEXT[] DEFAULT '{}',  -- V2: selected elements
-  follow_up_answers JSONB DEFAULT '{}',  -- V2: follow-up responses
-  
-  -- Legacy
+  elements_selected TEXT[] DEFAULT '{}',
+  follow_up_answers JSONB DEFAULT '{}',
+  element_responses JSONB DEFAULT '{}',
+
+  -- Question context
   question_asked TEXT,
   question_type TEXT,
   answer JSONB,
   profile_updates JSONB,
-  
+
+  -- Status
+  skipped BOOLEAN DEFAULT false,
+
   created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(user_id, scene_id)
 );
 ```
@@ -199,47 +213,10 @@ CREATE TABLE scene_responses (
 **Indexes:**
 - `idx_scene_responses_user` - User responses lookup
 - `idx_scene_responses_scene` - Scene responses lookup
+- `idx_scene_responses_slug` - Scene slug lookup
+- `idx_scene_responses_element_responses` - GIN index for JSONB
 
-### composite_scene_responses
-
-V2 composite scene responses (according to V2 documentation).
-
-```sql
-CREATE TABLE composite_scene_responses (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
-  scene_id TEXT NOT NULL,  -- References scenes.slug
-  
-  -- Selected elements
-  selected_elements TEXT[] NOT NULL DEFAULT '{}',
-  
-  -- Follow-up responses (nested JSON)
-  element_responses JSONB NOT NULL DEFAULT '{}',
-  -- Example structure:
-  -- {
-  --   "handcuffs": {
-  --     "cuff_type": ["metal", "leather"],
-  --     "cuff_role": "both"
-  --   },
-  --   "wax_play": {
-  --     "wax_body_map": ["chest", "back", "thighs"],
-  --     "wax_temperature": 65
-  --   }
-  -- }
-  
-  skipped BOOLEAN DEFAULT false,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now(),
-  
-  UNIQUE(user_id, scene_id)
-);
-```
-
-**Indexes:**
-- `idx_composite_scene_responses_user` - User lookup
-- `idx_composite_scene_responses_scene` - Scene slug lookup
-- `idx_composite_scene_responses_elements` - GIN index for elements array
-- `idx_composite_scene_responses_element_responses` - GIN index for JSONB
+> **Note:** `composite_scene_responses` was merged into this table (migration 021) and dropped (migration 033).
 
 ### tag_preferences
 
@@ -852,6 +829,21 @@ $$ LANGUAGE plpgsql STABLE;
     - `selected_variant_index` on scenes for gallery
     - Updated `compute_gates_from_onboarding` to handle value 3 (PARTNER_REQUEST)
     - `get_scene_images()` helper function
+14. **025_paired_scenes.sql** - Paired scenes (`paired_with` field)
+15. **025_shared_images_with.sql** - Shared images between scenes
+16. **026_admin_settings.sql** - Admin settings table
+17. **027_openness_level.sql** - Openness level for profiles
+18. **028_scene_types_v3.sql** - Scene types V3 (multi-modal scenes)
+19. **029_expand_config_types.sql** - Expand discovery config types
+20. **030_unified_scene_structure.sql** - Unify onboarding and regular scenes (`is_onboarding`, `for_gender`)
+21. **031_image_analysis.sql** - Image analysis metadata
+22. **032_drop_gates_scenes.sql** - Drop legacy gate scene references
+23. **033_unified_architecture.sql** - Unified scene/response architecture:
+    - `sets_gate`, `paired_scene` columns on scenes
+    - Drop `composite_scene_responses` (merged into `scene_responses`)
+    - Drop `onboarding_categories` table
+    - Drop legacy onboarding columns from scenes
+24. **034_drop_paired_with.sql** - Remove `paired_with` UUID column, use `paired_scene` slug
 
 ---
 

@@ -3,10 +3,10 @@
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import { getMatchResults, getTagBasedMatches, type TagPreference } from '@/lib/matching';
+import { getTagBasedMatches, type TagPreference } from '@/lib/matching';
 import { MatchList } from '@/components/partners/MatchList';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Heart, Lightbulb, Lock, MessageCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { PartnerChat } from '@/components/partners/PartnerChat';
@@ -17,7 +17,6 @@ export default function PartnerDetailPage({ params }: { params: Promise<{ partne
   const [loading, setLoading] = useState(true);
   const [partnerName, setPartnerName] = useState('Партнёр');
   const [matches, setMatches] = useState<MatchResult[]>([]);
-  const [partnerDoesntWant, setPartnerDoesntWant] = useState<MatchResult[]>([]);
   const [showChat, setShowChat] = useState(false);
   const [actualPartnerId, setActualPartnerId] = useState<string | null>(null);
   const supabase = createClient();
@@ -48,19 +47,8 @@ export default function PartnerDetailPage({ params }: { params: Promise<{ partne
           setPartnerName(partnership.nickname);
         }
 
-        // Get both users' preferences (legacy system)
-        const [myPrefs, partnerPrefs, myTags, partnerTagsResult] = await Promise.all([
-          supabase
-            .from('preference_profiles')
-            .select('preferences')
-            .eq('user_id', user.id)
-            .single(),
-          supabase
-            .from('preference_profiles')
-            .select('preferences')
-            .eq('user_id', partnerUserId)
-            .single(),
-          // New: fetch tag_preferences for role-based matching
+        // Fetch tag_preferences for role-based matching
+        const [myTags, partnerTagsResult] = await Promise.all([
           supabase
             .from('tag_preferences')
             .select('tag_ref, interest_level, role_preference')
@@ -71,33 +59,13 @@ export default function PartnerDetailPage({ params }: { params: Promise<{ partne
             .eq('user_id', partnerUserId),
         ]);
 
-        // Legacy matching (preference_profiles)
-        const legacyResults = getMatchResults(
-          (myPrefs.data?.preferences || {}) as Record<string, unknown>,
-          (partnerPrefs.data?.preferences || {}) as Record<string, unknown>
-        );
-
-        // New tag-based matching with role complementarity
+        // Tag-based matching with role complementarity
         const tagResults = getTagBasedMatches(
           (myTags.data || []) as TagPreference[],
           (partnerTagsResult.data || []) as TagPreference[]
         );
 
-        // Merge results: tag-based matches take priority, then add legacy matches
-        const tagMatchDimensions = new Set(tagResults.matches.map(m => m.dimension));
-        const combinedMatches = [
-          ...tagResults.matches,
-          ...legacyResults.matches.filter(m => !tagMatchDimensions.has(m.dimension)),
-        ];
-
-        const tagNoWantDimensions = new Set(tagResults.partnerDoesntWant.map(m => m.dimension));
-        const combinedPartnerDoesntWant = [
-          ...tagResults.partnerDoesntWant,
-          ...legacyResults.partnerDoesntWant.filter(m => !tagNoWantDimensions.has(m.dimension)),
-        ];
-
-        setMatches(combinedMatches);
-        setPartnerDoesntWant(combinedPartnerDoesntWant);
+        setMatches(tagResults.matches);
       } catch (error) {
         console.error('Error fetching matches:', error);
       } finally {
@@ -136,30 +104,6 @@ export default function PartnerDetailPage({ params }: { params: Promise<{ partne
         </h2>
         <MatchList matches={matches} partnerName={partnerName} />
       </div>
-
-      {/* Partner doesn't want */}
-      {partnerDoesntWant.length > 0 && (
-        <div>
-          <h2 className="text-lg font-semibold mb-4 text-muted-foreground">
-            {partnerName} не интересует:
-          </h2>
-          <Card>
-            <CardContent className="p-4">
-              <ul className="space-y-2">
-                {partnerDoesntWant.slice(0, 5).map((item) => (
-                  <li
-                    key={item.dimension}
-                    className="text-sm text-muted-foreground flex items-center gap-2"
-                  >
-                    <span>•</span>
-                    <span className="capitalize">{item.dimension}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-      )}
 
       {/* Actions */}
       <div className="space-y-3">

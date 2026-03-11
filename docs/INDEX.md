@@ -1,6 +1,6 @@
 # Intimate Discovery — Documentation Index
 
-> Последнее обновление: 2025-01-19
+> Последнее обновление: 2026-03-11
 
 ## Quick Links
 
@@ -8,7 +8,7 @@
 |----------|----------|
 | [architecture.md](architecture.md) | Архитектура Discovery системы, flow, компоненты |
 | [database.md](database.md) | Схема базы данных, таблицы, миграции |
-| [scenes.md](scenes.md) | Система сцен — 162 composite scenes, baseline gates |
+| [scenes.md](scenes.md) | Система сцен — 162 composite scenes, onboarding gates |
 | [body-map.md](body-map.md) | Body Map — интерактивный выбор зон тела |
 | [admin-panel.md](admin-panel.md) | Админ-панель — управление сценами и пользователями |
 | [content-guidelines.md](content-guidelines.md) | Правила написания контента: описания, промпты |
@@ -29,9 +29,11 @@ intimate-discovery/
 │   ├── components/
 │   │   └── discovery/          # UI компоненты для discovery
 │   └── lib/                    # Backend logic
-│       ├── question-v2.ts      # Обработка V2 вопросов
 │       ├── tag-preferences.ts  # Агрегация предпочтений
-│       └── scene-progression.ts # Адаптивный flow
+│       ├── scene-progression.ts # Адаптивный flow
+│       ├── topic-flow.ts       # Topic-based discovery flow
+│       ├── matching.ts         # Tag-based partner matching
+│       └── onboarding-gates.ts # Gates system for scene filtering
 │
 ├── scenes/
 │   └── v2/                     # АКТУАЛЬНЫЕ СЦЕНЫ

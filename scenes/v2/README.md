@@ -35,7 +35,7 @@ Key improvements:
 4. COMPOSITE SCENES (121 scenes)  ← Visual scenes with follow-up questions
    - Organized by category
    - Role-separated (M→F / F→M)
-   - Filtered by baseline gates
+   - Filtered by onboarding gates (sets_gate + isSceneAllowed)
 ```
 
 **📖 Детальная документация Body Map:** См. [`docs/BODY_MAP_SYSTEM.md`](../../docs/BODY_MAP_SYSTEM.md)
