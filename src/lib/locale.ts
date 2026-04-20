@@ -290,11 +290,73 @@ export const UI_STRINGS: Record<string, LocalizedString> = {
   landing_footer_contact: { ru: 'Контакты', en: 'Contact' },
   landing_footer_copyright: { ru: '© {year} Nexy. 18+', en: '© {year} Nexy. Adults only.' },
 
+  // ==================== PARTNER MATCHING ====================
+  matchesMutualOpen: { ru: 'Взаимные желания', en: 'Mutual desires' },
+  matchesMutualHidden: { ru: 'Скрытые совпадения', en: 'Hidden matches' },
+  matchesPartnerWants: {
+    ru: 'Она хочет (тебе стоит попробовать)',
+    en: 'They want this (you might try)',
+  },
+  matchesYouWant: {
+    ru: 'Ты хочешь (ещё не в её ответах)',
+    en: "You want this (not in their answers yet)",
+  },
+  matchesRoleConflict: { ru: 'Конфликт ролей', en: 'Role conflict' },
+  matchesHiddenExplain: {
+    ru: 'Вы оба хотели, но стеснялись сказать',
+    en: 'You both wanted it, but were shy to say',
+  },
+  matchesWaitingPartner: {
+    ru: 'Ждём когда {name} ответит на сцены',
+    en: 'Waiting for {name} to answer some scenes',
+  },
+  matchesRoleConflictExplain: {
+    ru: 'Оба хотите одну роль — обсудите switch',
+    en: 'You both want the same role — try switching',
+  },
+  matchesNoData: {
+    ru: 'Пройдите несколько сцен чтобы увидеть совпадения',
+    en: 'Answer a few scenes to see your matches',
+  },
+  matchesEmptyState: {
+    ru: 'Пока нет совпадений в этой категории',
+    en: 'No matches in this category yet',
+  },
+  matchesYouLabel: { ru: 'Ты', en: 'You' },
+  matchesPartnerLabel: { ru: 'Партнёр', en: 'Partner' },
+  matchesHeaderCount: {
+    ru: '{count} совпадений',
+    en: '{count} matches',
+  },
+  matchesHeaderHidden: {
+    ru: '{count} скрытых',
+    en: '{count} hidden',
+  },
+  matchesPercentage: {
+    ru: '{percent}% совпадения',
+    en: '{percent}% match',
+  },
+  matchesConnected: { ru: 'Связаны', en: 'Connected' },
+
   // Legal pages
   legal_privacy_title: { ru: 'Политика конфиденциальности', en: 'Privacy Policy' },
   legal_terms_title: { ru: 'Условия использования', en: 'Terms of Service' },
   legal_back: { ru: '← На главную', en: '← Back to home' },
   legal_last_updated: { ru: 'Последнее обновление: {date}', en: 'Last updated: {date}' },
+
+  // Age gate / consent (signup)
+  ageConsent: {
+    ru: 'Мне 18 лет и больше. Я согласен с условиями и политикой конфиденциальности.',
+    en: 'I am 18 or older and agree to the Terms of Service and Privacy Policy.',
+  },
+  ageConsentPrefix: {
+    ru: 'Мне 18 лет и больше. Я согласен с',
+    en: 'I am 18 or older and agree to the',
+  },
+  ageConsentAnd: { ru: 'и', en: 'and' },
+  ageConsentSuffix: { ru: '.', en: '.' },
+  termsLabel: { ru: 'условиями', en: 'Terms of Service' },
+  privacyLabel: { ru: 'политикой конфиденциальности', en: 'Privacy Policy' },
 };
 
 /**

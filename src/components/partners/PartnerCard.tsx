@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Star } from 'lucide-react';
 
 interface PartnerCardProps {
   id: string;
@@ -13,6 +13,7 @@ interface PartnerCardProps {
   nickname?: string | null;
   status: string;
   matchCount?: number;
+  hiddenCount?: number;
   index: number;
 }
 
@@ -22,6 +23,7 @@ export function PartnerCard({
   nickname,
   status,
   matchCount = 0,
+  hiddenCount = 0,
   index,
 }: PartnerCardProps) {
   const displayName = nickname || `Partner ${partnerId.slice(0, 4)}`;
@@ -43,7 +45,7 @@ export function PartnerCard({
 
             <div className="flex-1">
               <h3 className="font-medium">{displayName}</h3>
-              <div className="flex gap-2 mt-1">
+              <div className="flex flex-wrap gap-2 mt-1">
                 <Badge
                   variant={status === 'active' ? 'default' : 'secondary'}
                   className="text-xs"
@@ -53,6 +55,15 @@ export function PartnerCard({
                 {matchCount > 0 && (
                   <Badge variant="outline" className="text-xs">
                     {matchCount} совпадений
+                  </Badge>
+                )}
+                {hiddenCount > 0 && (
+                  <Badge
+                    variant="outline"
+                    className="text-xs bg-amber-50 text-amber-800 border-amber-200"
+                  >
+                    <Star className="w-3 h-3 mr-0.5" />
+                    {hiddenCount} скрытых
                   </Badge>
                 )}
               </div>

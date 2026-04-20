@@ -7,6 +7,10 @@ import { PartnerCard } from '@/components/partners/PartnerCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader2, UserPlus, Users } from 'lucide-react';
+import {
+  getCategorizedMatches,
+  type TagPreference,
+} from '@/lib/matching';
 
 interface Partnership {
   id: string;
@@ -14,6 +18,8 @@ interface Partnership {
   user_id: string;
   nickname: string | null;
   status: string;
+  matchCount?: number;
+  hiddenCount?: number;
 }
 
 export default function PartnersPage() {
@@ -40,7 +46,31 @@ export default function PartnersPage() {
             ...p,
             partner_id: p.user_id === user.id ? p.partner_id : p.user_id,
           }));
-          setPartnerships(transformed);
+
+          // Fetch my tags once + partner tags per partnership, then compute counts.
+          const { data: myTagsData } = await supabase
+            .from('tag_preferences')
+            .select('tag_ref, interest_level, role_preference')
+            .eq('user_id', user.id);
+          const myTags = (myTagsData || []) as TagPreference[];
+
+          const withCounts = await Promise.all(
+            transformed.map(async (p) => {
+              const { data: partnerTagsData } = await supabase
+                .from('tag_preferences')
+                .select('tag_ref, interest_level, role_preference')
+                .eq('user_id', p.partner_id);
+              const partnerTags = (partnerTagsData || []) as TagPreference[];
+              const c = getCategorizedMatches(myTags, partnerTags);
+              return {
+                ...p,
+                matchCount: c.mutual_open.length,
+                hiddenCount: c.mutual_hidden.length,
+              };
+            })
+          );
+
+          setPartnerships(withCounts);
         }
       } catch (error) {
         console.error('Error fetching partnerships:', error);
@@ -98,6 +128,8 @@ export default function PartnersPage() {
               partnerId={partnership.partner_id}
               nickname={partnership.nickname}
               status={partnership.status}
+              matchCount={partnership.matchCount}
+              hiddenCount={partnership.hiddenCount}
               index={index}
             />
           ))}
