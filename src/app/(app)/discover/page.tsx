@@ -6,10 +6,12 @@ import { BodyMapAnswer } from '@/components/discovery/BodyMapAnswer';
 import { SceneRendererV3 } from '@/components/discovery/SceneRendererV3';
 import { OnboardingIntroScreen } from '@/components/discovery/OnboardingIntroScreen';
 import { OnboardingResultsScreen } from '@/components/discovery/OnboardingResultsScreen';
+import { InsightsReveal } from '@/components/discovery/InsightsReveal';
 import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCw } from 'lucide-react';
 import { t } from '@/lib/locale';
 import { useDiscovery } from '@/hooks/useDiscovery';
+import { useInsightsReveal } from '@/hooks/useInsightsReveal';
 
 export default function DiscoverPage() {
   const {
@@ -47,6 +49,10 @@ export default function DiscoverPage() {
     moveToNextScene,
   } = useDiscovery();
 
+  // Aha-moment: показываем reveal один раз после 15 ответов
+  const { shouldShow: showInsights, insights, acknowledge: ackInsights } =
+    useInsightsReveal(answeredCount, locale);
+
   // ─── Loading ────────────────────────────────────────
 
   if (loading) {
@@ -54,6 +60,20 @@ export default function DiscoverPage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
+    );
+  }
+
+  // ─── Aha-moment reveal (один раз после 15 ответов) ──
+
+  if (showInsights && insights) {
+    return (
+      <InsightsReveal
+        topTags={insights.topTags}
+        archetype={insights.archetype ?? undefined}
+        roleBalance={insights.roleBalance ?? undefined}
+        onContinue={ackInsights}
+        locale={locale}
+      />
     );
   }
 
