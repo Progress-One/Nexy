@@ -7,8 +7,12 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/compat-types';
 import { analyzeImage, ImageAnalysis } from '@/lib/image-analyzer';
 import { matchScenesToImage, SceneSuggestion } from '@/lib/scene-matcher';
+import { requireAdmin } from '@/lib/admin-auth';
 
 export async function POST(request: Request) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
     const { imageUrl } = await request.json();
 
