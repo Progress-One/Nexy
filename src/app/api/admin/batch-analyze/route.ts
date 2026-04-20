@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/compat-types';
 import { analyzeImage, ImageAnalysis } from '@/lib/image-analyzer';
+import { requireAdmin } from '@/lib/admin-auth';
 
 const DEFAULT_BATCH_SIZE = 5;
 
@@ -17,6 +18,9 @@ interface BatchResult {
 }
 
 export async function POST(request: Request) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
     const body = await request.json().catch(() => ({}));
     const batchSize = body.batchSize || DEFAULT_BATCH_SIZE;
@@ -166,6 +170,9 @@ export async function POST(request: Request) {
 
 // GET - retrieve all analysis data
 export async function GET() {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;

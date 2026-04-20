@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/admin-auth';
 
 export async function POST(req: Request) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
 
   if (!apiKey) {

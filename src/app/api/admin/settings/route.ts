@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
+import { requireAdmin } from '@/lib/admin-auth';
 
 const SETTINGS_KEY = 'generation_settings';
 
 // GET - load settings
 export async function GET() {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const supabase = await createServiceClient();
 
   const { data, error } = await supabase
@@ -24,6 +28,9 @@ export async function GET() {
 
 // POST - save settings
 export async function POST(req: Request) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const supabase = await createServiceClient();
   const { settings } = await req.json();
 

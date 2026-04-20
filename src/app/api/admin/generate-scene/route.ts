@@ -18,6 +18,7 @@ import {
   rewritePromptWithAI,
   cleanAccumulatedEmphasis,
 } from '@/lib/prompt-rewriter';
+import { requireAdmin } from '@/lib/admin-auth';
 
 type QAEvaluator = 'replicate' | 'claude';
 
@@ -330,6 +331,9 @@ async function generateWithQA(params: {
 }
 
 export async function POST(req: Request) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const supabase = await createServiceClient();
 
   const {

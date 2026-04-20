@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
 import * as fs from 'fs';
 import * as path from 'path';
+import { requireAdmin } from '@/lib/admin-auth';
 
 interface V2Element {
   id: string;
@@ -42,6 +43,9 @@ interface V2SceneJSON {
 }
 
 export async function POST() {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const supabase = await createServiceClient();
 
   try {
@@ -167,6 +171,9 @@ export async function POST() {
 
 // GET endpoint to check V2 import status
 export async function GET() {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const supabase = await createServiceClient();
 
   try {

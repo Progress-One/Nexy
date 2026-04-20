@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/compat-types';
+import { requireAdmin } from '@/lib/admin-auth';
 
 // Use service role for admin operations (bypasses RLS)
 const supabase = createClient(
@@ -8,6 +9,9 @@ const supabase = createClient(
 );
 
 export async function POST(req: Request) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
     const { sceneId, imagePrompt } = await req.json();
 
