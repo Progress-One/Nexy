@@ -2,7 +2,9 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { SignJWT } from 'jose';
 import pg from 'pg';
-import { createHash, randomUUID } from 'crypto';
+import { randomUUID } from 'crypto';
+import { hashPassword } from '@/lib/password';
+import { requireEnv } from '@/lib/env';
 
 const { Pool } = pg;
 let _pool: pg.Pool | null = null;
@@ -10,10 +12,6 @@ function getPool() {
   if (_pool) return _pool;
   _pool = new Pool({ connectionString: process.env['DATABASE_URL'], max: 5 });
   return _pool;
-}
-
-function hashPassword(password: string): string {
-  return createHash('sha256').update(password).digest('hex');
 }
 
 export async function POST(req: Request) {
@@ -36,13 +34,14 @@ export async function POST(req: Request) {
 
   // Create user
   const userId = randomUUID();
+  const passwordHash = await hashPassword(password);
   await pool.query(
     'INSERT INTO profiles (id, email, password_hash, onboarding_completed) VALUES ($1, $2, $3, false)',
-    [userId, email, hashPassword(password)],
+    [userId, email, passwordHash],
   );
 
   // Create JWT
-  const secret = new TextEncoder().encode(process.env['JWT_SECRET'] || 'nexy-jwt-secret');
+  const secret = new TextEncoder().encode(requireEnv('JWT_SECRET'));
   const jwt = await new SignJWT({ sub: userId, email })
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime('30d')

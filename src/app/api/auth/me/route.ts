@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { jwtVerify } from 'jose';
+import { requireEnv } from '@/lib/env';
 
 export async function GET() {
   const cookieStore = await cookies();
@@ -11,7 +12,7 @@ export async function GET() {
   }
 
   try {
-    const secret = new TextEncoder().encode(process.env['JWT_SECRET'] || 'nexy-jwt-secret');
+    const secret = new TextEncoder().encode(requireEnv('JWT_SECRET'));
     const { payload } = await jwtVerify(token, secret);
     return NextResponse.json({ user: { id: payload.sub, email: payload.email } });
   } catch {

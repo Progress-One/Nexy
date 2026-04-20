@@ -71,8 +71,24 @@ export class QueryBuilder {
     return this;
   }
 
-  limit(n: number) { this.limitVal = n; return this; }
-  range(from: number, to: number) { this.offsetVal = from; this.limitVal = to - from + 1; return this; }
+  private validateInt(value: number, name: string, min: number = 0): number {
+    if (!Number.isInteger(value) || value < min) {
+      throw new Error(`Invalid ${name}: must be integer >= ${min}`);
+    }
+    return value;
+  }
+
+  limit(n: number) { this.limitVal = this.validateInt(n, 'limit', 1); return this; }
+  range(from: number, to: number) {
+    const validFrom = this.validateInt(from, 'range.from', 0);
+    const validTo = this.validateInt(to, 'range.to', 0);
+    if (validTo < validFrom) {
+      throw new Error('Invalid range: to must be >= from');
+    }
+    this.offsetVal = validFrom;
+    this.limitVal = validTo - validFrom + 1;
+    return this;
+  }
   single() { this.singleMode = true; this.limitVal = 1; return this; }
   maybeSingle() { this.maybeSingleMode = true; this.limitVal = 1; return this; }
 
@@ -165,12 +181,23 @@ export class QueryBuilder {
   }
 }
 
+const VALID_IDENT = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+
 export class RPCBuilder {
-  constructor(private pool: pg.Pool, private fnName: string, private params: Record<string, unknown>) {}
+  constructor(private pool: pg.Pool, private fnName: string, private params: Record<string, unknown>) {
+    if (!VALID_IDENT.test(fnName)) {
+      throw new Error(`Invalid RPC function name: ${fnName}`);
+    }
+  }
 
   async then(resolve: (val: { data: any; error: any }) => void) {
     try {
       const keys = Object.keys(this.params);
+      for (const k of keys) {
+        if (!VALID_IDENT.test(k)) {
+          throw new Error(`Invalid RPC parameter name: ${k}`);
+        }
+      }
       const vals = keys.map(k => {
         const v = this.params[k];
         return Array.isArray(v) && v.length > 100 ? `[${v.join(',')}]` : v;

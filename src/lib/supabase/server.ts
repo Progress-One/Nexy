@@ -2,6 +2,7 @@ import pg from 'pg';
 import { cookies } from 'next/headers';
 import { jwtVerify } from 'jose';
 import { QueryBuilder, RPCBuilder } from './pg-query-builder';
+import { requireEnv } from '@/lib/env';
 
 const { Pool } = pg;
 
@@ -28,7 +29,7 @@ export async function createClient() {
   const token = cookieStore.get('nexy_session')?.value;
   if (token) {
     try {
-      const secret = new TextEncoder().encode(process.env['JWT_SECRET'] || 'nexy-jwt-secret');
+      const secret = new TextEncoder().encode(requireEnv('JWT_SECRET'));
       const { payload } = await jwtVerify(token, secret);
       currentUser = { id: payload.sub as string, email: payload.email as string };
     } catch { /* expired/invalid */ }
@@ -53,7 +54,7 @@ export async function createClient() {
             region: 'us-east-1',
             credentials: {
               accessKeyId: process.env['MINIO_ACCESS_KEY'] || 'admin',
-              secretAccessKey: process.env['MINIO_SECRET_KEY'] || 'JxX9ml-3coRzS501ZdddT25xykItNj1X',
+              secretAccessKey: requireEnv('MINIO_SECRET_KEY'),
             },
             forcePathStyle: true,
           });

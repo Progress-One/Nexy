@@ -1,8 +1,9 @@
 import { jwtVerify } from 'jose';
 import { NextResponse, type NextRequest } from 'next/server';
+import { requireEnv } from '@/lib/env';
 
 export async function updateSession(request: NextRequest) {
-  const jwtSecret = process.env['JWT_SECRET'] || 'nexy-jwt-secret';
+  const jwtSecret = requireEnv('JWT_SECRET');
   const token = request.cookies.get('nexy_session')?.value;
 
   let user: { id: string; email: string } | null = null;

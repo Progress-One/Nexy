@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { t, getLocale } from '@/lib/locale';
 
 export default function SignupPage() {
   const [email, setEmail] = useState('');
@@ -17,6 +18,7 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+  const locale = getLocale();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,6 +106,25 @@ export default function SignupPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
+            </div>
+            <div className="flex items-start gap-2 text-sm">
+              <input
+                type="checkbox"
+                id="age-consent"
+                required
+                className="mt-1"
+              />
+              <label htmlFor="age-consent" className="text-muted-foreground">
+                {t('ageConsentPrefix', locale)}{' '}
+                <Link href="/terms" className="underline text-primary">
+                  {t('termsLabel', locale)}
+                </Link>{' '}
+                {t('ageConsentAnd', locale)}{' '}
+                <Link href="/privacy" className="underline text-primary">
+                  {t('privacyLabel', locale)}
+                </Link>
+                {t('ageConsentSuffix', locale)}
+              </label>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">

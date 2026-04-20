@@ -34,6 +34,16 @@ export async function POST(request: NextRequest) {
 
   const supabase = await createServiceClient();
 
+  // Idempotency check — Stripe may retry delivery; we only process each event once.
+  const { data: existing } = await supabase
+    .from('processed_webhooks')
+    .select('event_id')
+    .eq('event_id', event.id)
+    .maybeSingle();
+  if (existing) {
+    return NextResponse.json({ ok: true, duplicate: true });
+  }
+
   try {
     switch (event.type) {
       case 'checkout.session.completed': {
@@ -102,6 +112,11 @@ export async function POST(request: NextRequest) {
         break;
       }
     }
+
+    // Record successful processing so retries become no-ops.
+    await supabase
+      .from('processed_webhooks')
+      .insert({ event_id: event.id, source: 'stripe' });
 
     return NextResponse.json({ received: true });
   } catch (error) {
