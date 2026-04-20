@@ -1,0 +1,54 @@
+{
+  "id": "footjob-receive",
+  "slug": "footjob-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "footjob",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Футджоб",
+    "en": "Footjob"
+  },
+  "subtitle": {
+    "ru": "Она ласкает тебя ступнями",
+    "en": "She pleasures you with feet"
+  },
+  "user_description": {
+    "ru": "Она ласкает твой член ступнями. Зажимает между стоп, двигает вверх-вниз.",
+    "en": "She strokes your cock with her feet. Squeezes between her soles, moves up and down."
+  },
+  "ai_description": {
+    "ru": "Она ласкает его член ступнями. Мягкие стопы обхватывают, двигаются вверх-вниз. Фетиш ног + стимуляция.",
+    "en": "She strokes his cock with her feet. Soft soles wrap around, move up and down. Foot fetish + stimulation."
+  },
+  "image_prompt": "woman using both feet to stroke man's penis, her soles wrapped around his shaft, man lying on bed, soft bedroom lighting",
+  "intensity": 3,
+  "category": "manual",
+  "tags": [
+    "footjob",
+    "feet",
+    "foot_fetish",
+    "receiving"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "footjob",
+      "foot_fetish",
+      "receiving"
+    ],
+    "tests_secondary": [
+      "teasing",
+      "feet"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Футджоб — она ласкает тебя ступнями",
+      "en": "Footjob — she strokes you with her feet"
+    }
+  }
+}

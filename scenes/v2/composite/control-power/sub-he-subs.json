@@ -1,0 +1,60 @@
+{
+  "id": "sub-he-subs",
+  "slug": "sub-he-subs",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "he-follows"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "dom-she-doms",
+  "role_direction": "f_to_m",
+  "sets_gate": "male_submissive",
+  "title": {
+    "ru": "Сабмиссив",
+    "en": "Submissive"
+  },
+  "subtitle": {
+    "ru": "Ты — Саб",
+    "en": "You're the Sub"
+  },
+  "user_description": {
+    "ru": "Ты — сабмиссив. Выполняешь приказы, следуешь правилам. Она твоя Доминатрикс.",
+    "en": "You're the submissive. Follow orders, obey rules. She's your Dominatrix."
+  },
+  "ai_description": {
+    "ru": "Он — сабмиссив в D/s отношениях. Выполняет приказы, следует правилам, принимает наказания. Осознанная BDSM динамика.",
+    "en": "He's the submissive in D/s relationship. Follows orders, obeys rules, accepts punishment. Conscious BDSM dynamic."
+  },
+  "image_prompt": "man kneeling before standing woman, submissive posture, looking up at her, bedroom with dim lighting",
+  "intensity": 3,
+  "category": "control-power",
+  "tags": [
+    "submissive",
+    "sub",
+    "bdsm",
+    "power_exchange",
+    "femdom"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "submissive",
+      "bdsm",
+      "power_exchange"
+    ],
+    "tests_secondary": [
+      "obedience",
+      "rules",
+      "surrender"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Быть её сабмиссив",
+      "en": "Be her submissive"
+    }
+  }
+}

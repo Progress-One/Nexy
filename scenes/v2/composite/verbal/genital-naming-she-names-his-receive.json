@@ -1,0 +1,115 @@
+{
+  "id": "genital-naming-she-names-his-receive",
+  "slug": "genital-naming-she-names-his-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "genital-naming-she-names-his",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Как называть",
+    "en": "What to call it"
+  },
+  "subtitle": {
+    "ru": "Твоё интимное место",
+    "en": "Your intimate parts"
+  },
+  "user_description": {
+    "ru": "Какими словами тебе нравится когда она называет твоё интимное место?",
+    "en": "What words do you like when she calls your intimate parts?"
+  },
+  "ai_description": {
+    "ru": "Какие слова М нравится слышать когда Ж называет его член.",
+    "en": "What words M likes to hear when F names his cock."
+  },
+  "intensity": 2,
+  "category": "verbal",
+  "tags": [
+    "dirty_talk",
+    "verbal",
+    "naming",
+    "genitals"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "genital_naming",
+      "dirty_talk"
+    ],
+    "tests_secondary": [
+      "verbal_preference"
+    ]
+  },
+  "question": {
+    "type": "multi_select",
+    "text": {
+      "ru": "Какие слова тебе нравится слышать?",
+      "en": "What words do you like to hear?"
+    },
+    "options": [
+      {
+        "id": "chlen",
+        "label": {
+          "ru": "Член",
+          "en": "Cock"
+        }
+      },
+      {
+        "id": "hui",
+        "label": {
+          "ru": "Хуй",
+          "en": "Dick"
+        }
+      },
+      {
+        "id": "bolt",
+        "label": {
+          "ru": "Болт",
+          "en": "Rod"
+        }
+      },
+      {
+        "id": "palka",
+        "label": {
+          "ru": "Палка",
+          "en": "Stick"
+        }
+      },
+      {
+        "id": "elda",
+        "label": {
+          "ru": "Елда",
+          "en": "Shaft"
+        }
+      },
+      {
+        "id": "tam",
+        "label": {
+          "ru": "Там",
+          "en": "Down there"
+        }
+      },
+      {
+        "id": "on",
+        "label": {
+          "ru": "Он",
+          "en": "It"
+        }
+      },
+      {
+        "id": "penis",
+        "label": {
+          "ru": "Пенис",
+          "en": "Penis"
+        }
+      }
+    ],
+    "allow_other": true,
+    "other_placeholder": {
+      "ru": "Своё слово...",
+      "en": "Your own word..."
+    },
+    "min_selections": 0
+  }
+}

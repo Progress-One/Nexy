@@ -1,0 +1,56 @@
+{
+  "id": "she-follows",
+  "slug": "she-follows",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": true,
+  "onboarding_order": 5,
+  "for_gender": "female",
+  "paired_scene": "he-leads",
+  "role_direction": "m_to_f",
+  "sets_gate": "female_follows",
+  "title": {
+    "ru": "Он ведёт",
+    "en": "He Leads"
+  },
+  "subtitle": {
+    "ru": "Ты отдаёшься",
+    "en": "You surrender"
+  },
+  "user_description": {
+    "ru": "Он направляет, инициирует, задаёт ритм. Ты следуешь за ним, отдаёшься.",
+    "en": "He directs, initiates, sets the pace. You follow his lead, surrender."
+  },
+  "ai_description": {
+    "ru": "Она следует за ним в сексе. Отдаётся его инициативе, позволяет вести. Лайтовая версия подчинения — не BDSM, просто он главный.",
+    "en": "She follows his lead in sex. Surrenders to his initiative, lets him lead. Light submission — not BDSM, just him in charge."
+  },
+  "image_prompt": "woman being gently guided onto bed by man, relaxed trusting posture, his hand on her waist, bedroom",
+  "intensity": 1,
+  "category": "control-power",
+  "tags": [
+    "following",
+    "surrender",
+    "trust",
+    "light_submission"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "following",
+      "surrender",
+      "female_submissive"
+    ],
+    "tests_secondary": [
+      "trust",
+      "letting_go"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Отдаться его инициативе",
+      "en": "Follow his lead"
+    }
+  }
+}

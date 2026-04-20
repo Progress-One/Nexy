@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@/lib/supabase/compat-types';
 import type { Scene, Proposal } from './types';
 
 export interface ProposalWithScene {

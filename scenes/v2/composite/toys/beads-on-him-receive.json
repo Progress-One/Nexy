@@ -1,0 +1,55 @@
+{
+  "id": "beads-on-him-receive",
+  "slug": "beads-on-him-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "anal-play-on-him-receive"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "beads-on-him",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Шарики для тебя",
+    "en": "Beads for You"
+  },
+  "subtitle": {
+    "ru": "Она использует на тебе",
+    "en": "She uses on you"
+  },
+  "user_description": {
+    "ru": "Она использует на тебе цепочку шариков — медленно вводит и вытягивает.",
+    "en": "She uses a string of beads on you — slowly inserts and pulls out."
+  },
+  "ai_description": {
+    "ru": "Она использует на нём анальные шарики — медленно вводит и вытягивает.",
+    "en": "She uses anal beads on him — slowly inserting and pulling out."
+  },
+  "image_prompt": "silicone anal beads, intimate bedroom setting",
+  "intensity": 2,
+  "category": "toys",
+  "tags": [
+    "toys",
+    "beads",
+    "anal",
+    "receiving"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "toys",
+      "beads"
+    ],
+    "tests_secondary": [
+      "receiving"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Шарики для тебя",
+      "en": "Beads for you"
+    }
+  }
+}

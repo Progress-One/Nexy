@@ -6,7 +6,7 @@ import type {
   BodyMapAnswer,
   BodyZoneId,
 } from './types';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@/lib/supabase/compat-types';
 
 /**
  * Get response category from answer

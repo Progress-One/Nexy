@@ -1,0 +1,59 @@
+{
+  "id": "cum-on-tits-receive",
+  "slug": "cum-on-tits-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "finish-preference-f",
+    "titfuck-receive"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "cum-on-tits",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Он кончает на грудь",
+    "en": "Cum on Tits"
+  },
+  "subtitle": {
+    "ru": "Принять на грудь",
+    "en": "Receive on chest"
+  },
+  "user_description": {
+    "ru": "Он кончает тебе на грудь. Тёплая сперма стекает по твоей коже.",
+    "en": "He cums on your tits. Warm cum dripping on your skin."
+  },
+  "ai_description": {
+    "ru": "Она принимает его сперму на грудь.",
+    "en": "She receives his cum on her tits."
+  },
+  "image_prompt": "intimate moment, woman lying on back, man over her, focus on chest area, bedroom",
+  "intensity": 2,
+  "category": "body-fluids",
+  "tags": [
+    "cum",
+    "tits",
+    "chest",
+    "finish",
+    "receive"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "cum",
+      "tits",
+      "finish"
+    ],
+    "tests_secondary": [
+      "visual",
+      "breasts"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Принять сперму на грудь",
+      "en": "Receive cum on tits"
+    }
+  }
+}

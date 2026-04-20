@@ -1,0 +1,115 @@
+{
+  "id": "oral-wording-he-says-receive",
+  "slug": "oral-wording-he-says-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "oral-wording-he-says",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Как говорить про оральный",
+    "en": "How to talk about oral"
+  },
+  "subtitle": {
+    "ru": "Что ты хочешь слышать",
+    "en": "What you want to hear"
+  },
+  "user_description": {
+    "ru": "Какими словами тебе нравится когда он говорит про оральный секс?",
+    "en": "What words do you like when he talks about oral sex?"
+  },
+  "ai_description": {
+    "ru": "Какие слова Ж нравится слышать от М про оральный секс.",
+    "en": "What words F likes to hear from M about oral sex."
+  },
+  "intensity": 2,
+  "category": "verbal",
+  "tags": [
+    "oral",
+    "dirty_talk",
+    "verbal",
+    "wording"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "oral_wording",
+      "dirty_talk"
+    ],
+    "tests_secondary": [
+      "verbal_preference"
+    ]
+  },
+  "question": {
+    "type": "multi_select",
+    "text": {
+      "ru": "Какие фразы тебе нравится слышать?",
+      "en": "What phrases do you like to hear?"
+    },
+    "options": [
+      {
+        "id": "otsosi",
+        "label": {
+          "ru": "Отсоси мне",
+          "en": "Suck me"
+        }
+      },
+      {
+        "id": "minet",
+        "label": {
+          "ru": "Сделай минет",
+          "en": "Give me a blowjob"
+        }
+      },
+      {
+        "id": "voz_v_rot",
+        "label": {
+          "ru": "Возьми в рот",
+          "en": "Take it in your mouth"
+        }
+      },
+      {
+        "id": "lizhi",
+        "label": {
+          "ru": "Лижи",
+          "en": "Lick it"
+        }
+      },
+      {
+        "id": "glubzhe",
+        "label": {
+          "ru": "Глубже",
+          "en": "Deeper"
+        }
+      },
+      {
+        "id": "hochu_tvoyi_guby",
+        "label": {
+          "ru": "Хочу твои губы",
+          "en": "I want your lips"
+        }
+      },
+      {
+        "id": "polaskap",
+        "label": {
+          "ru": "Поласкай меня ртом",
+          "en": "Pleasure me with your mouth"
+        }
+      },
+      {
+        "id": "na_koleni",
+        "label": {
+          "ru": "На колени",
+          "en": "On your knees"
+        }
+      }
+    ],
+    "allow_other": true,
+    "other_placeholder": {
+      "ru": "Своя фраза...",
+      "en": "Your own phrase..."
+    },
+    "min_selections": 0
+  }
+}

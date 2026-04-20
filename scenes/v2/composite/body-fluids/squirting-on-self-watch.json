@@ -1,0 +1,58 @@
+{
+  "id": "squirting-on-self-watch",
+  "slug": "squirting-on-self-watch",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "squirting-on-self",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Она в своём сквирте",
+    "en": "She in Her Squirt"
+  },
+  "subtitle": {
+    "ru": "Смотреть как лежит в луже",
+    "en": "Watch her lie in puddle"
+  },
+  "user_description": {
+    "ru": "Ты смотришь как она лежит в луже своего сквирта, тёплая жидкость на её животе и бёдрах.",
+    "en": "You watch her lie in a puddle of her squirt, warm liquid on her belly and thighs."
+  },
+  "ai_description": {
+    "ru": "Он смотрит как она лежит в своём сквирте.",
+    "en": "He watches her lie in her own squirt."
+  },
+  "image_prompt": "woman lying on bed in wet puddle, liquid covering her belly and thighs, wet sheets, bedroom, man watching",
+  "intensity": 3,
+  "category": "body-fluids",
+  "tags": [
+    "squirting",
+    "squirt",
+    "wet",
+    "watching",
+    "body_fluids"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "squirting",
+      "watching",
+      "body_fluids"
+    ],
+    "tests_secondary": [
+      "messy",
+      "voyeur"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Смотреть как она в своём сквирте",
+      "en": "Watch her in her own squirt"
+    }
+  },
+  "clarification_for": [
+    "squirting-watch"
+  ]
+}

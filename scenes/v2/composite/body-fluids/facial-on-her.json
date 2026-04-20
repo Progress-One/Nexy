@@ -1,0 +1,58 @@
+{
+  "id": "facial-on-her",
+  "slug": "facial-on-her",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "finish-preference-m",
+    "blowjob"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "facial-on-her-receive",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Кончить на лицо",
+    "en": "Facial"
+  },
+  "subtitle": {
+    "ru": "Финиш на её лицо",
+    "en": "Finish on her face"
+  },
+  "user_description": {
+    "ru": "Ты кончаешь ей на лицо. Она смотрит на тебя снизу.",
+    "en": "You cum on her face. She looks up at you."
+  },
+  "ai_description": {
+    "ru": "Он кончает ей на лицо. Она на коленях или лежит, смотрит на него.",
+    "en": "He cums on her face. She's on her knees or lying down, looking at him."
+  },
+  "image_prompt": "intimate moment, man standing, woman on knees looking up, bedroom, implied finish",
+  "intensity": 3,
+  "category": "body-fluids",
+  "tags": [
+    "facial",
+    "cum",
+    "finish",
+    "face"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "facial",
+      "cum",
+      "finish"
+    ],
+    "tests_secondary": [
+      "dominant",
+      "visual"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Кончить ей на лицо",
+      "en": "Cum on her face"
+    }
+  }
+}

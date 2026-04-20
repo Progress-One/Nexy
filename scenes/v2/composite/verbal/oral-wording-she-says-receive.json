@@ -1,0 +1,115 @@
+{
+  "id": "oral-wording-she-says-receive",
+  "slug": "oral-wording-she-says-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "oral-wording-she-says",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Как говорить про оральный",
+    "en": "How to talk about oral"
+  },
+  "subtitle": {
+    "ru": "Что ты хочешь слышать",
+    "en": "What you want to hear"
+  },
+  "user_description": {
+    "ru": "Какими словами тебе нравится когда она говорит про оральный секс?",
+    "en": "What words do you like when she talks about oral sex?"
+  },
+  "ai_description": {
+    "ru": "Какие слова М нравится слышать от Ж про оральный секс.",
+    "en": "What words M likes to hear from F about oral sex."
+  },
+  "intensity": 2,
+  "category": "verbal",
+  "tags": [
+    "oral",
+    "dirty_talk",
+    "verbal",
+    "wording"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "oral_wording",
+      "dirty_talk"
+    ],
+    "tests_secondary": [
+      "verbal_preference"
+    ]
+  },
+  "question": {
+    "type": "multi_select",
+    "text": {
+      "ru": "Какие фразы тебе нравится слышать?",
+      "en": "What phrases do you like to hear?"
+    },
+    "options": [
+      {
+        "id": "hochu_oblizat",
+        "label": {
+          "ru": "Хочу облизать",
+          "en": "I want to lick it"
+        }
+      },
+      {
+        "id": "hochu_vzyat_v_rot",
+        "label": {
+          "ru": "Хочу взять в рот",
+          "en": "I want to take it in my mouth"
+        }
+      },
+      {
+        "id": "day_mne",
+        "label": {
+          "ru": "Дай мне",
+          "en": "Give it to me"
+        }
+      },
+      {
+        "id": "vkusnyy",
+        "label": {
+          "ru": "Какой вкусный",
+          "en": "So tasty"
+        }
+      },
+      {
+        "id": "bolshoy",
+        "label": {
+          "ru": "Какой большой",
+          "en": "So big"
+        }
+      },
+      {
+        "id": "hochu_otsosat",
+        "label": {
+          "ru": "Хочу отсосать тебе",
+          "en": "I want to suck you"
+        }
+      },
+      {
+        "id": "konchi_mne_v_rot",
+        "label": {
+          "ru": "Кончи мне в рот",
+          "en": "Cum in my mouth"
+        }
+      },
+      {
+        "id": "lyublyu_tvoy",
+        "label": {
+          "ru": "Люблю твой член",
+          "en": "I love your cock"
+        }
+      }
+    ],
+    "allow_other": true,
+    "other_placeholder": {
+      "ru": "Своя фраза...",
+      "en": "Your own phrase..."
+    },
+    "min_selections": 0
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "id": "electrostim-m-to-f",
+  "slug": "electrostim-m-to-f",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": ["electrostim"],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "electrostim-m-to-f-receive",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Электростимуляция (на ней)",
+    "en": "Electrostimulation (on Her)"
+  },
+  "subtitle": {
+    "ru": "Ты используешь электроды на ней",
+    "en": "You use electrodes on her"
+  },
+  "user_description": {
+    "ru": "Ты прикрепляешь электроды к её телу — слабые импульсы от покалывания до мышечных сокращений.",
+    "en": "You attach electrodes to her body — mild impulses from tingling to muscle contractions."
+  },
+  "ai_description": {
+    "ru": "Он использует электростимуляцию на ней. Слабые электрические импульсы для стимуляции. Специальные устройства для эротической электростимуляции.",
+    "en": "He uses electrostimulation on her. Mild electrical impulses for stimulation. Special devices for erotic electrostimulation."
+  },
+  "image_prompt": "woman lying on bed with electrode pads attached to thighs, man controlling device, bedroom with soft lighting",
+  "intensity": 4,
+  "category": "sensory",
+  "tags": [
+    "electrostim",
+    "e-stim",
+    "TENS",
+    "violet_wand",
+    "sensation",
+    "m_dom"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "electrostim",
+      "e-stim",
+      "violet_wand"
+    ],
+    "tests_secondary": [
+      "sensation",
+      "sensory_play",
+      "TENS"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Использовать электростимуляцию на ней?",
+      "en": "Use electrostimulation on her?"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "id": "nipple-clamps-on-her-receive",
+  "slug": "nipple-clamps-on-her-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "nipple-play-m-to-f-receive"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "nipple-clamps-on-her",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Зажимы для тебя",
+    "en": "Clamps for You"
+  },
+  "subtitle": {
+    "ru": "Он надевает тебе",
+    "en": "He puts on you"
+  },
+  "user_description": {
+    "ru": "Он надевает тебе зажимы на соски. Регулирует давление.",
+    "en": "He puts nipple clamps on you. Adjusts the pressure."
+  },
+  "ai_description": {
+    "ru": "Он надевает ей зажимы на соски — боль и удовольствие под его контролем.",
+    "en": "He puts nipple clamps on her — pain and pleasure under his control."
+  },
+  "image_prompt": "woman with nipple clamps, man adjusting the clamps, close-up on chest, bedroom setting",
+  "intensity": 3,
+  "category": "toys",
+  "tags": [
+    "toys",
+    "nipple_clamps",
+    "pain",
+    "receiving"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "nipple_clamps",
+      "toys"
+    ],
+    "tests_secondary": [
+      "pain",
+      "receiving"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Зажимы на твои соски",
+      "en": "Clamps on your nipples"
+    }
+  }
+}

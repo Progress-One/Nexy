@@ -1,0 +1,56 @@
+{
+  "id": "cum-on-himself-receive",
+  "slug": "cum-on-himself-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "finish-preference-f"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "cum-on-himself",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Он кончает на себя",
+    "en": "He Cums on Himself"
+  },
+  "subtitle": {
+    "ru": "Смотреть как он в сперме",
+    "en": "Watch him covered"
+  },
+  "user_description": {
+    "ru": "Он кончает на своё тело. Ты смотришь как сперма на его животе, груди.",
+    "en": "He cums on his own body. You watch cum on his belly, chest."
+  },
+  "ai_description": {
+    "ru": "Она смотрит как он кончает на себя. Сперма на его теле.",
+    "en": "She watches him cum on himself. Cum on his body."
+  },
+  "image_prompt": "woman watching man lying with cum on his stomach, bedroom",
+  "intensity": 2,
+  "category": "body-fluids",
+  "tags": [
+    "cum",
+    "watching",
+    "finish",
+    "body"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "cum",
+      "watching",
+      "finish"
+    ],
+    "tests_secondary": [
+      "visual"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Смотреть как он кончает на себя",
+      "en": "Watch him cum on himself"
+    }
+  }
+}

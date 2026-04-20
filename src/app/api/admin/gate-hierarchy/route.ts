@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/compat-types';
 import { SCENE_GATES, ALL_GATES } from '@/lib/onboarding-gates';
 
 const supabase = createClient(

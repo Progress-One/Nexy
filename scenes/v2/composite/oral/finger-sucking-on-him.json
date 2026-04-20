@@ -1,0 +1,43 @@
+{
+  "id": "finger-sucking-on-him",
+  "slug": "finger-sucking-on-him",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": ["cunnilingus"],
+  "paired_scene": "finger-sucking-on-him-receive",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Мои пальцы у него во рту",
+    "en": "My Fingers in His Mouth"
+  },
+  "subtitle": {
+    "ru": "Он сосёт мои пальцы",
+    "en": "He sucks my fingers"
+  },
+  "user_description": {
+    "ru": "Дать ему свои пальцы. Смотреть как он их облизывает и посасывает.",
+    "en": "Give him my fingers. Watch him lick and suck them."
+  },
+  "ai_description": {
+    "ru": "Вложить пальцы партнёру в рот, он нежно облизывает и посасывает. Визуальное удовольствие и контроль.",
+    "en": "Put fingers in his mouth, he gently licks and sucks them. Visual pleasure and control."
+  },
+  "image_prompt": "intimate couple, woman's fingers near man's lips, sensual moment, soft lighting",
+  "intensity": 1,
+  "category": "oral",
+  "tags": ["oral", "finger_sucking", "licking", "sensual", "teasing", "control"],
+  "ai_context": {
+    "tests_primary": ["oral", "finger_sucking", "control"],
+    "tests_secondary": ["teasing", "visual", "foreplay"]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Дать ему сосать пальцы",
+      "en": "Let him suck my fingers"
+    }
+  }
+}

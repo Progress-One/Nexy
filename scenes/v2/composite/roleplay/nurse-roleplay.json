@@ -1,0 +1,58 @@
+{
+  "id": "nurse-roleplay",
+  "slug": "nurse-roleplay",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "doctor-patient"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "nurse-roleplay-receive",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Медсестра",
+    "en": "Nurse Roleplay"
+  },
+  "subtitle": {
+    "ru": "Она ухаживает за тобой",
+    "en": "She takes care of you"
+  },
+  "user_description": {
+    "ru": "Она в костюме медсестры. Ухаживает за тобой, делает процедуры. Забота переходит в секс.",
+    "en": "She's in nurse outfit. Takes care of you, does procedures. Care turns into sex."
+  },
+  "ai_description": {
+    "ru": "Она медсестра, он пациент. Забота, процедуры, униформа. Мягкая власть через заботу.",
+    "en": "She's the nurse, he's the patient. Care, procedures, uniform. Soft power through caring."
+  },
+  "image_prompt": "woman in sexy nurse costume leaning over man in bed, medical props, bedroom styled as hospital room",
+  "intensity": 2,
+  "category": "roleplay",
+  "tags": [
+    "roleplay",
+    "nurse",
+    "medical",
+    "uniform",
+    "caring"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "roleplay",
+      "nurse",
+      "uniform"
+    ],
+    "tests_secondary": [
+      "caring",
+      "medical"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Она медсестра, ты пациент",
+      "en": "She's nurse, you're patient"
+    }
+  }
+}

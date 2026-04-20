@@ -1,0 +1,58 @@
+{
+  "id": "gag-on-her-receive",
+  "slug": "gag-on-her-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "she-follows",
+    "bondage-m-ties-f-receive"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "gag-on-her",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Кляп",
+    "en": "Gagged"
+  },
+  "subtitle": {
+    "ru": "Рот заткнут",
+    "en": "Mouth silenced"
+  },
+  "user_description": {
+    "ru": "Он вставляет тебе кляп. Ты не можешь говорить, только мычать.",
+    "en": "He puts a gag in your mouth. You can't speak, only moan."
+  },
+  "ai_description": {
+    "ru": "Ей затыкают рот кляпом. Потеря контроля над голосом, беспомощность.",
+    "en": "Her mouth is gagged. Loss of voice control, helplessness."
+  },
+  "image_prompt": "woman with ball gag in mouth, man's hands fastening it, bedroom",
+  "intensity": 3,
+  "category": "bondage",
+  "tags": [
+    "gag",
+    "bondage",
+    "submission",
+    "silence"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "gag",
+      "bondage",
+      "submission"
+    ],
+    "tests_secondary": [
+      "helpless",
+      "silence"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Кляп во рту",
+      "en": "Gagged mouth"
+    }
+  }
+}

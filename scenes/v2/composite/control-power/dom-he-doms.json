@@ -1,0 +1,60 @@
+{
+  "id": "dom-he-doms",
+  "slug": "dom-he-doms",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "he-leads"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "sub-she-subs",
+  "role_direction": "m_to_f",
+  "sets_gate": "male_dominant",
+  "title": {
+    "ru": "Доминант",
+    "en": "Dominant"
+  },
+  "subtitle": {
+    "ru": "Ты — Дом",
+    "en": "You're the Dom"
+  },
+  "user_description": {
+    "ru": "Ты — Доминант. Приказы, правила, наказания за непослушание. Она твоя сабмиссив.",
+    "en": "You're the Dominant. Orders, rules, punishments for disobedience. She's your submissive."
+  },
+  "ai_description": {
+    "ru": "Он — Доминант в D/s отношениях. Устанавливает правила, даёт приказы, наказывает. Осознанная BDSM динамика.",
+    "en": "He's the Dominant in D/s relationship. Sets rules, gives orders, punishes. Conscious BDSM dynamic."
+  },
+  "image_prompt": "dominant man standing over kneeling woman, his hand on her chin lifting her face, authoritative posture, bedroom with dim lighting",
+  "intensity": 3,
+  "category": "control-power",
+  "tags": [
+    "dominant",
+    "dom",
+    "bdsm",
+    "power_exchange",
+    "ds"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "dominant",
+      "bdsm",
+      "power_exchange"
+    ],
+    "tests_secondary": [
+      "control",
+      "rules",
+      "punishment"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Быть её Доминантом",
+      "en": "Be her Dominant"
+    }
+  }
+}

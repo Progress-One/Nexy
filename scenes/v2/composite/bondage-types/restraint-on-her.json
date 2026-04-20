@@ -1,0 +1,43 @@
+{
+  "id": "restraint-on-her",
+  "slug": "restraint-on-her",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": ["bondage-m-ties-f"],
+  "paired_scene": "restraint-on-her-receive",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Надеть на неё наручники",
+    "en": "Put Cuffs on Her"
+  },
+  "subtitle": {
+    "ru": "Фиксация её рук",
+    "en": "Restrain her hands"
+  },
+  "user_description": {
+    "ru": "Зафиксировать её руки наручниками, ремнями или мягкими путами.",
+    "en": "Restrain her hands with cuffs, straps, or soft bonds."
+  },
+  "ai_description": {
+    "ru": "Надеть на партнёршу наручники или ремни, зафиксировать руки. Контроль и власть.",
+    "en": "Put cuffs or straps on partner, restrain her hands. Control and power."
+  },
+  "image_prompt": "man putting leather cuffs on woman's wrists, bedroom setting, intimate",
+  "intensity": 2,
+  "category": "bondage",
+  "tags": ["bondage", "restraint", "cuffs", "control", "dominant"],
+  "ai_context": {
+    "tests_primary": ["bondage", "restraint", "control"],
+    "tests_secondary": ["dominant", "power"]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Надеть на неё наручники",
+      "en": "Put cuffs on her"
+    }
+  }
+}

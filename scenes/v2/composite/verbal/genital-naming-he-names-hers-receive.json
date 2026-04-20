@@ -1,0 +1,115 @@
+{
+  "id": "genital-naming-he-names-hers-receive",
+  "slug": "genital-naming-he-names-hers-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "genital-naming-he-names-hers",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Как называть",
+    "en": "What to call it"
+  },
+  "subtitle": {
+    "ru": "Твоё интимное место",
+    "en": "Your intimate parts"
+  },
+  "user_description": {
+    "ru": "Какими словами тебе нравится когда он называет твоё интимное место?",
+    "en": "What words do you like when he calls your intimate parts?"
+  },
+  "ai_description": {
+    "ru": "Какие слова Ж нравится слышать когда М называет её интимное место.",
+    "en": "What words F likes to hear when M names her intimate parts."
+  },
+  "intensity": 2,
+  "category": "verbal",
+  "tags": [
+    "dirty_talk",
+    "verbal",
+    "naming",
+    "genitals"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "genital_naming",
+      "dirty_talk"
+    ],
+    "tests_secondary": [
+      "verbal_preference"
+    ]
+  },
+  "question": {
+    "type": "multi_select",
+    "text": {
+      "ru": "Какие слова тебе нравится слышать?",
+      "en": "What words do you like to hear?"
+    },
+    "options": [
+      {
+        "id": "kiska",
+        "label": {
+          "ru": "Киска",
+          "en": "Pussy"
+        }
+      },
+      {
+        "id": "pizda",
+        "label": {
+          "ru": "Пизда",
+          "en": "Cunt"
+        }
+      },
+      {
+        "id": "schelka",
+        "label": {
+          "ru": "Щёлка",
+          "en": "Slit"
+        }
+      },
+      {
+        "id": "dyrka",
+        "label": {
+          "ru": "Дырка",
+          "en": "Hole"
+        }
+      },
+      {
+        "id": "manda",
+        "label": {
+          "ru": "Манда",
+          "en": "Snatch"
+        }
+      },
+      {
+        "id": "tam",
+        "label": {
+          "ru": "Там внизу",
+          "en": "Down there"
+        }
+      },
+      {
+        "id": "vlagalishe",
+        "label": {
+          "ru": "Влагалище",
+          "en": "Vagina"
+        }
+      },
+      {
+        "id": "prelest",
+        "label": {
+          "ru": "Прелесть",
+          "en": "Pretty thing"
+        }
+      }
+    ],
+    "allow_other": true,
+    "other_placeholder": {
+      "ru": "Своё слово...",
+      "en": "Your own word..."
+    },
+    "min_selections": 0
+  }
+}

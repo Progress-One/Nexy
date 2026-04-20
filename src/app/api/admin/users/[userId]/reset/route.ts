@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/compat-types';
 
 // Use service role for admin operations (bypasses RLS)
 const supabase = createClient(

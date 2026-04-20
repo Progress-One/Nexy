@@ -1,0 +1,58 @@
+{
+  "id": "panty-gag-on-her",
+  "slug": "panty-gag-on-her",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "gag-on-her"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "panty-gag-on-her-receive",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Трусики во рту",
+    "en": "Panty Gag"
+  },
+  "subtitle": {
+    "ru": "Её трусики как кляп",
+    "en": "Her panties as gag"
+  },
+  "user_description": {
+    "ru": "Ты засовываешь её трусики ей в рот. Вкус и запах её возбуждения.",
+    "en": "You stuff her panties in her mouth. Taste and smell of her arousal."
+  },
+  "ai_description": {
+    "ru": "Он использует её трусики как кляп. Интимность, её вкус во рту, унижение и возбуждение.",
+    "en": "He uses her panties as a gag. Intimacy, her taste in her mouth, humiliation and arousal."
+  },
+  "image_prompt": "man stuffing panties into woman's mouth, she's on bed, bedroom",
+  "intensity": 3,
+  "category": "bondage",
+  "tags": [
+    "gag",
+    "panties",
+    "humiliation",
+    "intimate"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "gag",
+      "panties",
+      "humiliation"
+    ],
+    "tests_secondary": [
+      "scent",
+      "taste",
+      "intimate"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Её трусики ей в рот",
+      "en": "Her panties in her mouth"
+    }
+  }
+}

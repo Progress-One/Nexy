@@ -1,0 +1,53 @@
+{
+  "id": "masturbation-she-watches-him-receive",
+  "slug": "masturbation-she-watches-him-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "masturbation-she-watches-him",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Ласкать себя для неё",
+    "en": "Touch yourself for her"
+  },
+  "subtitle": {
+    "ru": "Она смотрит на тебя",
+    "en": "She watches you"
+  },
+  "user_description": {
+    "ru": "Ты ласкаешь себя пока она смотрит.",
+    "en": "You touch yourself while she watches."
+  },
+  "ai_description": {
+    "ru": "Он мастурбирует пока Ж смотрит. Эксгибиционизм, открытость.",
+    "en": "He masturbates while F watches. Exhibitionism, openness."
+  },
+  "image_prompt": "man masturbating on bed while woman watches, intimate bedroom setting, soft lighting",
+  "intensity": 2,
+  "category": "solo-mutual",
+  "tags": [
+    "showing",
+    "masturbation",
+    "exhibitionism",
+    "intimate"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "showing",
+      "exhibitionism"
+    ],
+    "tests_secondary": [
+      "intimacy",
+      "vulnerability"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Ласкать себя пока она смотрит — возбуждает",
+      "en": "Touching yourself while she watches — arousing"
+    }
+  }
+}

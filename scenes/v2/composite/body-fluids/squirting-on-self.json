@@ -1,0 +1,58 @@
+{
+  "id": "squirting-on-self",
+  "slug": "squirting-on-self",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "squirting-on-self-watch",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Сквирт на себя",
+    "en": "Squirt on Self"
+  },
+  "subtitle": {
+    "ru": "В своей тёплой луже",
+    "en": "In your own warm puddle"
+  },
+  "user_description": {
+    "ru": "Тёплая волна сквирта омывает твой живот и бёдра. Ты лежишь в своей луже.",
+    "en": "Warm wave of squirt washes over your belly and thighs. You lie in your own puddle."
+  },
+  "ai_description": {
+    "ru": "Она лежит в своём сквирте, тёплая жидкость на животе и бёдрах.",
+    "en": "She lies in her own squirt, warm liquid on her belly and thighs."
+  },
+  "image_prompt": "woman lying on bed in wet puddle, liquid covering her belly and thighs, wet sheets, bedroom",
+  "intensity": 3,
+  "category": "body-fluids",
+  "tags": [
+    "squirting",
+    "squirt",
+    "wet",
+    "self",
+    "body_fluids"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "squirting",
+      "wet",
+      "body_fluids"
+    ],
+    "tests_secondary": [
+      "messy",
+      "self_pleasure"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Лежать в своём сквирте",
+      "en": "Lie in your own squirt"
+    }
+  },
+  "clarification_for": [
+    "squirting"
+  ]
+}

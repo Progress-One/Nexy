@@ -1,0 +1,56 @@
+{
+  "id": "butt-plug-on-him-receive",
+  "slug": "butt-plug-on-him-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "anal-play-on-him-receive"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "butt-plug-on-him",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Пробка для тебя",
+    "en": "Plug for You"
+  },
+  "subtitle": {
+    "ru": "Она вставляет тебе",
+    "en": "She inserts in you"
+  },
+  "user_description": {
+    "ru": "Она вставляет тебе анальную пробку. Ты носишь для неё.",
+    "en": "She inserts a butt plug in you. You wear it for her."
+  },
+  "ai_description": {
+    "ru": "Она вставляет ему анальную пробку — он носит для неё.",
+    "en": "She inserts a butt plug in him — he wears it for her."
+  },
+  "image_prompt": "man on all fours, woman with butt plug ready to insert, bedroom setting",
+  "intensity": 3,
+  "category": "toys",
+  "tags": [
+    "toys",
+    "butt_plug",
+    "anal",
+    "receiving"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "butt_plug",
+      "toys",
+      "anal"
+    ],
+    "tests_secondary": [
+      "receiving"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Пробка для тебя",
+      "en": "Plug for you"
+    }
+  }
+}

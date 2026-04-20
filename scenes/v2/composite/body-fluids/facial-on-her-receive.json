@@ -1,0 +1,59 @@
+{
+  "id": "facial-on-her-receive",
+  "slug": "facial-on-her-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "finish-preference-f",
+    "blowjob"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "facial-on-her",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Он кончает на лицо",
+    "en": "Facial"
+  },
+  "subtitle": {
+    "ru": "Принять на лицо",
+    "en": "Receive on face"
+  },
+  "user_description": {
+    "ru": "Он кончает тебе на лицо. Ты смотришь на него снизу.",
+    "en": "He cums on your face. You look up at him."
+  },
+  "ai_description": {
+    "ru": "Она принимает его сперму на лицо. На коленях или лёжа, смотрит на него.",
+    "en": "She receives his cum on her face. On her knees or lying down, looking at him."
+  },
+  "image_prompt": "intimate moment, man standing, woman on knees looking up, bedroom, implied finish",
+  "intensity": 3,
+  "category": "body-fluids",
+  "tags": [
+    "facial",
+    "cum",
+    "finish",
+    "face",
+    "receive"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "facial",
+      "cum",
+      "finish"
+    ],
+    "tests_secondary": [
+      "submissive",
+      "visual"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Принять сперму на лицо",
+      "en": "Receive cum on face"
+    }
+  }
+}

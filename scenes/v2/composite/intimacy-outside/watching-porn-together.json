@@ -1,0 +1,58 @@
+{
+  "id": "watching-porn-together",
+  "slug": "watching-porn-together",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "filming"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": null,
+  "role_direction": "mutual",
+  "title": {
+    "ru": "Порно вместе",
+    "en": "Watching Porn Together"
+  },
+  "subtitle": {
+    "ru": "Смотреть и обсуждать",
+    "en": "Watch and discuss"
+  },
+  "user_description": {
+    "ru": "Вы вместе смотрите порно. Выбираете видео, комментируете, повторяете.",
+    "en": "You watch porn together. Choose videos, comment, repeat what you see."
+  },
+  "ai_description": {
+    "ru": "Совместный просмотр порно. Выбирают видео вместе, обсуждают что нравится, пробуют повторить.",
+    "en": "Watching porn together. Choose videos, discuss what turns them on, try to repeat."
+  },
+  "image_prompt": "couple sitting on couch in dim room, laptop screen glowing on coffee table, both looking at screen, casual home clothes, living room",
+  "intensity": 2,
+  "category": "intimacy-outside",
+  "tags": [
+    "porn",
+    "watching",
+    "together",
+    "discussing",
+    "intimacy"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "porn",
+      "watching",
+      "together"
+    ],
+    "tests_secondary": [
+      "discussing",
+      "exploration",
+      "ideas"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Смотреть порно вместе",
+      "en": "Watch porn together"
+    }
+  }
+}

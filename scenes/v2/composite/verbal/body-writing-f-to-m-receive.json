@@ -1,0 +1,54 @@
+{
+  "id": "body-writing-she-writes-on-him-receive",
+  "slug": "body-writing-she-writes-on-him-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "body-writing-she-writes-on-him",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Надписи на теле",
+    "en": "Body Writing"
+  },
+  "subtitle": {
+    "ru": "Она пишет на тебе",
+    "en": "She writes on you"
+  },
+  "user_description": {
+    "ru": "Она пишет на твоём теле маркером — слова, своё имя, знаки.",
+    "en": "She writes on your body with marker — words, her name, marks."
+  },
+  "ai_description": {
+    "ru": "М позволяет Ж писать на его теле — знаки принадлежности, метки.",
+    "en": "M allows F to write on his body — marks of ownership, tags."
+  },
+  "image_prompt": "woman writing with marker on man's body, he lying on bed, intimate bedroom setting",
+  "intensity": 4,
+  "category": "verbal",
+  "tags": [
+    "body_writing",
+    "marking",
+    "ownership",
+    "femdom",
+    "d_s"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "body_writing",
+      "marking"
+    ],
+    "tests_secondary": [
+      "ownership",
+      "femdom"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Надписи на твоём теле — возбуждает",
+      "en": "Body writing on you — arousing"
+    }
+  }
+}

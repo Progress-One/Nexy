@@ -1,0 +1,57 @@
+{
+  "id": "she-leads",
+  "slug": "she-leads",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": true,
+  "onboarding_order": 6,
+  "for_gender": "female",
+  "paired_scene": "he-follows",
+  "role_direction": "f_to_m",
+  "sets_gate": "female_leads",
+  "title": {
+    "ru": "Ты ведёшь",
+    "en": "You Lead"
+  },
+  "subtitle": {
+    "ru": "Инициатива твоя",
+    "en": "You take initiative"
+  },
+  "user_description": {
+    "ru": "Ты направляешь, инициируешь, задаёшь ритм. Он следует за тобой.",
+    "en": "You direct, initiate, set the pace. He follows your lead."
+  },
+  "ai_description": {
+    "ru": "Она ведёт в сексе. Инициирует, направляет, задаёт темп. Лайтовая версия доминирования — не BDSM, просто она главная.",
+    "en": "She leads in sex. Initiates, directs, sets the pace. Light version of dominance — not BDSM, just her in charge."
+  },
+  "image_prompt": "woman pushing man onto bed, confident posture, taking control, bedroom",
+  "intensity": 1,
+  "category": "control-power",
+  "tags": [
+    "leading",
+    "initiative",
+    "control",
+    "light_dominance",
+    "femdom_light"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "leading",
+      "initiative",
+      "female_dominant"
+    ],
+    "tests_secondary": [
+      "control",
+      "direction"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Вести в сексе",
+      "en": "Lead in sex"
+    }
+  }
+}

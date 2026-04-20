@@ -1,0 +1,56 @@
+{
+  "id": "cum-on-himself",
+  "slug": "cum-on-himself",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "finish-preference-m"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "cum-on-himself-receive",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Кончить на себя",
+    "en": "Cum on Himself"
+  },
+  "subtitle": {
+    "ru": "Сперма на своём теле",
+    "en": "Cum on own body"
+  },
+  "user_description": {
+    "ru": "Ты кончаешь на своё тело. Сперма на животе, груди.",
+    "en": "You cum on your own body. Cum on belly, chest."
+  },
+  "ai_description": {
+    "ru": "Он кончает на своё тело. Сперма на его животе или груди.",
+    "en": "He cums on his own body. Cum on his belly or chest."
+  },
+  "image_prompt": "man lying on back after orgasm, cum on his stomach, bedroom",
+  "intensity": 2,
+  "category": "body-fluids",
+  "tags": [
+    "cum",
+    "self",
+    "finish",
+    "body"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "cum",
+      "self",
+      "finish"
+    ],
+    "tests_secondary": [
+      "messy"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Кончить на себя",
+      "en": "Cum on yourself"
+    }
+  }
+}

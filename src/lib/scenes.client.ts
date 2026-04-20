@@ -1,5 +1,5 @@
 import type { Scene, SceneV2 } from '@/lib/types';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@/lib/supabase/compat-types';
 import { getAdaptiveScenes } from './scene-progression';
 
 // Client-side version that accepts a Supabase client

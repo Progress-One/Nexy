@@ -1,0 +1,986 @@
+[
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\age-play\\ddlg.json",
+    "slug": "daddy-dom-little-girl",
+    "for_gender": null,
+    "role_direction": "m_daddy_f_little",
+    "current_ru": "Мужчина играет роль Daddy, женщина играет роль его маленькой девочки",
+    "current_en": "Man plays the role of Daddy, woman plays the role of his little girl"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\age-play\\mdlb.json",
+    "slug": "mommy-dom-little-boy",
+    "for_gender": null,
+    "role_direction": "f_mommy_m_little",
+    "current_ru": "Женщина в роли Mommy доминирует над мужчиной, который играет её маленького мальчика",
+    "current_en": "Woman in Mommy role dominates over man who plays her little boy"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\anal\\anal-sex-receive.json",
+    "slug": "anal-sex-receive",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Он входит в твою попку членом. Медленно или страстно, глубоко.",
+    "current_en": "He enters your ass with his cock. Slowly or passionately, deep."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\anal\\pegging-receive.json",
+    "slug": "pegging-receive",
+    "for_gender": "male",
+    "role_direction": "f_to_m",
+    "current_ru": "Она надевает страпон и входит в тебя сзади. Ты наклоняешься и принимаешь её.",
+    "current_en": "She puts on a strap-on and enters you from behind. You bend over and receive her."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\anal\\pegging.json",
+    "slug": "pegging",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Женщина надевает страпон и входит в его анус сзади. Мужчина наклоняется вперёд и принимает её.",
+    "current_en": "Woman puts on a strap-on and enters his anus from behind. Man bends forward and receives her."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\baseline\\body-fetishes.json",
+    "slug": "body-fetishes",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Партнёр фокусируется на определённых частях тела — груди, попе, ногах, ступнях или других зонах",
+    "current_en": "Partner focuses on specific body parts — breasts, butt, legs, feet or other zones"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\baseline\\fantasy-reality.json",
+    "slug": "fantasy-reality",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Партнёры обсуждают свои фантазии и решают, какие из них воплотить",
+    "current_en": "Partners discuss their fantasies and decide which ones to act out"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\body-fluids\\cum-where-to-finish.json",
+    "slug": "cum-where-to-finish",
+    "for_gender": null,
+    "role_direction": "universal",
+    "current_ru": "Он кончает — на лицо, в рот, на грудь, внутрь или на тело.",
+    "current_en": "He cums — on face, in mouth, on breasts, inside or on body."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\body-fluids\\golden-shower-f-to-m.json",
+    "slug": "golden-shower-she-on-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она писает на него. Он на коленях принимает её струю.",
+    "current_en": "She pees on him. He kneels and receives her stream."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\body-fluids\\golden-shower-m-to-f.json",
+    "slug": "golden-shower-he-on-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он писает на неё. Она на коленях принимает его струю.",
+    "current_en": "He pees on her. She kneels and receives his stream."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\body-fluids\\spitting-f-to-m.json",
+    "slug": "spitting-she-on-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она плюёт ему в лицо или в рот. Он покорно принимает.",
+    "current_en": "She spits in his face or mouth. He submissively accepts."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\body-fluids\\spitting-m-to-f.json",
+    "slug": "spitting-he-on-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он плюёт ей в рот или на лицо. Она принимает с открытыми губами.",
+    "current_en": "He spits in her mouth or on face. She accepts with open lips."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\body-fluids\\squirt-receiving.json",
+    "slug": "squirt-receiving",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она сквиртует — ему в лицо, в рот, на тело. Он пьёт, смакует, выплёвывает на неё.",
+    "current_en": "She squirts — on his face, in his mouth, on his body. He drinks, savors, spits back on her."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\body-fluids\\squirting.json",
+    "slug": "squirting",
+    "for_gender": null,
+    "role_direction": "solo",
+    "current_ru": "Женщина испытывает сквирт во время оргазма — из неё выделяется струя жидкости",
+    "current_en": "Woman experiences squirting during orgasm — a stream of liquid comes from her"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\clothing\\harness-f.json",
+    "slug": "female-harness",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Она в портупее или харнессе — ремешки на голом теле, металлические кольца и цепочки.",
+    "current_en": "She wears harness — straps on naked body, metal rings and chains."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\clothing\\harness-m.json",
+    "slug": "male-harness",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Он в кожаном харнессе — ремешки на голом торсе, металлические кольца.",
+    "current_en": "He wears leather harness — straps on bare torso, metal rings."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\clothing\\heels-only.json",
+    "slug": "heels-only",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Она голая, только в туфлях на каблуках. Ходит перед ним или занимается сексом в них.",
+    "current_en": "She is naked, wearing only high heels. Walking for him or having sex in them."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\clothing\\latex-leather.json",
+    "slug": "latex-leather",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Партнёры носят одежду из латекса, кожи или винила",
+    "current_en": "Partners wear latex, leather or vinyl clothing"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\clothing\\lingerie-f.json",
+    "slug": "female-lingerie",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Женщина надевает красивое нижнее бельё — кружевное, из прозрачных тканей, с подвязками",
+    "current_en": "Woman wearing beautiful lingerie — lace, sheer fabrics, with garters"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\clothing\\lingerie-m.json",
+    "slug": "male-lingerie",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Он в эротическом белье — джокстрап, стринги или сетка. Показывает тело для неё.",
+    "current_en": "He wears erotic underwear — jockstrap, thong or mesh. Displays body for her."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\clothing\\stockings.json",
+    "slug": "stockings-garters",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Она в чулках с поясом. Он гладит её ноги и снимает чулки.",
+    "current_en": "She wears stockings with garters. He strokes her legs and removes the stockings."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\clothing\\uniforms-f.json",
+    "slug": "female-uniforms",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Она надевает костюм медсестры, горничной или секретарши. Он раздевает её.",
+    "current_en": "She puts on a nurse, maid or secretary costume. He undresses her."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\clothing\\uniforms-m.json",
+    "slug": "male-uniforms",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Он в униформе — полицейский, пожарный, дворецкий. Она раздевает его.",
+    "current_en": "He wears uniform — police, firefighter, butler. She undresses him."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\cnc-rough\\cnc-f-takes-m.json",
+    "slug": "cnc-she-takes-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Женщина прижимает мужчину к кровати за запястья, садится на него сверху, он делает вид что сопротивляется. По взаимному согласию.",
+    "current_en": "Woman pins man to bed by his wrists, mounts him on top, he pretends to resist. Consensual."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\cnc-rough\\cnc-m-takes-f.json",
+    "slug": "cnc-he-takes-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он прижимает её к стене, держит её руки над головой, входит в неё грубо. Она изображает сопротивление. По обоюдному согласию.",
+    "current_en": "He pins her against the wall, holds her hands above her head, enters her roughly. She acts resistant. Consensual."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\cnc-rough\\primal.json",
+    "slug": "primal",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Мужчина и женщина борются на полу, рычат, кусают друг друга. Он царапает её спину. Она кусает его шею.",
+    "current_en": "Man and woman wrestle on floor, growl, bite each other. He scratches her back. She bites his neck."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\cnc-rough\\somnophilia-f-to-m.json",
+    "slug": "somnophilia-f-to-m",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она занимается с ним сексом пока он спит. Он просыпается от того, что она уже на нём.",
+    "current_en": "She has sex with him while he sleeps. He wakes up to her already on him."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\cnc-rough\\somnophilia-m-to-f.json",
+    "slug": "somnophilia-m-to-f",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он занимается с ней сексом пока она спит. Она просыпается от того, что её трахают.",
+    "current_en": "He has sex with her while she sleeps. She wakes up to being fucked."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\bondage-f-ties-m.json",
+    "slug": "bondage-she-ties-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она связывает его руки — к кровати или за спиной.",
+    "current_en": "She ties his hands — to bed or behind back."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\bondage-m-ties-f.json",
+    "slug": "bondage-he-ties-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он связывает её руки — над головой или к кровати.",
+    "current_en": "He ties her hands — above head or to bed."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\collar-f-owns-m.json",
+    "slug": "collar-she-owns-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она надевает ему на шею ошейник и держит поводок",
+    "current_en": "She puts a collar on his neck and holds the leash"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\collar-m-owns-f.json",
+    "slug": "collar-he-owns-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он надевает на неё ошейник и держит поводок",
+    "current_en": "He puts a collar on her and holds the leash"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\edging-f-to-m.json",
+    "slug": "edging-she-controls-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она стимулирует его до состояния близкого к оргазму, затем останавливается. Повторяет это несколько раз.",
+    "current_en": "She stimulates him to near orgasm, then stops. Repeats this multiple times."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\edging-m-to-f.json",
+    "slug": "edging-he-controls-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он стимулирует её до грани оргазма и прекращает. Повторяет это несколько раз подряд.",
+    "current_en": "He stimulates her to the edge of orgasm and stops. He repeats this several times in a row."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\feminization.json",
+    "slug": "feminization",
+    "for_gender": null,
+    "role_direction": "f_dom_m_sub",
+    "current_ru": "Он надевает женскую одежду, макияж, парик. Она превращает его в девочку.",
+    "current_en": "He wears women's clothes, makeup, wig. She transforms him into a girl."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\forced-orgasm-f-to-m.json",
+    "slug": "forced-orgasm-on-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она продолжает стимулировать его после оргазма. Он связан и не может остановить её.",
+    "current_en": "She continues stimulating him after orgasm. He is restrained and cannot stop her."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\forced-orgasm-m-to-f.json",
+    "slug": "forced-orgasm-on-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он использует вибратор, чтобы довести её до оргазма несколько раз подряд. Она связана или удерживается и не может остановить его.",
+    "current_en": "He uses a vibrator to make her orgasm multiple times in a row. She is restrained or held and cannot stop him."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\free-use-f-available.json",
+    "slug": "free-use-f-available",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Она доступна для секса в любой момент. Он может трахнуть её во время домашних дел, работы или сна без спроса.",
+    "current_en": "She's available for sex anytime. He can fuck her during housework, work, or sleep without asking."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\free-use-m-available.json",
+    "slug": "free-use-m-available",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Он доступен для секса в любой момент. Она может использовать его во время игр, работы или сна без спроса.",
+    "current_en": "He's available for sex anytime. She can use him during games, work, or sleep without asking."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\ruined-orgasm-f-to-m.json",
+    "slug": "ruined-orgasm-f-to-m",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она стимулирует его до оргазма, затем в момент кульминации убирает руку — оргазм происходит без стимуляции",
+    "current_en": "She stimulates him until orgasm, then removes hand at climax — orgasm happens without stimulation"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\ruined-orgasm-m-to-f.json",
+    "slug": "ruined-orgasm-m-to-f",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он стимулирует её до оргазма, затем в момент кульминации останавливается — оргазм происходит без стимуляции",
+    "current_en": "He stimulates her until orgasm, then stops at climax — orgasm happens without stimulation"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\control-power\\sex-tasks.json",
+    "slug": "sex-tasks",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Партнёр даёт задания: сделать фото, написать фантазию, потрогать себя. Контроль на расстоянии.",
+    "current_en": "Partner gives tasks: take a photo, write a fantasy, touch yourself. Remote control."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\cuckold\\cuckold.json",
+    "slug": "cuckold",
+    "for_gender": null,
+    "role_direction": "cuckold",
+    "current_ru": "Женщина занимается сексом с одним мужчиной, пока её партнёр наблюдает за ними.",
+    "current_en": "A woman has sex with one man while her partner watches them."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\cuckold\\hotwife.json",
+    "slug": "hotwife-vixen",
+    "for_gender": null,
+    "role_direction": "hotwife",
+    "current_ru": "Она флиртует и трахается с другими мужчинами с одобрения партнёра.",
+    "current_en": "She flirts and fucks other men with partner's approval."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\emotional-context\\angry-sex.json",
+    "slug": "angry-sex",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Он толкает её к стене, рвёт одежду, грубо трахает. Или она — его.",
+    "current_en": "He pushes her against wall, tears clothes, fucks her rough. Or she does him."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\exhibitionism\\dress-code.json",
+    "slug": "dress-code",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Партнёр выбирает что ты наденешь на свидание или выход. Элемент контроля и предвкушения.",
+    "current_en": "Partner chooses what you wear for a date or outing. Element of control and anticipation."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\exhibitionism\\glory-hole-f-gives.json",
+    "slug": "glory-hole-f-gives",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она на коленях перед отверстием в стене. Делает минет анонимному члену.",
+    "current_en": "She kneels before hole in wall. Gives blowjob to anonymous cock."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\exhibitionism\\glory-hole-m-gives.json",
+    "slug": "glory-hole-m-gives",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он на коленях перед отверстием в стене. Лижет анонимную киску.",
+    "current_en": "He kneels before hole in wall. Licks anonymous pussy."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\exhibitionism\\striptease-f.json",
+    "slug": "female-striptease",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она медленно раздевается перед ним, танцует, снимает одежду по одной вещи.",
+    "current_en": "She slowly undresses for him, dances, removes clothes one piece at a time."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\exhibitionism\\striptease-m.json",
+    "slug": "male-striptease",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он медленно раздевается перед ней, танцует, снимает рубашку и штаны.",
+    "current_en": "He slowly undresses for her, dances, removes shirt and pants."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\extreme\\breath-play-f-to-m.json",
+    "slug": "breath-play-f-to-m",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она контролирует его дыхание — сжимает горло, закрывает рот и нос, садится на лицо",
+    "current_en": "She controls his breathing — squeezes his throat, covers mouth and nose, sits on his face"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\extreme\\breath-play-m-to-f.json",
+    "slug": "breath-play-m-to-f",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он контролирует её дыхание — сжимает горло, закрывает рот и нос, контролирует когда ей дышать",
+    "current_en": "He controls her breathing — squeezes her throat, covers mouth and nose, controls when she breathes"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\extreme\\breeding-kink.json",
+    "slug": "breeding-kink",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Он кончает внутрь неё, желая оплодотворить. Фантазия о беременности без контрацепции.",
+    "current_en": "He cums inside her, wanting to impregnate. Fantasy about pregnancy without contraception."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\extreme\\figging.json",
+    "slug": "figging",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Мужчина вставляет очищенный корень имбиря в анус женщины.",
+    "current_en": "Man inserts peeled ginger root into woman's anus."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\extreme\\fisting-f-to-m.json",
+    "slug": "fisting-f-to-m",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она вводит руку внутрь него анально",
+    "current_en": "She inserts her hand inside him anally"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\extreme\\fisting-m-to-f.json",
+    "slug": "fisting-m-to-f",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он вводит руку внутрь неё — вагинально или анально",
+    "current_en": "He inserts his hand inside her — vaginal or anal"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\extreme\\knife-play-f-to-m.json",
+    "slug": "knife-play-f-to-m",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она водит лезвием ножа по его коже — грудь, живот, шея",
+    "current_en": "She traces knife blade on his skin — chest, belly, neck"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\extreme\\knife-play-m-to-f.json",
+    "slug": "knife-play-m-to-f",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он водит лезвием ножа по её коже — шея, грудь, живот",
+    "current_en": "He traces knife blade on her skin — neck, chest, belly"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\extreme\\lactation.json",
+    "slug": "lactation",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Он сосёт её грудь и пьёт молоко.",
+    "current_en": "He sucks her breast and drinks milk."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\extreme\\mummification-f.json",
+    "slug": "mummification-f",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Она полностью завёрнута в плёнку или бинты, не может пошевелиться",
+    "current_en": "She's fully wrapped in plastic or bandages, can't move"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\extreme\\mummification-m.json",
+    "slug": "mummification-m",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Он полностью завёрнут в плёнку или бинты, не может пошевелиться",
+    "current_en": "He's fully wrapped in plastic or bandages, can't move"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\extreme\\objectification-f.json",
+    "slug": "objectification-f",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Она становится объектом — мебелью или игрушкой. На неё ставят стакан, используют как подставку или сидение.",
+    "current_en": "She becomes an object — furniture or toy. A glass is placed on her, she's used as a stand or seat."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\extreme\\objectification-m.json",
+    "slug": "objectification-m",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Он становится объектом — мебелью или игрушкой. На него садятся, используют как подставку или только его член.",
+    "current_en": "He becomes an object — furniture or toy. She sits on him, uses him as a stand or just his cock."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\group\\double-penetration.json",
+    "slug": "double-penetration",
+    "for_gender": null,
+    "role_direction": "group",
+    "current_ru": "Женщина занимается сексом с двумя мужчинами одновременно. Один мужчина входит спереди, второй сзади. Или оба входят в одно отверстие.",
+    "current_en": "Woman has sex with two men simultaneously. One man enters from front, second from behind. Or both enter same hole."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\impact-pain\\cbt.json",
+    "slug": "cbt",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Женщина причиняет боль гениталиям мужчины — сжимает, бьёт, связывает его член и яички",
+    "current_en": "Woman inflicts pain on man's genitals — squeezes, hits, binds his cock and balls"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\impact-pain\\choking-f-to-m.json",
+    "slug": "choking-she-chokes-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Женщина обхватывает рукой горло мужчины и слегка сжимает. Контролирует его дыхание.",
+    "current_en": "Woman wraps her hand around man's throat and squeezes slightly. Controls his breathing."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\impact-pain\\choking-m-to-f.json",
+    "slug": "choking-he-chokes-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Мужчина кладёт руку на горло женщины и слегка сжимает, контролируя её дыхание",
+    "current_en": "Man places his hand on woman's throat and squeezes slightly, controlling her breathing"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\impact-pain\\face-slapping-f-to-m.json",
+    "slug": "face-slapping-she-slaps-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она даёт ему пощёчину",
+    "current_en": "She slaps his face"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\impact-pain\\face-slapping-m-to-f.json",
+    "slug": "face-slapping-he-slaps-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он бьёт её по лицу рукой во время секса",
+    "current_en": "He slaps her face with his hand during sex"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\impact-pain\\nipple-play-f-to-m.json",
+    "slug": "nipple-play-she-on-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она щиплет, крутит, кусает его соски.",
+    "current_en": "She pinches, twists, bites his nipples."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\impact-pain\\nipple-play-m-to-f.json",
+    "slug": "nipple-play-he-on-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он щиплет, крутит, сосёт её соски.",
+    "current_en": "He pinches, twists, sucks her nipples."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\impact-pain\\spanking-f-to-m.json",
+    "slug": "spanking-she-spanks-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Он лежит у неё на коленях, она шлёпает его по заднице.",
+    "current_en": "He lies across her lap, she spanks his ass."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\impact-pain\\spanking-m-to-f.json",
+    "slug": "spanking-he-spanks-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Она лежит у него на коленях, он шлёпает её по заднице.",
+    "current_en": "She lies across his lap, he spanks her ass."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\impact-pain\\wax-play-f-to-m.json",
+    "slug": "wax-play-she-on-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она капает горячий воск свечи на его тело.",
+    "current_en": "She drips hot candle wax on his body."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\impact-pain\\wax-play-m-to-f.json",
+    "slug": "wax-play-he-on-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он капает горячий воск свечи на её тело.",
+    "current_en": "He drips hot candle wax on her body."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\impact-pain\\whipping-f-to-m.json",
+    "slug": "whipping-f-to-m",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она бьёт его плетью, тростью или флоггером по телу — ягодицы, спина, бёдра",
+    "current_en": "She strikes him with whip, cane or flogger on his body — butt, back, thighs"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\impact-pain\\whipping-m-to-f.json",
+    "slug": "whipping-m-to-f",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он бьёт её плетью, тростью или флоггером по телу — ягодицы, спина, бёдра",
+    "current_en": "He strikes her with whip, cane or flogger on her body — butt, back, thighs"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\intimacy-outside\\casual-touch.json",
+    "slug": "casual-intimate-touch",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Он подходит к ней сзади во время готовки и кладёт руку на грудь. Она продолжает готовить.",
+    "current_en": "He approaches her from behind while she's cooking and puts his hand on her breast. She continues cooking."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\intimacy-outside\\kitchen-counter.json",
+    "slug": "kitchen-counter",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Он подходит сзади, пока она готовит. Задирает юбку и входит прямо на кухне.",
+    "current_en": "He comes from behind while she cooks. Lifts her skirt and enters right in the kitchen."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\manual\\fingering.json",
+    "slug": "fingering",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он ласкает её клитор пальцами и вводит пальцы внутрь. Стимулирует точку G.",
+    "current_en": "He caresses her clit with his fingers and inserts fingers inside. Stimulates the G-spot."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\manual\\handjob.json",
+    "slug": "handjob",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она обхватывает его член рукой и ласкает. Медленно дразня или быстро до оргазма.",
+    "current_en": "She wraps her hand around him and strokes. Slowly teasing or fast to orgasm."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\manual\\titfuck.json",
+    "slug": "titfuck",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Она сжимает грудь вокруг его члена. Он двигается между ними.",
+    "current_en": "She presses her breasts around his penis. He moves between them."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\massage\\massage-f-to-m.json",
+    "slug": "massage-she-massages-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она массирует его тело маслом. Руки скользят всё ниже, к члену.",
+    "current_en": "She massages his body with oil. Hands slide lower, to his cock."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\massage\\massage-m-to-f.json",
+    "slug": "massage-he-massages-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он массирует её тело маслом. Руки скользят к груди, между ног.",
+    "current_en": "He massages her body with oil. Hands slide to breasts, between legs."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\oral\\blowjob.json",
+    "slug": "blowjob",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Женщина стоит на коленях перед мужчиной, берёт его член в рот. Сосёт, лижет, ласкает языком.",
+    "current_en": "Woman kneels before man, takes his cock in mouth. Sucks, licks, caresses with tongue."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\oral\\cunnilingus.json",
+    "slug": "cunnilingus",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он между её ног, лижет её киску. Язык на клиторе, губы на половых губах.",
+    "current_en": "He between her legs, licks her pussy. Tongue on clit, lips on labia."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\oral\\deepthroat.json",
+    "slug": "deepthroat",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она берёт его член глубоко в горло. До упора, до слёз, до рвотного рефлекса.",
+    "current_en": "She takes his cock deep in throat. All the way, to tears, to gag reflex."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\oral\\facesitting-f-on-m.json",
+    "slug": "facesitting-she-on-him",
+    "for_gender": null,
+    "role_direction": "f_on_m",
+    "current_ru": "Она садится на его лицо. Он лижет её киску и попку снизу.",
+    "current_en": "She sits on his face. He licks her pussy and ass from below."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\oral\\facesitting-m-on-f.json",
+    "slug": "facesitting-he-on-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он садится на её лицо. Она сосёт его член и лижет яйца снизу.",
+    "current_en": "He sits on her face. She sucks his cock and licks balls from below."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\oral\\rimming-f-to-m.json",
+    "slug": "rimming-she-to-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она лижет его анус языком.",
+    "current_en": "She licks his anus with her tongue."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\oral\\rimming-m-to-f.json",
+    "slug": "rimming-he-to-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он лижет её анус языком.",
+    "current_en": "He licks her anus with his tongue."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\pet-play\\pet-play-f-is-pet.json",
+    "slug": "pet-play-she-is-pet",
+    "for_gender": null,
+    "role_direction": "m_dom_f_pet",
+    "current_ru": "Женщина играет роль домашнего животного. На ней ушки, хвостик, ошейник. Ползает на четвереньках, выполняет команды партнёра.",
+    "current_en": "Woman plays the role of a pet. She wears ears, tail, collar. Crawls on all fours, follows partner's commands."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\pet-play\\pet-play-m-is-pet.json",
+    "slug": "pet-play-he-is-pet",
+    "for_gender": null,
+    "role_direction": "f_dom_m_pet",
+    "current_ru": "Он на четвереньках в ошейнике и ушках. Она стоит рядом, гладит его по голове.",
+    "current_en": "He is on all fours wearing a collar and ears. She stands nearby, petting his head."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\positions\\position-cowgirl.json",
+    "slug": "position-cowgirl",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Она сверху, лицом к нему. Контролирует ритм и глубину.",
+    "current_en": "She on top, facing him. Controls the rhythm and depth."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\positions\\position-doggy.json",
+    "slug": "position-doggy",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Она на четвереньках, он сзади. Глубокое проникновение и контроль.",
+    "current_en": "She on all fours, him behind. Deep penetration and control."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\positions\\position-reverse-cowgirl.json",
+    "slug": "position-reverse-cowgirl",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Она сверху, спиной к нему. Отличный вид и новые ощущения.",
+    "current_en": "She on top, back to him. Great view and new sensations."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\positions\\position-sitting.json",
+    "slug": "position-sitting",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Он сидит, она на нём. На стуле, диване или краю кровати.",
+    "current_en": "He sits, she on him. On a chair, couch, or edge of bed."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\roleplay\\boss-f-subordinate-m.json",
+    "slug": "boss-f-subordinate-m",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она играет босса в офисе. Он — её подчинённый. Власть и подчинение на рабочем месте.",
+    "current_en": "She plays office boss. He's her subordinate. Power and submission at workplace."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\roleplay\\boss-m-secretary-f.json",
+    "slug": "boss-m-secretary-f",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он играет босса в офисе. Она — его секретарша. Власть и подчинение на рабочем месте.",
+    "current_en": "He plays office boss. She's his secretary. Power and submission at workplace."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\roleplay\\service-roleplay.json",
+    "slug": "service-roleplay",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Она играет роль горничной, официантки или стюардессы. Носит соответствующую униформу и обслуживает его.",
+    "current_en": "She plays the role of a maid, waitress, or stewardess. Wears appropriate uniform and serves him."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\roleplay\\taboo-roleplay.json",
+    "slug": "taboo-roleplay",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Мужчина и женщина играют роли сводных родственников и занимаются сексом",
+    "current_en": "A man and woman roleplay as step-family members and have sex"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\roleplay\\teacher-f-student-m.json",
+    "slug": "teacher-f-student-m",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она играет строгую учительницу. Он — ученик. Наказания или соблазнение.",
+    "current_en": "She plays strict teacher. He's student. Punishments or seduction."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\roleplay\\teacher-m-student-f.json",
+    "slug": "teacher-m-student-f",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он играет строгого учителя. Она — ученица в школьной форме. Наказания за плохое поведение.",
+    "current_en": "He plays strict teacher. She's student in uniform. Punishments for bad behavior."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\romantic\\romantic-sex.json",
+    "slug": "romantic-sex",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Мужчина и женщина занимаются сексом в медленном темпе. Они целуются, смотрят друг другу в глаза. В комнате горят свечи, играет музыка.",
+    "current_en": "A man and woman have sex at a slow pace. They kiss and look into each other's eyes. Candles burn in the room, music plays."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\solo-mutual\\mutual-masturbation.json",
+    "slug": "mutual-masturbation",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Мужчина и женщина мастурбируют друг перед другом. Каждый ласкает себя и наблюдает за партнёром.",
+    "current_en": "Man and woman masturbate in front of each other. Each touches themselves and watches their partner."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\toys\\butt-plug.json",
+    "slug": "butt-plug",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Она или он носит анальную пробку — во время секса или под одеждой.",
+    "current_en": "She or he wears a butt plug — during sex or under clothes."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\toys\\cock-ring.json",
+    "slug": "cock-ring",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Он надевает эрекционное кольцо для усиления эрекции и продления секса.",
+    "current_en": "He wears a cock ring for harder erection and longer sex."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\toys\\dildo.json",
+    "slug": "dildo-play",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Партнёр вводит фаллоимитатор вагинально или анально. Или соло-игра.",
+    "current_en": "Partner inserts dildo vaginally or anally. Or solo play."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\toys\\nipple-clamps.json",
+    "slug": "nipple-clamps",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Он надевает ей зажимы на соски и регулирует давление.",
+    "current_en": "He puts nipple clamps on her and adjusts the pressure."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\toys\\remote-control.json",
+    "slug": "remote-control-toy",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Она носит вибратор внутри. Он управляет им с пульта. Включает в ресторане, на улице, в общественных местах.",
+    "current_en": "She wears vibrator inside. He controls it with remote. Turns it on in restaurant, on street, in public places."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\toys\\vibrator.json",
+    "slug": "vibrator-play",
+    "for_gender": null,
+    "role_direction": "mutual",
+    "current_ru": "Она или он использует вибратор на клиторе или вводит внутрь влагалища",
+    "current_en": "She or he uses vibrator on clitoris or inserts it into vagina"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\verbal\\body-writing-f-to-m.json",
+    "slug": "body-writing-she-writes-on-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она пишет на его теле маркером — слова, имя, стрелки",
+    "current_en": "She writes on his body with marker — words, name, arrows"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\verbal\\body-writing-m-to-f.json",
+    "slug": "body-writing-he-writes-on-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он пишет на её теле маркером — слова, имя, стрелки",
+    "current_en": "He writes on her body with marker — words, name, arrows"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\verbal\\degradation-f-to-m.json",
+    "slug": "degradation-she-degrades-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она унижает его словами — \"жалкий\", \"ничтожество\", \"лизать мои ноги\".",
+    "current_en": "She humiliates him with words — \"pathetic\", \"worthless\", \"lick my feet\"."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\verbal\\degradation-m-to-f.json",
+    "slug": "degradation-he-degrades-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он унижает её словами — \"шлюха\", \"грязная девка\", \"на колени\".",
+    "current_en": "He humiliates her with words — \"slut\", \"dirty whore\", \"on your knees\"."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\verbal\\praise-f-to-m.json",
+    "slug": "praise-she-praises-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она говорит ему слова похвалы: \"хороший мальчик\", \"молодец\", \"как ты меня радуешь\"",
+    "current_en": "She speaks words of praise to him: \"good boy\", \"well done\", \"you please me so\""
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\verbal\\praise-m-to-f.json",
+    "slug": "praise-he-praises-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он говорит ей \"хорошая девочка\", \"умница\", \"какая ты красивая\"",
+    "current_en": "He tells her \"good girl\", \"clever girl\", \"you're so beautiful\""
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\worship-service\\body-worship-f-to-m.json",
+    "slug": "body-worship-she-worships-him",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она целует его тело — грудь, живот, руки, ноги.",
+    "current_en": "She kisses his body — chest, stomach, arms, legs."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\worship-service\\body-worship-m-to-f.json",
+    "slug": "body-worship-he-worships-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он целует её тело — грудь, живот, бёдра, спину.",
+    "current_en": "He kisses her body — breasts, stomach, thighs, back."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\worship-service\\cock-worship.json",
+    "slug": "cock-worship",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она на коленях перед ним, поклоняется его члену — целует, лижет, ласкает руками с обожанием и благоговением",
+    "current_en": "She kneels before him, worships his cock — kisses, licks, caresses with hands in adoration and reverence"
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\worship-service\\foot-worship-f-to-m.json",
+    "slug": "foot-worship-she-worships-his",
+    "for_gender": "female",
+    "role_direction": "f_to_m",
+    "current_ru": "Она на коленях у его ног, целует и лижет его ступни и пальцы.",
+    "current_en": "She kneels at his feet, kisses and licks his soles and toes."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\worship-service\\foot-worship-m-to-f.json",
+    "slug": "foot-worship-he-worships-her",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он на коленях у её ног, целует и лижет её ступни и пальцы.",
+    "current_en": "He kneels at her feet, kisses and licks her soles and toes."
+  },
+  {
+    "path": "D:\\skill.im\\Nexy\\Prototype\\intimate-discovery\\scenes\\v2\\composite\\worship-service\\pussy-worship.json",
+    "slug": "pussy-worship",
+    "for_gender": "male",
+    "role_direction": "m_to_f",
+    "current_ru": "Он на коленях перед ней, поклоняется её киске — целует, лижет, ласкает руками с обожанием и благоговением",
+    "current_en": "He kneels before her, worships her pussy — kisses, licks, caresses with hands in adoration and reverence"
+  }
+]

@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@/lib/supabase/compat-types';
 import type { Scene, SceneV2 } from './types';
 import { fetchUserGates, isSceneAllowed } from './onboarding-gates';
 

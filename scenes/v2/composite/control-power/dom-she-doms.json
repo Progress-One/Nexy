@@ -1,0 +1,61 @@
+{
+  "id": "dom-she-doms",
+  "slug": "dom-she-doms",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "she-leads"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "sub-he-subs",
+  "role_direction": "f_to_m",
+  "sets_gate": "female_dominant",
+  "title": {
+    "ru": "Доминатрикс",
+    "en": "Dominatrix"
+  },
+  "subtitle": {
+    "ru": "Ты — Домме",
+    "en": "You're the Domme"
+  },
+  "user_description": {
+    "ru": "Ты — Доминатрикс. Приказы, правила, наказания за непослушание. Он твой сабмиссив.",
+    "en": "You're the Dominatrix. Orders, rules, punishments for disobedience. He's your submissive."
+  },
+  "ai_description": {
+    "ru": "Она — Доминатрикс в D/s отношениях. Устанавливает правила, даёт приказы, наказывает. Осознанная BDSM динамика, femdom.",
+    "en": "She's the Dominatrix in D/s relationship. Sets rules, gives orders, punishes. Conscious BDSM dynamic, femdom."
+  },
+  "image_prompt": "dominant woman standing over kneeling man, authoritative posture, her hand on his chin, bedroom with dim lighting",
+  "intensity": 3,
+  "category": "control-power",
+  "tags": [
+    "dominant",
+    "domme",
+    "dominatrix",
+    "bdsm",
+    "femdom",
+    "power_exchange"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "dominant",
+      "femdom",
+      "power_exchange"
+    ],
+    "tests_secondary": [
+      "control",
+      "rules",
+      "punishment"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Быть его Доминатрикс",
+      "en": "Be his Dominatrix"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "id": "cum-in-mouth-receive",
+  "slug": "cum-in-mouth-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "finish-preference-f",
+    "blowjob"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "cum-in-mouth",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Он кончает в рот",
+    "en": "Cum in Mouth"
+  },
+  "subtitle": {
+    "ru": "Принять в рот",
+    "en": "Receive in mouth"
+  },
+  "user_description": {
+    "ru": "Он кончает тебе в рот. Ты глотаешь или держишь.",
+    "en": "He cums in your mouth. You swallow or hold."
+  },
+  "ai_description": {
+    "ru": "Она принимает его сперму в рот. Глотает или показывает.",
+    "en": "She receives his cum in her mouth. Swallows or shows."
+  },
+  "image_prompt": "intimate oral moment, woman on knees, man standing, bedroom",
+  "intensity": 2,
+  "category": "body-fluids",
+  "tags": [
+    "cum",
+    "mouth",
+    "swallow",
+    "finish",
+    "oral",
+    "receive"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "cum",
+      "mouth",
+      "swallow"
+    ],
+    "tests_secondary": [
+      "oral",
+      "finish"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Принять сперму в рот",
+      "en": "Receive cum in mouth"
+    }
+  }
+}

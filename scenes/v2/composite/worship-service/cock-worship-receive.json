@@ -1,0 +1,57 @@
+{
+  "id": "cock-worship-receive",
+  "slug": "cock-worship-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "blowjob"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "cock-worship",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Cock worship",
+    "en": "Cock Worship"
+  },
+  "subtitle": {
+    "ru": "Она поклоняется твоему члену",
+    "en": "She worships your cock"
+  },
+  "user_description": {
+    "ru": "Она на коленях перед тобой, поклоняется твоему члену — целует, лижет, ласкает руками с обожанием.",
+    "en": "She kneels before you, worships your cock — kissing, licking, caressing with her hands in adoration."
+  },
+  "ai_description": {
+    "ru": "М получает cock worship — благоговейное отношение к его члену. Восхищение, обожание, служение.",
+    "en": "M receives cock worship — reverent attitude toward his cock. Admiration, adoration, service."
+  },
+  "image_prompt": "woman kneeling before man, worshipping his cock with hands and mouth, looking up at him adoringly, bedroom setting, intimate angle",
+  "intensity": 2,
+  "category": "worship-service",
+  "tags": [
+    "cock_worship",
+    "worship",
+    "service",
+    "devotion",
+    "oral"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "cock_worship",
+      "genital_worship"
+    ],
+    "tests_secondary": [
+      "receiving_devotion",
+      "dominance"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Cock worship — она поклоняется твоему члену",
+      "en": "Cock worship — she worships your cock"
+    }
+  }
+}

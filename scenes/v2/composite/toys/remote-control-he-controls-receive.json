@@ -1,0 +1,55 @@
+{
+  "id": "remote-control-he-controls-receive",
+  "slug": "remote-control-he-controls-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "remote-control-he-controls",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Пульт у него",
+    "en": "He Controls"
+  },
+  "subtitle": {
+    "ru": "Он управляет твоей игрушкой",
+    "en": "He controls your toy"
+  },
+  "user_description": {
+    "ru": "У тебя внутри вибратор, пульт у него. В ресторане, на улице — он решает когда включить.",
+    "en": "You have a vibrator inside, he holds the remote. At restaurant, on street — he decides when to turn it on."
+  },
+  "ai_description": {
+    "ru": "Игрушка внутри неё, пульт у него. Он контролирует её удовольствие на публике.",
+    "en": "Toy inside her, remote with him. He controls her pleasure in public."
+  },
+  "image_prompt": "woman sitting at restaurant table trying to maintain composure, man beside her discretely holding remote control, both dressed",
+  "intensity": 3,
+  "category": "toys",
+  "tags": [
+    "toys",
+    "remote",
+    "public",
+    "control",
+    "receiving"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "remote",
+      "control",
+      "toys"
+    ],
+    "tests_secondary": [
+      "public",
+      "receiving"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Пульт от твоей игрушки у него",
+      "en": "He controls your toy"
+    }
+  }
+}

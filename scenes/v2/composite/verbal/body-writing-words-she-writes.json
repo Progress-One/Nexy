@@ -1,0 +1,119 @@
+{
+  "id": "body-writing-words-she-writes",
+  "slug": "body-writing-words-she-writes",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "body-writing-words-she-writes-receive",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Какие надписи?",
+    "en": "What to write?"
+  },
+  "subtitle": {
+    "ru": "Что ты пишешь на нём",
+    "en": "What you write on him"
+  },
+  "user_description": {
+    "ru": "Какие надписи ты хочешь писать на его теле?",
+    "en": "What inscriptions do you want to write on his body?"
+  },
+  "ai_description": {
+    "ru": "Выбор надписей для написания на его теле.",
+    "en": "Choosing what to write on his body."
+  },
+  "intensity": 3,
+  "category": "verbal",
+  "tags": [
+    "body_writing",
+    "marking",
+    "giving",
+    "femdom"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "body_writing",
+      "giving"
+    ],
+    "tests_secondary": [
+      "ownership",
+      "femdom"
+    ]
+  },
+  "question": {
+    "type": "multi_select",
+    "text": {
+      "ru": "Какие надписи ты хочешь писать?",
+      "en": "What do you want to write?"
+    },
+    "options": [
+      {
+        "id": "slave",
+        "label": {
+          "ru": "Раб",
+          "en": "Slave"
+        }
+      },
+      {
+        "id": "pet",
+        "label": {
+          "ru": "Питомец",
+          "en": "Pet"
+        }
+      },
+      {
+        "id": "owned",
+        "label": {
+          "ru": "Моя собственность",
+          "en": "My property"
+        }
+      },
+      {
+        "id": "name",
+        "label": {
+          "ru": "Своё имя",
+          "en": "My name"
+        }
+      },
+      {
+        "id": "good_boy",
+        "label": {
+          "ru": "Хороший мальчик",
+          "en": "Good boy"
+        }
+      },
+      {
+        "id": "toy",
+        "label": {
+          "ru": "Игрушка",
+          "en": "Toy"
+        }
+      },
+      {
+        "id": "slut",
+        "label": {
+          "ru": "Шлюх",
+          "en": "Slut"
+        }
+      },
+      {
+        "id": "arrows",
+        "label": {
+          "ru": "Стрелки",
+          "en": "Arrows"
+        }
+      }
+    ],
+    "allow_other": true,
+    "other_placeholder": {
+      "ru": "Своя надпись...",
+      "en": "Custom text..."
+    },
+    "min_selections": 0
+  },
+  "clarification_for": [
+    "body-writing-she-writes-on-him"
+  ]
+}

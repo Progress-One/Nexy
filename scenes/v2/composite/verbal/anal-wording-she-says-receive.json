@@ -1,0 +1,115 @@
+{
+  "id": "anal-wording-she-says-receive",
+  "slug": "anal-wording-she-says-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "anal-wording-she-says",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Как говорить про анал",
+    "en": "How to talk about anal"
+  },
+  "subtitle": {
+    "ru": "Что ты хочешь слышать",
+    "en": "What you want to hear"
+  },
+  "user_description": {
+    "ru": "Какими словами тебе нравится когда она говорит про анальный секс?",
+    "en": "What words do you like when she talks about anal sex?"
+  },
+  "ai_description": {
+    "ru": "Какие слова М нравится слышать от Ж про анальный секс.",
+    "en": "What words M likes to hear from F about anal sex."
+  },
+  "intensity": 3,
+  "category": "verbal",
+  "tags": [
+    "anal",
+    "dirty_talk",
+    "verbal",
+    "wording"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "anal_wording",
+      "dirty_talk"
+    ],
+    "tests_secondary": [
+      "verbal_preference"
+    ]
+  },
+  "question": {
+    "type": "multi_select",
+    "text": {
+      "ru": "Какие фразы тебе нравится слышать?",
+      "en": "What phrases do you like to hear?"
+    },
+    "options": [
+      {
+        "id": "hochu_v_popku",
+        "label": {
+          "ru": "Хочу тебя в попку",
+          "en": "I want you in my ass"
+        }
+      },
+      {
+        "id": "voz_szadi",
+        "label": {
+          "ru": "Возьми меня сзади",
+          "en": "Take me from behind"
+        }
+      },
+      {
+        "id": "v_zhopu",
+        "label": {
+          "ru": "Засади в жопу",
+          "en": "Fuck my ass"
+        }
+      },
+      {
+        "id": "tesnaya",
+        "label": {
+          "ru": "Я такая тесная",
+          "en": "I'm so tight"
+        }
+      },
+      {
+        "id": "medlenno",
+        "label": {
+          "ru": "Медленно",
+          "en": "Slowly"
+        }
+      },
+      {
+        "id": "glubzhe",
+        "label": {
+          "ru": "Глубже",
+          "en": "Deeper"
+        }
+      },
+      {
+        "id": "rastyanut",
+        "label": {
+          "ru": "Растяни меня",
+          "en": "Stretch me"
+        }
+      },
+      {
+        "id": "nravitsya",
+        "label": {
+          "ru": "Мне нравится",
+          "en": "I like it"
+        }
+      }
+    ],
+    "allow_other": true,
+    "other_placeholder": {
+      "ru": "Своя фраза...",
+      "en": "Your own phrase..."
+    },
+    "min_selections": 0
+  }
+}

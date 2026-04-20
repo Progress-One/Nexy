@@ -1,0 +1,56 @@
+{
+  "id": "long-kissing",
+  "slug": "long-kissing",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "romantic-sex"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": null,
+  "role_direction": "mutual",
+  "title": {
+    "ru": "Долгие поцелуи",
+    "en": "Long Kissing"
+  },
+  "subtitle": {
+    "ru": "Целоваться бесконечно",
+    "en": "Kiss forever"
+  },
+  "user_description": {
+    "ru": "Долгие, глубокие поцелуи. Не прерываться, раствориться друг в друге.",
+    "en": "Long, deep kisses. Don't stop, dissolve in each other."
+  },
+  "ai_description": {
+    "ru": "Долгие поцелуи — губы, язык, дыхание. Целоваться как подростки, не торопясь переходить к сексу.",
+    "en": "Long kisses — lips, tongue, breath. Kiss like teenagers, no rush to move to sex."
+  },
+  "image_prompt": "couple kissing deeply on bed, hands in each other's hair, eyes closed, intimate moment",
+  "intensity": 1,
+  "category": "romantic",
+  "tags": [
+    "kissing",
+    "romantic",
+    "intimate",
+    "slow"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "kissing",
+      "romantic",
+      "intimate"
+    ],
+    "tests_secondary": [
+      "slow",
+      "connection"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Долго целоваться",
+      "en": "Long kissing"
+    }
+  }
+}

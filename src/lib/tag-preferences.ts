@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@/lib/supabase/compat-types';
 import type { SceneV2, V2Element } from './types';
 
 /**

@@ -1,0 +1,57 @@
+{
+  "id": "lactation-receive",
+  "slug": "lactation-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": ["lactation"],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "lactation",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Лактация",
+    "en": "Lactation"
+  },
+  "subtitle": {
+    "ru": "Ты пьёшь её молоко",
+    "en": "You drink her milk"
+  },
+  "user_description": {
+    "ru": "Ты сосёшь её грудь и пьёшь её молоко.",
+    "en": "You suck her breast and drink her milk."
+  },
+  "ai_description": {
+    "ru": "Эротизация грудного молока и кормления. Кормление грудью, сцеживание, ANR (Adult Nursing Relationship). Интимность и забота.",
+    "en": "Eroticization of breast milk and nursing. Breastfeeding, expressing, ANR (Adult Nursing Relationship). Intimacy and nurturing."
+  },
+  "image_prompt": "woman with milk-filled breasts, man sucking her nipple, both nude on bed, bedroom setting",
+  "intensity": 3,
+  "category": "extreme",
+  "tags": [
+    "lactation",
+    "breastfeeding",
+    "ANR",
+    "nursing",
+    "nurturing"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "lactation",
+      "breastfeeding",
+      "ANR"
+    ],
+    "tests_secondary": [
+      "nursing",
+      "nurturing",
+      "intimacy"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Она кормит тебя грудью?",
+      "en": "She breastfeeds you?"
+    }
+  }
+}

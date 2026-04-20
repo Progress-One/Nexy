@@ -1,0 +1,53 @@
+{
+  "id": "masturbation-he-watches-her",
+  "slug": "masturbation-he-watches-her",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "masturbation-he-watches-her-receive",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Смотреть на неё",
+    "en": "Watch her"
+  },
+  "subtitle": {
+    "ru": "Она ласкает себя",
+    "en": "She touches herself"
+  },
+  "user_description": {
+    "ru": "Ты смотришь как она ласкает себя.",
+    "en": "You watch her touch herself."
+  },
+  "ai_description": {
+    "ru": "Он наблюдает как Ж мастурбирует. Вуайеризм, интимность момента.",
+    "en": "He watches F masturbate. Voyeurism, intimacy of the moment."
+  },
+  "image_prompt": "man watching woman masturbating on bed, intimate bedroom setting, soft lighting",
+  "intensity": 2,
+  "category": "solo-mutual",
+  "tags": [
+    "watching",
+    "masturbation",
+    "voyeurism",
+    "intimate"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "watching",
+      "voyeurism"
+    ],
+    "tests_secondary": [
+      "intimacy",
+      "visual_stimulation"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Смотреть как она ласкает себя — возбуждает",
+      "en": "Watching her touch herself — arousing"
+    }
+  }
+}

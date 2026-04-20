@@ -4,7 +4,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/compat-types';
 import { analyzeImage, ImageAnalysis } from '@/lib/image-analyzer';
 import { matchScenesToImage, SceneSuggestion } from '@/lib/scene-matcher';
 

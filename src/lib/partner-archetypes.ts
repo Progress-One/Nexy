@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@/lib/supabase/compat-types';
 import { ARCHETYPES, tagMatchesPrefixes, type ArchetypeDefinition } from './archetype-definitions';
 
 interface TagPreference {

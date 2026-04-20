@@ -1,0 +1,58 @@
+{
+  "id": "hair-pulling-on-him-receive",
+  "slug": "hair-pulling-on-him-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "he-follows",
+    "spanking-f-to-m-receive"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "hair-pulling-on-him",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Схватить за волосы",
+    "en": "Hair Pulling"
+  },
+  "subtitle": {
+    "ru": "Она держит тебя за волосы",
+    "en": "She grabs your hair"
+  },
+  "user_description": {
+    "ru": "Она хватает тебя за волосы. Тянет, направляет, контролирует.",
+    "en": "She grabs your hair. Pulls, guides, controls."
+  },
+  "ai_description": {
+    "ru": "Она хватает его за волосы, тянет, направляет голову.",
+    "en": "She grabs his hair, pulls, guides his head."
+  },
+  "image_prompt": "woman grabbing man's hair during sex, his head pulled, bedroom",
+  "intensity": 2,
+  "category": "impact-pain",
+  "tags": [
+    "hair_pulling",
+    "submission",
+    "femdom",
+    "receive"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "hair_pulling",
+      "submission",
+      "femdom"
+    ],
+    "tests_secondary": [
+      "pain",
+      "control"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Когда она хватает за волосы",
+      "en": "When she pulls your hair"
+    }
+  }
+}

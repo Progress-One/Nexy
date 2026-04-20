@@ -1,0 +1,57 @@
+{
+  "id": "open-gag-on-her",
+  "slug": "open-gag-on-her",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "gag-on-her"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "open-gag-on-her-receive",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Открытый кляп",
+    "en": "Open Mouth Gag"
+  },
+  "subtitle": {
+    "ru": "Рот держится открытым",
+    "en": "Mouth held open"
+  },
+  "user_description": {
+    "ru": "Ты надеваешь ей кляп-кольцо. Рот открыт, доступен.",
+    "en": "You put a ring gag on her. Mouth open, accessible."
+  },
+  "ai_description": {
+    "ru": "Кляп-кольцо или spider gag. Рот принудительно открыт, доступен для использования.",
+    "en": "Ring gag or spider gag. Mouth forced open, accessible for use."
+  },
+  "image_prompt": "woman with ring gag holding mouth open, man standing in front of her, bedroom",
+  "intensity": 4,
+  "category": "bondage",
+  "tags": [
+    "gag",
+    "ring_gag",
+    "open_mouth",
+    "bondage"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "gag",
+      "ring_gag",
+      "oral_access"
+    ],
+    "tests_secondary": [
+      "bondage",
+      "control"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Открытый кляп ей",
+      "en": "Open gag on her"
+    }
+  }
+}

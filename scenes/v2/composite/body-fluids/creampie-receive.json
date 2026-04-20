@@ -1,0 +1,58 @@
+{
+  "id": "creampie-receive",
+  "slug": "creampie-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "finish-preference-f"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "creampie",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Он кончает внутрь",
+    "en": "Creampie"
+  },
+  "subtitle": {
+    "ru": "Принять внутрь",
+    "en": "Receive inside"
+  },
+  "user_description": {
+    "ru": "Он кончает внутрь тебя. Без вытаскивания, до конца.",
+    "en": "He cums inside you. No pulling out, all the way."
+  },
+  "ai_description": {
+    "ru": "Она принимает его сперму внутрь.",
+    "en": "She receives his cum inside."
+  },
+  "image_prompt": "couple in missionary position, intimate moment of climax, bodies pressed together, bedroom",
+  "intensity": 2,
+  "category": "body-fluids",
+  "tags": [
+    "creampie",
+    "cum",
+    "inside",
+    "finish",
+    "receive"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "creampie",
+      "cum",
+      "inside"
+    ],
+    "tests_secondary": [
+      "intimate",
+      "breeding"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Принять сперму внутрь",
+      "en": "Receive cum inside"
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "id": "creampie",
+  "slug": "creampie",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "finish-preference-m"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "creampie-receive",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Кончить внутрь",
+    "en": "Creampie"
+  },
+  "subtitle": {
+    "ru": "Финиш внутри неё",
+    "en": "Finish inside her"
+  },
+  "user_description": {
+    "ru": "Ты кончаешь внутрь неё. Без вытаскивания, до конца.",
+    "en": "You cum inside her. No pulling out, all the way."
+  },
+  "ai_description": {
+    "ru": "Он кончает внутрь. Финиш не вытаскивая, сперма внутри неё.",
+    "en": "He cums inside. Finish without pulling out, cum stays inside her."
+  },
+  "image_prompt": "couple in missionary position, intimate moment of climax, bodies pressed together, bedroom",
+  "intensity": 2,
+  "category": "body-fluids",
+  "tags": [
+    "creampie",
+    "cum",
+    "inside",
+    "finish"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "creampie",
+      "cum",
+      "inside"
+    ],
+    "tests_secondary": [
+      "intimate",
+      "breeding"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Кончить внутрь",
+      "en": "Cum inside"
+    }
+  }
+}

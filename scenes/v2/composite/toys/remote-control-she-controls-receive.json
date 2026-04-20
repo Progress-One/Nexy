@@ -1,0 +1,55 @@
+{
+  "id": "remote-control-she-controls-receive",
+  "slug": "remote-control-she-controls-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "remote-control-she-controls",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Пульт у неё",
+    "en": "She Controls"
+  },
+  "subtitle": {
+    "ru": "Она управляет твоей игрушкой",
+    "en": "She controls your toy"
+  },
+  "user_description": {
+    "ru": "У тебя вибратор или кольцо с вибрацией, пульт у неё. Она решает когда включить.",
+    "en": "You have a vibrator or vibrating ring, she holds the remote. She decides when to turn it on."
+  },
+  "ai_description": {
+    "ru": "Игрушка на нём, пульт у неё. Она контролирует его удовольствие.",
+    "en": "Toy on him, remote with her. She controls his pleasure."
+  },
+  "image_prompt": "couple at restaurant, woman discretely holding remote control, man trying to maintain composure, both dressed",
+  "intensity": 3,
+  "category": "toys",
+  "tags": [
+    "toys",
+    "remote",
+    "public",
+    "control",
+    "receiving"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "remote",
+      "control",
+      "toys"
+    ],
+    "tests_secondary": [
+      "public",
+      "receiving"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Пульт от твоей игрушки у неё",
+      "en": "She controls your toy"
+    }
+  }
+}

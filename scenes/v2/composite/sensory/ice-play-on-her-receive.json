@@ -1,0 +1,57 @@
+{
+  "id": "ice-play-on-her-receive",
+  "slug": "ice-play-on-her-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "she-follows"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "ice-play-on-her",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Лёд на тебе",
+    "en": "Ice on You"
+  },
+  "subtitle": {
+    "ru": "Холод по твоему телу",
+    "en": "Cold on your body"
+  },
+  "user_description": {
+    "ru": "Он водит льдом по твоему телу. Соски, живот, между ног. Ты вздрагиваешь от холода.",
+    "en": "He runs ice on your body. Nipples, belly, between legs. You shiver from cold."
+  },
+  "ai_description": {
+    "ru": "Он водит льдом по её коже. Она вздрагивает, мурашки, острые ощущения.",
+    "en": "He runs ice on her skin. She shivers, goosebumps, sharp sensations."
+  },
+  "image_prompt": "woman lying on bed, man running ice cube on her stomach, water droplets, her eyes closed",
+  "intensity": 2,
+  "category": "sensory",
+  "tags": [
+    "ice",
+    "temperature",
+    "sensory",
+    "receive"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "ice",
+      "temperature",
+      "sensory"
+    ],
+    "tests_secondary": [
+      "cold",
+      "surrender"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Когда он водит льдом по тебе",
+      "en": "When he runs ice on you"
+    }
+  }
+}

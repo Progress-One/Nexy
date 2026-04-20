@@ -1,0 +1,56 @@
+{
+  "id": "sex-by-window",
+  "slug": "sex-by-window",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "exhibitionism"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": null,
+  "role_direction": "mutual",
+  "title": {
+    "ru": "Секс у окна",
+    "en": "Sex by Window"
+  },
+  "subtitle": {
+    "ru": "Снаружи могут увидеть",
+    "en": "They might see"
+  },
+  "user_description": {
+    "ru": "Вы занимаетесь сексом у окна. Снаружи могут увидеть ваши силуэты или больше.",
+    "en": "You have sex by the window. People outside might see your silhouettes or more."
+  },
+  "ai_description": {
+    "ru": "Секс у окна, прижата к стеклу. Риск что увидят с улицы или из соседнего дома. Возбуждение от публичности.",
+    "en": "Sex by the window, pressed against glass. Risk of being seen from street or neighbor's building. Thrill of exposure."
+  },
+  "image_prompt": "couple having sex pressed against large window, city lights visible outside, night time, silhouettes visible from outside",
+  "intensity": 3,
+  "category": "exhibitionism",
+  "tags": [
+    "exhibitionism",
+    "window",
+    "public",
+    "risk"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "exhibitionism",
+      "window",
+      "public"
+    ],
+    "tests_secondary": [
+      "risk",
+      "thrill"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Секс у окна",
+      "en": "Sex by window"
+    }
+  }
+}

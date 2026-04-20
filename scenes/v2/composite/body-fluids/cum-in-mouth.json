@@ -1,0 +1,59 @@
+{
+  "id": "cum-in-mouth",
+  "slug": "cum-in-mouth",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "finish-preference-m",
+    "blowjob"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "cum-in-mouth-receive",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Кончить в рот",
+    "en": "Cum in Mouth"
+  },
+  "subtitle": {
+    "ru": "Финиш ей в рот",
+    "en": "Finish in her mouth"
+  },
+  "user_description": {
+    "ru": "Ты кончаешь ей в рот. Она глотает или держит.",
+    "en": "You cum in her mouth. She swallows or holds."
+  },
+  "ai_description": {
+    "ru": "Он кончает ей в рот. Она принимает, глотает или показывает.",
+    "en": "He cums in her mouth. She receives, swallows or shows."
+  },
+  "image_prompt": "intimate oral moment, woman on knees, man standing, bedroom",
+  "intensity": 2,
+  "category": "body-fluids",
+  "tags": [
+    "cum",
+    "mouth",
+    "swallow",
+    "finish",
+    "oral"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "cum",
+      "mouth",
+      "swallow"
+    ],
+    "tests_secondary": [
+      "oral",
+      "finish"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Кончить ей в рот",
+      "en": "Cum in her mouth"
+    }
+  }
+}

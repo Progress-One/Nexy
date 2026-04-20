@@ -1,0 +1,56 @@
+{
+  "id": "public-kissing",
+  "slug": "public-kissing",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "public-sex"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": null,
+  "role_direction": "mutual",
+  "title": {
+    "ru": "Поцелуи на публике",
+    "en": "Public Kissing"
+  },
+  "subtitle": {
+    "ru": "Демонстративная близость",
+    "en": "Showing affection"
+  },
+  "user_description": {
+    "ru": "Вы целуетесь на публике. Глубокий поцелуй, руки блуждают. Люди смотрят.",
+    "en": "You kiss in public. Deep kiss, hands wandering. People watching."
+  },
+  "ai_description": {
+    "ru": "Страстный поцелуй в публичном месте. Не стесняясь окружающих, руки на теле партнёра.",
+    "en": "Passionate kiss in public place. Not shy of others, hands on partner's body."
+  },
+  "image_prompt": "couple kissing passionately on city street, his hand on her waist, her hand on his neck, people walking by in background, urban setting",
+  "intensity": 1,
+  "category": "exhibitionism",
+  "tags": [
+    "public",
+    "kissing",
+    "affection",
+    "exhibitionism"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "public",
+      "kissing",
+      "affection"
+    ],
+    "tests_secondary": [
+      "exhibitionism",
+      "spontaneous"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Страстно целоваться на публике",
+      "en": "Passionate kissing in public"
+    }
+  }
+}

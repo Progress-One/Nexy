@@ -1,0 +1,116 @@
+{
+  "id": "sex-initiation-she-says-soft-receive",
+  "slug": "sex-initiation-she-says-soft-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "sex-initiation-she-says-soft",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Как предложить близость",
+    "en": "How to initiate intimacy"
+  },
+  "subtitle": {
+    "ru": "Что ты хочешь слышать",
+    "en": "What you want to hear"
+  },
+  "user_description": {
+    "ru": "Какими словами тебе нравится когда она приглашает к близости?",
+    "en": "What words do you like when she invites you to intimacy?"
+  },
+  "ai_description": {
+    "ru": "Какие нежные слова создают настроение?",
+    "en": "What tender words set the mood?"
+  },
+  "intensity": 1,
+  "category": "verbal",
+  "tags": [
+    "romantic",
+    "verbal",
+    "initiation",
+    "tender"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "sex_initiation",
+      "romantic"
+    ],
+    "tests_secondary": [
+      "tenderness",
+      "verbal_preference"
+    ]
+  },
+  "question": {
+    "type": "multi_select",
+    "text": {
+      "ru": "Какие фразы тебя трогают?",
+      "en": "What phrases touch you?"
+    },
+    "options": [
+      {
+        "id": "idi_ko_mne",
+        "label": {
+          "ru": "Иди ко мне",
+          "en": "Come to me"
+        }
+      },
+      {
+        "id": "hochu_tebya",
+        "label": {
+          "ru": "Хочу тебя",
+          "en": "I want you"
+        }
+      },
+      {
+        "id": "obnimi",
+        "label": {
+          "ru": "Обними меня",
+          "en": "Hold me"
+        }
+      },
+      {
+        "id": "ostansya",
+        "label": {
+          "ru": "Останься со мной",
+          "en": "Stay with me"
+        }
+      },
+      {
+        "id": "bud_so_mnoy",
+        "label": {
+          "ru": "Будь со мной",
+          "en": "Be with me"
+        }
+      },
+      {
+        "id": "skuchala",
+        "label": {
+          "ru": "Скучала по тебе",
+          "en": "I missed you"
+        }
+      },
+      {
+        "id": "lyublyu",
+        "label": {
+          "ru": "Люблю тебя",
+          "en": "I love you"
+        }
+      },
+      {
+        "id": "poceluy",
+        "label": {
+          "ru": "Поцелуй меня",
+          "en": "Kiss me"
+        }
+      }
+    ],
+    "allow_other": true,
+    "other_placeholder": {
+      "ru": "Своя фраза...",
+      "en": "Your own phrase..."
+    },
+    "min_selections": 0
+  }
+}

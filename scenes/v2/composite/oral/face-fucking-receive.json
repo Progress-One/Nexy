@@ -1,0 +1,59 @@
+{
+  "id": "face-fucking-receive",
+  "slug": "face-fucking-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "blowjob",
+    "deepthroat"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "face-fucking",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Трахает в рот",
+    "en": "Face Fucking"
+  },
+  "subtitle": {
+    "ru": "Он контролирует",
+    "en": "He controls"
+  },
+  "user_description": {
+    "ru": "Он трахает твой рот. Держит за голову или волосы, задаёт ритм.",
+    "en": "He fucks your mouth. Holds your head or hair, sets the pace."
+  },
+  "ai_description": {
+    "ru": "Он трахает её рот, держит за голову, контролирует. Она принимает, отдаётся его ритму.",
+    "en": "He fucks her mouth, holds her head, controls. She takes it, surrenders to his pace."
+  },
+  "image_prompt": "woman on knees, man holding her head, thrusting into her mouth, bedroom",
+  "intensity": 4,
+  "category": "oral",
+  "tags": [
+    "face_fucking",
+    "throat",
+    "submission",
+    "rough",
+    "oral"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "face_fucking",
+      "submission",
+      "rough_oral"
+    ],
+    "tests_secondary": [
+      "surrender",
+      "throat"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Когда он трахает твой рот",
+      "en": "When he fucks your mouth"
+    }
+  }
+}

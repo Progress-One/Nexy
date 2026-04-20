@@ -1,0 +1,58 @@
+{
+  "id": "latex-on-her-watch",
+  "slug": "latex-on-her-watch",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "lingerie-lace"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "latex-on-her-wear",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Она в латексе",
+    "en": "Her in Latex"
+  },
+  "subtitle": {
+    "ru": "Латекс, кожа, винил на ней",
+    "en": "Latex, leather, vinyl on her"
+  },
+  "user_description": {
+    "ru": "Она в латексе, коже или виниле. Блестящий материал облегает её тело.",
+    "en": "She's in latex, leather or vinyl. Shiny material hugging her body."
+  },
+  "ai_description": {
+    "ru": "Она в латексе или коже. Материал облегает тело, блестит, пахнет. Фетиш материалов на ней.",
+    "en": "She's in latex or leather. Material hugs her body, shines, smells. Material fetish on her."
+  },
+  "image_prompt": "woman in black latex bodysuit, shiny material tight on body, dimly lit room",
+  "intensity": 3,
+  "category": "clothing",
+  "tags": [
+    "latex",
+    "leather",
+    "vinyl",
+    "material_fetish",
+    "on_her"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "latex",
+      "leather",
+      "material_fetish"
+    ],
+    "tests_secondary": [
+      "clothing",
+      "visual"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Она в латексе или коже",
+      "en": "Her in latex or leather"
+    }
+  }
+}

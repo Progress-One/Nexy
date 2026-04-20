@@ -23,7 +23,7 @@
  *   const allowed = isSceneAllowed('blowjob', gates);
  */
 
-import { SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient } from '@/lib/supabase/compat-types';
 
 // Response value constants
 export const RESPONSE = {

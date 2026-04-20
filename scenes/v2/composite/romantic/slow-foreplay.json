@@ -1,0 +1,56 @@
+{
+  "id": "slow-foreplay",
+  "slug": "slow-foreplay",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "romantic-sex"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": null,
+  "role_direction": "mutual",
+  "title": {
+    "ru": "Долгая прелюдия",
+    "en": "Slow Foreplay"
+  },
+  "subtitle": {
+    "ru": "Не торопиться",
+    "en": "Take your time"
+  },
+  "user_description": {
+    "ru": "Долгая прелюдия. Не торопиться, растягивать удовольствие, дразнить.",
+    "en": "Long foreplay. Take your time, extend pleasure, tease."
+  },
+  "ai_description": {
+    "ru": "Долгая прелюдия без спешки. Касания, поцелуи, исследование тела. Растягивать возбуждение, не переходить к сексу сразу.",
+    "en": "Long foreplay without rushing. Touches, kisses, exploring bodies. Extend arousal, don't rush to sex."
+  },
+  "image_prompt": "couple on bed, man slowly kissing woman's neck, her eyes closed, soft lighting, romantic atmosphere",
+  "intensity": 1,
+  "category": "romantic",
+  "tags": [
+    "foreplay",
+    "slow",
+    "teasing",
+    "romantic"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "foreplay",
+      "slow",
+      "teasing"
+    ],
+    "tests_secondary": [
+      "romantic",
+      "anticipation"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Долгая прелюдия",
+      "en": "Long foreplay"
+    }
+  }
+}

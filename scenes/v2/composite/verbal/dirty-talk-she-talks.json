@@ -1,0 +1,58 @@
+{
+  "id": "dirty-talk-she-talks",
+  "slug": "dirty-talk-she-talks",
+  "version": 2,
+  "scene_type": "clarification",
+  "sets_gate": "dirty_talk",
+  "is_active": true,
+  "is_onboarding": true,
+  "onboarding_order": 15,
+  "for_gender": "female",
+  "paired_scene": "dirty-talk-she-talks-receive",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Dirty Talk",
+    "en": "Dirty Talk"
+  },
+  "subtitle": {
+    "ru": "Ты говоришь ему грязно",
+    "en": "You talk dirty to him"
+  },
+  "user_description": {
+    "ru": "Ты говоришь ему грязные слова во время секса. Описания, желания, команды.",
+    "en": "You talk dirty to him during sex. Descriptions, desires, commands."
+  },
+  "ai_description": {
+    "ru": "Она шепчет ему на ухо грязные слова. Описывает что делает, что хочет чтобы он с ней сделал.",
+    "en": "She whispers dirty words in his ear. Describes what she's doing, what she wants him to do."
+  },
+  "image_prompt": "woman whispering in man's ear during intimate moment, both nude on bed, bedroom setting, close-up view",
+  "intensity": 2,
+  "category": "verbal",
+  "tags": [
+    "dirty_talk",
+    "verbal",
+    "giving",
+    "femdom"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "dirty_talk",
+      "giving"
+    ],
+    "tests_secondary": [
+      "verbal",
+      "femdom"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Ты говоришь ему грязно во время секса",
+      "en": "You talk dirty to him during sex"
+    }
+  },
+  "clarification_for": [
+    "dirty_talk"
+  ]
+}

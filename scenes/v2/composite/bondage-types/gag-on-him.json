@@ -1,0 +1,58 @@
+{
+  "id": "gag-on-him",
+  "slug": "gag-on-him",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "she-leads",
+    "bondage-f-ties-m"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "gag-on-him-receive",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Кляп ему",
+    "en": "Gag Him"
+  },
+  "subtitle": {
+    "ru": "Заткнуть ему рот",
+    "en": "Silence him"
+  },
+  "user_description": {
+    "ru": "Ты вставляешь ему кляп. Он не может говорить, только мычать.",
+    "en": "You put a gag in his mouth. He can't speak, only moan."
+  },
+  "ai_description": {
+    "ru": "Она затыкает ему рот кляпом. Контроль над его голосом, он беспомощен.",
+    "en": "She gags his mouth. Control over his voice, he's helpless."
+  },
+  "image_prompt": "woman putting ball gag on man, his mouth open, bedroom with dim lighting",
+  "intensity": 3,
+  "category": "bondage",
+  "tags": [
+    "gag",
+    "bondage",
+    "femdom",
+    "control"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "gag",
+      "bondage",
+      "femdom"
+    ],
+    "tests_secondary": [
+      "helpless",
+      "silence"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Заткнуть ему рот кляпом",
+      "en": "Gag his mouth"
+    }
+  }
+}

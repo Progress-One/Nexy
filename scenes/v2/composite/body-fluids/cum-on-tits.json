@@ -1,0 +1,58 @@
+{
+  "id": "cum-on-tits",
+  "slug": "cum-on-tits",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "finish-preference-m",
+    "titfuck-give"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "cum-on-tits-receive",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Кончить на грудь",
+    "en": "Cum on Tits"
+  },
+  "subtitle": {
+    "ru": "Финиш на её грудь",
+    "en": "Finish on her chest"
+  },
+  "user_description": {
+    "ru": "Ты кончаешь ей на грудь. Сперма стекает по её коже.",
+    "en": "You cum on her tits. Cum dripping on her skin."
+  },
+  "ai_description": {
+    "ru": "Он кончает ей на грудь. Сперма на её сосках и коже.",
+    "en": "He cums on her tits. Cum on her nipples and skin."
+  },
+  "image_prompt": "intimate moment, woman lying on back, man over her, focus on chest area, bedroom",
+  "intensity": 2,
+  "category": "body-fluids",
+  "tags": [
+    "cum",
+    "tits",
+    "chest",
+    "finish"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "cum",
+      "tits",
+      "finish"
+    ],
+    "tests_secondary": [
+      "visual",
+      "breasts"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Кончить ей на грудь",
+      "en": "Cum on her tits"
+    }
+  }
+}

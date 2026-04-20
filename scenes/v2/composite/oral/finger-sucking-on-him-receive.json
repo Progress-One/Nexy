@@ -1,0 +1,43 @@
+{
+  "id": "finger-sucking-on-him-receive",
+  "slug": "finger-sucking-on-him-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": ["cunnilingus"],
+  "paired_scene": "finger-sucking-on-him",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Её пальцы у меня во рту",
+    "en": "Her Fingers in My Mouth"
+  },
+  "subtitle": {
+    "ru": "Сосать её пальцы",
+    "en": "Sucking her fingers"
+  },
+  "user_description": {
+    "ru": "Взять её пальцы в рот. Нежно облизывать и посасывать.",
+    "en": "Take her fingers in my mouth. Gently lick and suck them."
+  },
+  "ai_description": {
+    "ru": "Партнёрша вкладывает пальцы в рот, нежно облизывать и посасывать их. Интимный, чувственный жест.",
+    "en": "Partner puts fingers in mouth, gently licking and sucking. Intimate, sensual gesture."
+  },
+  "image_prompt": "intimate couple, man with woman's fingers near his lips, sensual tender moment, soft lighting",
+  "intensity": 1,
+  "category": "oral",
+  "tags": ["oral", "finger_sucking", "licking", "sensual", "teasing", "submission"],
+  "ai_context": {
+    "tests_primary": ["oral", "finger_sucking", "receiving"],
+    "tests_secondary": ["teasing", "intimacy", "foreplay"]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Сосать её пальцы",
+      "en": "Suck her fingers"
+    }
+  }
+}

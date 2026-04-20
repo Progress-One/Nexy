@@ -1,0 +1,57 @@
+{
+  "id": "tape-bondage-on-him-receive",
+  "slug": "tape-bondage-on-him-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "bondage-f-ties-m-receive"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "tape-bondage-on-him",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Липкая лента",
+    "en": "Tape Bondage"
+  },
+  "subtitle": {
+    "ru": "Связан скотчем",
+    "en": "Bound with tape"
+  },
+  "user_description": {
+    "ru": "Она связывает тебя липкой лентой. Руки, ноги, рот заклеен.",
+    "en": "She binds you with tape. Hands, legs, mouth taped."
+  },
+  "ai_description": {
+    "ru": "Связан липкой лентой. Плотно, туго, беспомощен.",
+    "en": "Bound with tape. Tight, snug, helpless."
+  },
+  "image_prompt": "man with hands bound with silver duct tape, woman standing over him, bedroom",
+  "intensity": 3,
+  "category": "bondage",
+  "tags": [
+    "bondage",
+    "tape",
+    "duct_tape",
+    "submission"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "bondage",
+      "tape",
+      "submission"
+    ],
+    "tests_secondary": [
+      "helpless",
+      "femdom"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Быть связанным лентой",
+      "en": "Be bound with tape"
+    }
+  }
+}

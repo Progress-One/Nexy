@@ -1,0 +1,57 @@
+{
+  "id": "latex-on-him-wear",
+  "slug": "latex-on-him-wear",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "lingerie-lace"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "paired_scene": "latex-on-him-watch",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Носить латекс",
+    "en": "Wear Latex"
+  },
+  "subtitle": {
+    "ru": "Латекс, кожа на тебе",
+    "en": "Latex, leather on you"
+  },
+  "user_description": {
+    "ru": "Ты в латексе или коже. Кожаные штаны, латекс на твоём теле.",
+    "en": "You're in latex or leather. Leather pants, latex on your body."
+  },
+  "ai_description": {
+    "ru": "Он носит латекс или кожу. Материал на теле, ощущение.",
+    "en": "He wears latex or leather. Material on body, sensation."
+  },
+  "image_prompt": "man in leather pants looking at himself in mirror, dimly lit room",
+  "intensity": 3,
+  "category": "clothing",
+  "tags": [
+    "latex",
+    "leather",
+    "material_fetish",
+    "wearing"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "latex",
+      "leather",
+      "material_fetish"
+    ],
+    "tests_secondary": [
+      "clothing",
+      "sensation"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Носить латекс или кожу",
+      "en": "Wear latex or leather"
+    }
+  }
+}

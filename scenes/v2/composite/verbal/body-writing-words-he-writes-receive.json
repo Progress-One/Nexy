@@ -1,0 +1,118 @@
+{
+  "id": "body-writing-words-he-writes-receive",
+  "slug": "body-writing-words-he-writes-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "body-writing-words-he-writes",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Какие надписи?",
+    "en": "What to write?"
+  },
+  "subtitle": {
+    "ru": "Что он пишет на тебе",
+    "en": "What he writes on you"
+  },
+  "user_description": {
+    "ru": "Какие надписи тебе нравится когда он пишет на твоём теле?",
+    "en": "What inscriptions do you like when he writes on your body?"
+  },
+  "ai_description": {
+    "ru": "Какие надписи ей нравится видеть на себе.",
+    "en": "What inscriptions she likes to see on herself."
+  },
+  "intensity": 3,
+  "category": "verbal",
+  "tags": [
+    "body_writing",
+    "marking",
+    "receiving"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "body_writing",
+      "receiving"
+    ],
+    "tests_secondary": [
+      "ownership",
+      "degradation"
+    ]
+  },
+  "question": {
+    "type": "multi_select",
+    "text": {
+      "ru": "Какие надписи тебе нравятся?",
+      "en": "What inscriptions do you like?"
+    },
+    "options": [
+      {
+        "id": "slut",
+        "label": {
+          "ru": "Шлюха",
+          "en": "Slut"
+        }
+      },
+      {
+        "id": "whore",
+        "label": {
+          "ru": "Шалава",
+          "en": "Whore"
+        }
+      },
+      {
+        "id": "owned",
+        "label": {
+          "ru": "Его собственность",
+          "en": "His property"
+        }
+      },
+      {
+        "id": "name",
+        "label": {
+          "ru": "Его имя",
+          "en": "His name"
+        }
+      },
+      {
+        "id": "arrows",
+        "label": {
+          "ru": "Стрелки",
+          "en": "Arrows"
+        }
+      },
+      {
+        "id": "cum_here",
+        "label": {
+          "ru": "Кончи сюда",
+          "en": "Cum here"
+        }
+      },
+      {
+        "id": "toy",
+        "label": {
+          "ru": "Игрушка",
+          "en": "Toy"
+        }
+      },
+      {
+        "id": "free_use",
+        "label": {
+          "ru": "Для использования",
+          "en": "Free use"
+        }
+      }
+    ],
+    "allow_other": true,
+    "other_placeholder": {
+      "ru": "Своя надпись...",
+      "en": "Custom text..."
+    },
+    "min_selections": 0
+  },
+  "clarification_for": [
+    "body-writing-he-writes-on-her-receive"
+  ]
+}

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/compat-types';
 import Anthropic from '@anthropic-ai/sdk';
 
 const supabase = createClient(

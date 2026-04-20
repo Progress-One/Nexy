@@ -1,0 +1,43 @@
+{
+  "id": "no-panties-walk-know",
+  "slug": "no-panties-walk-know",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": ["public-sex"],
+  "paired_scene": "no-panties-walk",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Она без трусиков",
+    "en": "She Has No Panties"
+  },
+  "subtitle": {
+    "ru": "Только ты знаешь",
+    "en": "Only you know"
+  },
+  "user_description": {
+    "ru": "Она вышла на улицу без нижнего белья. Только ты знаешь. Ваш секрет.",
+    "en": "She went out without underwear. Only you know. Your secret."
+  },
+  "ai_description": {
+    "ru": "Она гуляет без нижнего белья, а ты знаешь. Секрет между вами, возбуждение от мысли что никто вокруг не догадывается.",
+    "en": "She walks without underwear and you know. Secret between you, arousal from the thought that no one around suspects."
+  },
+  "image_prompt": "couple walking in park, woman in flowing summer dress, man looking at her with knowing smile, his hand on her lower back, shared secret, outdoor daylight",
+  "intensity": 2,
+  "category": "exhibitionism",
+  "tags": ["exhibitionism", "public", "teasing", "secret", "anticipation", "no_underwear"],
+  "ai_context": {
+    "tests_primary": ["exhibitionism", "public", "secret"],
+    "tests_secondary": ["teasing", "anticipation", "visual"]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Знать что она без белья",
+      "en": "Know she has no underwear"
+    }
+  }
+}

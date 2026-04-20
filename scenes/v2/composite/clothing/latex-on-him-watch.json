@@ -1,0 +1,57 @@
+{
+  "id": "latex-on-him-watch",
+  "slug": "latex-on-him-watch",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "lingerie-lace"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "latex-on-him-wear",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Он в латексе",
+    "en": "Him in Latex"
+  },
+  "subtitle": {
+    "ru": "Латекс, кожа на нём",
+    "en": "Latex, leather on him"
+  },
+  "user_description": {
+    "ru": "Он в латексе или коже. Кожаные штаны, латексная майка, материал на его теле.",
+    "en": "He's in latex or leather. Leather pants, latex top, material on his body."
+  },
+  "ai_description": {
+    "ru": "Он в латексе или коже. Материал на мужском теле, блеск, запах.",
+    "en": "He's in latex or leather. Material on male body, shine, smell."
+  },
+  "image_prompt": "man in leather pants and harness, muscular body, dimly lit room",
+  "intensity": 3,
+  "category": "clothing",
+  "tags": [
+    "latex",
+    "leather",
+    "material_fetish",
+    "on_him"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "latex",
+      "leather",
+      "material_fetish"
+    ],
+    "tests_secondary": [
+      "clothing",
+      "visual"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Он в латексе или коже",
+      "en": "Him in latex or leather"
+    }
+  }
+}

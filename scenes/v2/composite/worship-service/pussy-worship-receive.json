@@ -1,0 +1,55 @@
+{
+  "id": "pussy-worship-receive",
+  "slug": "pussy-worship-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": [
+    "cunnilingus"
+  ],
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "female",
+  "paired_scene": "pussy-worship",
+  "role_direction": "m_to_f",
+  "title": {
+    "ru": "Pussy worship",
+    "en": "Pussy Worship"
+  },
+  "subtitle": {
+    "ru": "Он поклоняется твоей киске",
+    "en": "He worships your pussy"
+  },
+  "user_description": {
+    "ru": "Он на коленях перед тобой, поклоняется твоей киске — целует, лижет, ласкает руками с обожанием.",
+    "en": "He kneels before you, worships your pussy — kissing, licking, caressing with his hands in adoration."
+  },
+  "ai_description": {
+    "ru": "Pussy worship — благоговейное отношение к киске. Не просто куни, а поклонение: восхищение, обожание, служение.",
+    "en": "Pussy worship — reverent attitude toward her pussy. Not just cunnilingus, but worship: admiration, adoration, service."
+  },
+  "image_prompt": "man kneeling before woman, worshipping her pussy with mouth and hands, looking up at her adoringly, bedroom setting, intimate angle",
+  "intensity": 2,
+  "category": "worship-service",
+  "tags": [
+    "pussy_worship",
+    "worship",
+    "receiving"
+  ],
+  "ai_context": {
+    "tests_primary": [
+      "pussy_worship",
+      "receiving"
+    ],
+    "tests_secondary": [
+      "devotion",
+      "service"
+    ]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Он поклоняется твоей киске",
+      "en": "He worships your pussy"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "restraint-on-him-receive",
+  "slug": "restraint-on-him-receive",
+  "version": 2,
+  "scene_type": "clarification",
+  "clarification_for": ["bondage-f-ties-m-receive"],
+  "paired_scene": "restraint-on-him",
+  "is_active": true,
+  "is_onboarding": false,
+  "for_gender": "male",
+  "role_direction": "f_to_m",
+  "title": {
+    "ru": "Она наденет на тебя наручники",
+    "en": "She Puts Cuffs on You"
+  },
+  "subtitle": {
+    "ru": "Твои руки зафиксированы",
+    "en": "Your hands restrained"
+  },
+  "user_description": {
+    "ru": "Она фиксирует твои руки наручниками, ремнями или мягкими путами.",
+    "en": "She restrains your hands with cuffs, straps, or soft bonds."
+  },
+  "ai_description": {
+    "ru": "Партнёрша надевает наручники или ремни, фиксирует руки. Отдаться контролю.",
+    "en": "Partner puts cuffs or straps, restrains hands. Surrender control."
+  },
+  "image_prompt": "man's hands in soft leather cuffs attached to bedpost, bedroom setting",
+  "intensity": 2,
+  "category": "bondage",
+  "tags": ["bondage", "restraint", "cuffs", "submission", "surrender"],
+  "ai_context": {
+    "tests_primary": ["bondage", "restraint", "receiving"],
+    "tests_secondary": ["submission", "surrender"]
+  },
+  "question": {
+    "type": "swipe",
+    "text": {
+      "ru": "Быть в наручниках",
+      "en": "Be in cuffs"
+    }
+  }
+}
