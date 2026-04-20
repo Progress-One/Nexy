@@ -1,239 +1,122 @@
-# V2 Implementation Status
+# V3 Implementation Status
 
-## Дата обновления: 2026-03-11
+## Дата обновления: 2026-04-20
 
-> **Статус:** ✅ V2 Composite Scenes Flow полностью реализован с AI-траекторией и адаптивным flow
+> **Статус:** 🚧 Миграция с V2 на V3 в процессе. БД и контент уже в V3 формате.
+> Runtime постепенно переключается на V3 sequencing.
 
 ---
 
-## Реализованные компоненты
+## V3 Архитектура
 
-### UI Components
+**Плоская структура сцен без nested follow-ups:**
+- `main_question` — основная тема (свайп YES/NO/VERY/IF_PARTNER)
+- `clarification` — уточняющая сцена для main_question
+- `intro_slide` — runtime-сгенерированный текст между группами
 
-| Компонент | Статус | Файл | Описание |
-|-----------|--------|------|----------|
-| `CompositeSceneView` | ✅ | `src/components/discovery/CompositeSceneView.tsx` | Отображение composite scene с изображением, заголовком, описанием |
-| `ElementSelector` | ✅ | `src/components/discovery/ElementSelector.tsx` | Multi-select элементов с поддержкой min/max ограничений |
-| `FollowUpFlow` | ✅ | `src/components/discovery/FollowUpFlow.tsx` | Управление потоком follow-up вопросов с навигацией |
-| `ImageSelectAnswer` | ✅ | `src/components/discovery/ImageSelectAnswer.tsx` | Выбор из изображений |
-| `TextInputAnswer` | ✅ | `src/components/discovery/TextInputAnswer.tsx` | Свободный текстовый ввод |
-| `TextWithSuggestionsAnswer` | ✅ | `src/components/discovery/TextWithSuggestionsAnswer.tsx` | Выбор из предложений + свой вариант |
-| `IntensityAnswer` | ✅ | `src/components/discovery/IntensityAnswer.tsx` | Шкала интенсивности (0-100) с метками |
-| `RoleAnswer` | ✅ | `src/components/discovery/RoleAnswer.tsx` | Выбор роли (Give/Receive/Both) |
-| `ExperienceAnswer` | ✅ | `src/components/discovery/ExperienceAnswer.tsx` | Уровень опыта (Tried/Want to try/Fantasy only) |
+**Типы V3 сцен (scene_type):**
+- `main_question` — главный вопрос темы (обычно `is_onboarding = true`)
+- `clarification` — уточнение (ссылается на main через `clarification_for[]`)
+- `multi_choice_text` — множественный выбор текстовых опций
+- `image_selection` — выбор из картинок
+- `body_map_activity` — привязка зон тела к активности
+- `paired_text` — парные вопросы (give/receive)
+- `scale_text` — шкала интенсивности
+
+---
+
+## Готовность компонентов
+
+### UI Components (V3)
+
+| Компонент | Статус | Файл |
+|-----------|--------|------|
+| `SceneRendererV3` | ✅ | `src/components/discovery/SceneRendererV3.tsx` |
+| `SwipeCardsGroupV3` | ✅ | `src/components/discovery/SwipeCardsGroupV3.tsx` |
+| `IntroSlideV3` | ✅ | `src/components/discovery/IntroSlideV3.tsx` |
+| `MultiChoiceTextV3` | ✅ | `src/components/discovery/MultiChoiceTextV3.tsx` |
+| `ImageSelectionV3` | ✅ | `src/components/discovery/ImageSelectionV3.tsx` |
+| `BodyMapActivityV3` | ✅ | `src/components/discovery/BodyMapActivityV3.tsx` |
+| `PairedTextV3` | ✅ | `src/components/discovery/PairedTextV3.tsx` |
+| `ScaleTextV3` | ✅ | `src/components/discovery/ScaleTextV3.tsx` |
+| `BodyMapAnswer/` | ✅ | `src/components/discovery/BodyMapAnswer/` |
 
 ### Backend Logic
 
-| Модуль | Статус | Файл | Описание |
-|--------|--------|------|----------|
-| `topic-flow.ts` | ✅ | `src/lib/topic-flow.ts` | Topic-based discovery flow с gate scoring |
-| `tag-preferences.ts` | ✅ | `src/lib/tag-preferences.ts` | Агрегация предпочтений в `tag_preferences` |
-| `profile-signals.ts` | ✅ | `src/lib/profile-signals.ts` | Обновление психологического профиля |
-| `scene-progression.ts` | ✅ | `src/lib/scene-progression.ts` | Полный AI-flow: scoring, gates, exploration/exploitation |
-| `show-if.ts` | ✅ | `src/lib/show-if.ts` | **NEW** Условное отображение follow-ups (show_if) |
+| Модуль | Статус | Файл |
+|--------|--------|------|
+| `scene-sequencing-v3.ts` | ✅ | `src/lib/scene-sequencing-v3.ts` |
+| `tag-preferences.ts` | ✅ V3 | `updateTagPreferencesFromSwipe` + `markTagsAsRejected` |
+| `onboarding-gates.ts` | ✅ | Работает через `user_gates` trigger |
+| `matching.ts` | ✅ | Tag-based partner matching |
+| `scene-progression.ts` | ⚠️ | Содержит legacy V2 функции, будут удалены после переключения /discover |
+| `admin-auth.ts` | ✅ | `requireAdmin()` на всех admin API routes |
 
-### Database
+### Database (35 миграций)
 
-| Таблица | Статус | Миграция | Описание |
-|---------|--------|----------|----------|
-| `scene_responses` | ✅ | `005 + 021 + 033` | Единая таблица ответов (legacy + V2 + onboarding) |
-| `tag_preferences` | ✅ | `011_finalize_v2.sql` | Агрегированные предпочтения по тегам |
+| Миграция | Назначение |
+|----------|-----------|
+| `028_scene_types_v3.sql` | Добавила scene_type, clarification_for, user_clarification_tracking |
+| `030_unified_scene_structure.sql` | is_onboarding, for_gender |
+| `033_unified_architecture.sql` | sets_gate + auto-computed gates trigger |
+| `035_drop_v2_legacy_columns.sql` | 🚧 DROP elements, follow_up, question (после переключения кода) |
 
-### Integration
+### Content
 
-| Компонент | Статус | Описание |
-|-----------|--------|----------|
-| Discovery Flow | ✅ | Полная интеграция в `discover/page.tsx` |
-| Body Map Stage | ✅ | Отдельный этап перед сценами |
-| Scene Progression | ✅ | Адаптивный flow с dedupe_by_tag и приоритизацией на основе tag_preferences |
-| API Routes | ✅ | `/api/ai/question` работает с V2 |
-
----
-
-## V2 Composite Scenes Flow
-
-### Полный flow реализован:
-
-1. ✅ **Показ composite scene**
-   - `CompositeSceneView` отображает сцену с изображением
-   - Показываются заголовок, описание, теги, интенсивность
-
-2. ✅ **Выбор элементов**
-   - `ElementSelector` позволяет выбрать элементы сцены
-   - Поддержка min/max ограничений
-   - Визуальная индикация выбранных элементов
-
-3. ✅ **Follow-up вопросы**
-   - `FollowUpFlow` управляет потоком follow-up вопросов
-   - Поддержка всех типов follow-up
-   - Навигация вперед/назад
-   - Счетчик прогресса
-
-4. ✅ **Сохранение данных**
-   - Сохранение в `scene_responses` (единая таблица):
-     - `elements_selected` - массив ID выбранных элементов
-     - `element_responses` - JSONB с ответами на follow-up
-     - `skipped` - флаг пропуска сцены
-   - Обновление `tag_preferences` автоматически
-
-### Обработка всех случаев:
-
-- ✅ Пропуск сцены (кнопка "Не моё") → `skipped: true`
-- ✅ Пропуск выбора элементов → `selected_elements: []`, `skipped: true`
-- ✅ Выбор элементов без follow-up → сохранение сразу
-- ✅ Выбор элементов с follow-up → переход к follow-up фазе
-- ✅ Пропуск follow-up → сохранение с пустыми `element_responses`
+- **211 активных V3 clarification сцен** (92% контента)
+- **58 onboarding сцен** → работают как main_question
+- **141 inactive** V2 сцена — архив, не видна юзеру
+- **6 сцен** с `scene_type = null` — legacy, требуют ручной миграции или архивации
 
 ---
 
-## Tag Preferences Aggregation
+## Discovery Flow (V3)
 
-### Реализовано в `tag-preferences.ts`:
+```
+1. User signs up → выбор пола → /discover
+2. buildDiscoveryContextV3() собирает контекст (gates, shown clarifications)
+3. getNextDiscoveryScenesV3() возвращает { introSlide?, scenes[], triggeredByMain? }
+4. Если introSlide → показать IntroSlideV3
+5. Если scenes.length > 1 → SwipeCardsGroupV3 (колода)
+6. Если scenes.length === 1 → SceneRendererV3 (один сцена)
+7. На каждый ответ: updateTagPreferencesFromSwipe + markClarificationShown
+8. Gates пересчитываются автоматически через trigger → фильтрация следующих сцен
+9. При 0 scenes → фаза 'completed'
+```
 
-- ✅ Обновление `interest_level` на основе выбранных элементов (базовый: 50)
-- ✅ Извлечение `role_preference` из follow-up типа `role`
-- ✅ Извлечение `intensity_preference` из follow-up типа `intensity`/`scale`
-- ✅ Извлечение `experience_level` из follow-up типа `experience`
-- ✅ Сохранение специфичных предпочтений в `specific_preferences`
-- ✅ Отслеживание `source_scenes` (какие сцены внесли вклад)
-- ✅ Автоматический вызов при сохранении ответов
-
----
-
-## Body Map Integration
-
-### Реализовано:
-
-- ✅ Body Map показывается как **отдельный этап ПЕРЕД сценами**
-- ✅ Проверка статуса Body Map (completed/skipped/pending)
-- ✅ Создание виртуальных сцен для Body Map на основе профиля пользователя
-- ✅ Кнопка "Пропустить Body Map" для пропуска
-- ✅ Сохранение флага пропуска в `user_flow_state.tag_scores.body_map_skipped`
-- ✅ Автоматический переход к обычным сценам после Body Map
+**Значения свайпов:**
+- `0` — NO (rejected, interest_level -1)
+- `1` — YES (interested, interest_level 50)
+- `2` — VERY (very interested, interest_level 80)
+- `3` — IF_PARTNER (conditional, interest_level 30)
 
 ---
 
-## Scene Progression Algorithm
+## Что осталось
 
-### Реализовано в `scene-progression.ts`:
+### Критично (блокирует полный переход)
+- [ ] Переключить `src/app/(app)/discover/page.tsx` с V2 логики на V3 sequencing (в работе)
+- [ ] Удалить V2 функции из `scene-progression.ts` (после переключения)
+- [ ] Удалить V2 типы из `types.ts` (V2Element, V2FollowUp, V2Question, V2AIContext)
+- [ ] Запустить migration 035 на проде (после всего кода)
 
-- ⚠️ **Dedupe_by_tag логика** (отключена, возвращает false)
-  - Инфраструктура готова: `getAnsweredElementIds()`, `getAnsweredTagRefs()`
-  - `shouldSkipSceneByDedupe()` — заглушка, всегда возвращает false
+### Важно (UX кайфовости)
+- [ ] Progress indicator "3/20" в main questions
+- [ ] Feedback loop каждые 5 сцен ("узнали про тебя X")
+- [ ] Profile reveal после 30 сцен
+- [ ] Value intro (3 слайда) после регистрации
+- [ ] Partner match reveal с подсветкой IF_PARTNER-совпадений
 
-- ✅ **Адаптивная приоритизация**
-  - Расчет score сцены на основе `tag_preferences`:
-    - Interest level boost (0-50 points)
-    - Intensity preference matching
-    - Role preference matching (FIXED: правильная логика give/receive)
-    - Bonus за новые элементы (+5 за каждый)
-    - Penalty за высокую интенсивность, если пользователь не показал интерес
-    - Breadth-first bonus для категорийного покрытия
-  - Функция: `calculateSceneScore()`
-
-- ✅ **Адаптивный ordering**
-  - `getAdaptiveScenes()` - получает адаптивно отсортированные сцены
-  - Интегрировано в `getFilteredScenesClient()` с опцией `enableAdaptiveFlow`
-
-- ✅ **Onboarding Gates Filtering**
-  - Блокировка сцен на основе onboarding ответов через DB trigger
-  - Сцены с `sets_gate` устанавливают гейты при YES/VERY ответе
-  - Детальный маппинг 150+ сцен → гейты с поддержкой AND/OR и level:'very'
-  - Функции: `fetchUserGates()`, `isSceneAllowed()` из `onboarding-gates.ts`
-
-- ✅ **Comfort Signals / Intensity Progression** (NEW)
-  - Начало с мягких сцен (intensity 1-2)
-  - Постепенное повышение интенсивности на основе:
-    - Количества отвеченных сцен
-    - Среднего interest level
-    - Среднего intensity preference
-  - Функция: `getUserComfortLevel()`
-
-- ✅ **Exploration vs Exploitation** (NEW)
-  - 70% эксплуатация (лучшие matches по scoring)
-  - 30% исследование (случайные из оставшихся)
-  - Функция: `applyExplorationExploitation()`
-
-- ✅ **Breadth-First Category Coverage** (NEW)
-  - Bonus для не виденных категорий
-  - Активен в первые 15 сцен discovery
-  - Функция: `calculateBreadthBonus()`
+### Nice to have
+- [ ] Age gate 18+ при регистрации
+- [ ] Tests на scene-sequencing-v3, matching, tag-preferences
+- [ ] Streaks и weekly digest для retention
+- [ ] Централизованные scoring константы в admin_config таблице (A/B ready)
+- [ ] Rate-limiting на admin endpoints и Stripe webhook
 
 ---
 
-## Show-If Conditions (NEW)
+## Архив
 
-### Реализовано в `show-if.ts`:
-
-- ✅ **element_selected** - показать follow-up если выбраны определённые элементы
-- ✅ **interest_level** - показать follow-up если interest level в диапазоне {min, max}
-- ✅ **answer_contains** - показать follow-up если предыдущие ответы содержат значения
-
-### Функции:
-- `shouldShowFollowUp()` - проверка всех условий
-- `filterFollowUps()` - фильтрация массива follow-ups
-- `getDrilldownsForSelectedOptions()` - получение drilldowns для выбранных опций
-
----
-
-## Level 3 Drilldown Support (NEW)
-
-### Реализовано в `FollowUpFlow.tsx`:
-
-- ✅ **3 уровня глубины follow-ups**
-  - Level 1: Основной вопрос
-  - Level 2: Уточнение (follow_ups массив)
-  - Level 3: Детали (вложенные follow_ups или option.drilldown)
-
-- ✅ **Визуальная индикация уровня**
-  - Badge с текстом "Уточнение" / "Детали"
-
-- ✅ **Динамическое добавление drilldowns**
-  - При выборе опции с drilldown → добавление в очередь
-  - Поддержка до 3-х уровней вложенности
-
----
-
-## Что осталось (опционально)
-
-### Не критично, можно добавить позже:
-
-- ⚠️ **Генерация изображений**
-  - Генерация изображений для всех composite scenes
-  - Можно делать по мере необходимости
-
-- ⚠️ **AI-предсказания**
-  - ML-модель для улучшения scoring на основе истории
-  - Пока используется rule-based scoring
-
----
-
-## Тестирование
-
-### Готово к тестированию:
-
-- ✅ Все компоненты интегрированы
-- ✅ Нет ошибок линтера
-- ✅ Типы TypeScript обновлены
-- ✅ База данных поддерживает V2
-
-### Рекомендуется протестировать:
-
-1. Полный flow: сцена → выбор элементов → follow-up → сохранение
-2. Пропуск сцены
-3. Пропуск элементов
-4. Пропуск follow-up
-5. Обновление tag_preferences
-6. Body Map flow
-7. Переходы между фазами
-
----
-
-## Файлы для справки
-
-- `docs/database.md` - актуальная схема базы данных
-- `docs/architecture.md` - архитектура Discovery системы
-- `src/app/(app)/discover/page.tsx` - основной discovery flow
-- `src/lib/tag-preferences.ts` - агрегация tag preferences
-- `src/lib/scene-progression.ts` - адаптивный scoring и selection
-- `src/lib/matching.ts` - tag-based partner matching
+- Старый V2 статус: `docs/_archive/status-v2.md`
+- V2 architecture spec: `docs/_archive/architecture-v2.md`

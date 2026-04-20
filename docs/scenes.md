@@ -92,16 +92,12 @@ npx tsx scripts/full-scene-audit.ts
 
 ## Быстрый обзор
 
-**135 composite scenes** организованы в 24 категории:
+**~270 активных V3 сцен:**
+- **58 main_question** (onboarding — `is_onboarding=true`): quickie, rough-give, power-sub, recording, anal, oral и т.д.
+- **211 clarification** (`scene_type='clarification'` + `clarification_for=[...]`): уточняющие сцены для main_question'ов
+- **7 body-map** + **3 activity** сцены
 
-| Категория | Сцен | Примеры |
-|-----------|------|---------|
-| **baseline** | 14 | power-dynamic, intensity, pain-tolerance, anal-interest... |
-| impact-pain | 12 | spanking, wax, choking, nipple play, whipping, CBT |
-| control-power | 11 | bondage, collar, edging, feminization, free-use |
-| extreme | 10 | fisting, needle play, mummification, breath play |
-| oral | 7 | blowjob, cunnilingus, deepthroat, facesitting, rimming |
-| ... | ... | [см. полный список](../scenes/v2/README.md#categories-24-total-135-scenes) |
+Источник: `scenes/v2/scenes-status.json` → 352 total, 211 active, 141 inactive (архив).
 
 ## Baseline System
 
@@ -115,35 +111,43 @@ group-interest → no/maybe/yes       → skip/show group scenes
 ...
 ```
 
-## Структура сцены
+## Структура сцены (V3)
 
 ```json
 {
-  "id": "scene_id",
+  "id": "scene_uuid",
   "slug": "scene-slug",
-  "category": "baseline",
-  "intensity": 1-5,
-  "elements": [
-    {
-      "id": "element_id",
-      "follow_ups": [...]
-    }
-  ],
-  "ai_context": {
-    "gates": {
-      "answer_id": ["filter_1", "filter_2"]
-    }
-  }
+  "scene_type": "clarification",
+  "clarification_for": ["oral", "rough"],
+  "is_onboarding": false,
+  "for_gender": null,
+  "category": "oral",
+  "intensity": 2,
+  "tags": ["oral", "deepthroat"],
+  "sets_gate": null,
+  "role_direction": "m_to_f",
+  "paired_scene": "scene-slug-receive",
+  "title": { "ru": "...", "en": "..." },
+  "user_description": { "ru": "...", "en": "..." },
+  "image_prompt": "...",
+  "image_url": "https://..."
 }
 ```
+
+Поля по типу сцены:
+- `multi_choice_text`: `text_options`, `allow_other`, `other_placeholder`
+- `image_selection`: `image_options`
+- `paired_text`: `paired_questions`
+- `body_map_activity`: `body_map_activity_config`
+- `scale_text`: `scale_min`, `scale_max`, `scale_labels`
 
 ## Файловая структура
 
 ```
 scenes/v2/
 ├── composite/
-│   ├── _index.json         # Реестр всех 135 сцен
-│   ├── baseline/           # 14 foundational gates
+│   ├── _index.json         # Реестр сцен
+│   ├── baseline/           # foundational main_question сцены
 │   │   ├── power-dynamic.json
 │   │   ├── intensity.json
 │   │   └── ...

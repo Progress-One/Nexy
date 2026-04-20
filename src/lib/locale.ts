@@ -115,6 +115,17 @@ export const UI_STRINGS: Record<string, LocalizedString> = {
   checkForNew: { ru: 'Проверить новые', en: 'Check for new' },
   notForMe: { ru: 'Не моё', en: 'Not for me' },
 
+  // Discovery V3 flow
+  discoveryDone: { ru: 'Отлично!', en: 'Great!' },
+  discoveryComeBackLater: {
+    ru: 'На сегодня всё. Возвращайся позже за новыми сценами.',
+    en: "That's all for now. Come back later for more scenes.",
+  },
+  goBack: { ru: 'Вернуться', en: 'Go back' },
+  goToProfile: { ru: 'Перейти в профиль', en: 'Go to profile' },
+  somethingWentWrong: { ru: 'Что-то пошло не так', en: 'Something went wrong' },
+  tryAgain: { ru: 'Попробовать снова', en: 'Try again' },
+
   // Follow-up
   oneMoreQuestion: {
     ru: 'Ещё один вопрос',

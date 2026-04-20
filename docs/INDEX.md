@@ -1,19 +1,19 @@
-# Intimate Discovery — Documentation Index
+# Nexy — Documentation Index
 
-> Последнее обновление: 2026-03-11
+> Последнее обновление: 2026-04-20
 
 ## Quick Links
 
 | Документ | Описание |
 |----------|----------|
-| [architecture.md](architecture.md) | Архитектура Discovery системы, flow, компоненты |
-| [database.md](database.md) | Схема базы данных, таблицы, миграции |
-| [scenes.md](scenes.md) | Система сцен — 162 composite scenes, onboarding gates |
+| [architecture.md](architecture.md) | V3 Discovery архитектура (main_question + clarifications) |
+| [database.md](database.md) | Схема базы данных, таблицы, миграции (35 штук) |
+| [scenes.md](scenes.md) | Система сцен — V3 формат, scene_type, clarification_for |
 | [body-map.md](body-map.md) | Body Map — интерактивный выбор зон тела |
-| [admin-panel.md](admin-panel.md) | Админ-панель — управление сценами и пользователями |
-| [content-guidelines.md](content-guidelines.md) | Правила написания контента: описания, промпты |
-| [status.md](status.md) | Статус реализации — что готово, что в процессе |
-| **[onboarding-integration.md](onboarding-integration.md)** | **Визуальный онбординг, гейты, Mobile UX** |
+| [admin-panel.md](admin-panel.md) | Админ-панель (требует ADMIN_EMAILS env) |
+| [content-guidelines.md](content-guidelines.md) | Правила написания контента |
+| [status.md](status.md) | Статус V3 миграции — что готово, что осталось |
+| [onboarding-integration.md](onboarding-integration.md) | Онбординг, гейты, Mobile UX |
 
 ---
 
@@ -36,15 +36,13 @@ intimate-discovery/
 │       └── onboarding-gates.ts # Gates system for scene filtering
 │
 ├── scenes/
-│   └── v2/                     # АКТУАЛЬНЫЕ СЦЕНЫ
-│       ├── README.md           # Полная документация по сценам
-│       ├── onboarding/         # 20 категорий визуального онбординга
-│       │   └── categories.json # Описания и image_prompts
-│       ├── composite/          # 162 composite scenes
-│       │   ├── baseline/       # 14 foundational gates
-│       │   └── {categories}/   # 148 detailed scenes
-│       ├── body-map/           # 6 body map activities
-│       └── activities/         # sounds, clothing
+│   └── v2/                     # JSON source (был импортирован в БД,
+│       │                       # runtime читает только topics.json)
+│       ├── onboarding/         # 58 main_question сцен
+│       ├── composite/          # 211 активных clarification-сцен (V3 формат)
+│       ├── body-map/           # 7 body map сцен
+│       ├── activities/         # 3 activity сцены
+│       └── topics.json         # используется в runtime
 │
 ├── supabase/
 │   └── migrations/             # SQL миграции
@@ -57,29 +55,34 @@ intimate-discovery/
 
 ## Ключевые концепции
 
-### Discovery Flow (5 этапов)
+### Discovery Flow (V3)
 
-1. **Visual Onboarding** — свайп-карточки по 20 категориям (NO/YES/VERY)
-2. **Body Map** — пользователь указывает зоны на теле (kissing, biting, spanking...)
-3. **Activities** — выбор звуков и одежды (audio_select, image_select)
-4. **Baseline Scenes** — 14 базовых вопросов для уточнения
-5. **Composite Scenes** — 162 детальные сцены с follow-up вопросами
+1. **Signup** — email/password + выбор пола (один экран)
+2. **Main Questions** — свайп-сцены по темам (NO/YES/VERY/IF_PARTNER)
+3. **Intro Slide** — runtime-сгенерированный переход перед уточнениями
+4. **Clarifications** — колода или одиночные сцены (разные `scene_type`)
+5. **Body Map / Activities** — сцены `body_map_activity` встроены в flow
+6. **Matching** — tag-based совпадение с партнёром (включая IF_PARTNER)
 
-### Onboarding Gates
+### Gates System
 
-Визуальный онбординг определяет доступ к категориям сцен:
-- `oral: NO` → пропускаем все oral scenes
-- `anal: NO` → пропускаем anal, rimming, pegging
-- `rough: VERY` → открываем face-slapping, cnc
-- `bondage: YES` + `rough: VERY` → открываем extreme scenes
+Gates вычисляются автоматически из ответов через DB trigger:
+- Сцена с `sets_gate = 'oral'` + swipe YES → `user_gates.oral = true`
+- Swipe VERY → дополнительно `oral_very = true`
+- Производные: `power_dynamic OR rough → show_bondage`; `rough_very AND bondage → show_extreme`
 
-### Scene Structure
+Все gates в `user_gates` таблице, пересчитываются на каждый ответ.
 
-Каждая сцена содержит:
-- `sets_gate` — какой gate открывает при YES
-- `clarification_for` — после каких сцен показывать (массив slug-ов сцен)
-- `paired_scene` — парная сцена (та же ситуация, другая перспектива)
-- `question` — тип вопроса (swipe/multi_select/scale)
+### Scene Structure (V3)
+
+Каждая сцена в БД содержит:
+- `scene_type` — main_question / clarification / multi_choice_text / image_selection / body_map_activity / paired_text / scale_text
+- `clarification_for[]` — массив slug'ов main_question'ов для которых это clarification
+- `sets_gate` — какой gate открывает при YES/VERY
+- `paired_scene` — парная сцена (та же ситуация с другой стороны)
+- `is_onboarding` — показывать в онбординге (обычно для main_question)
+- `for_gender` — фильтрация по полу юзера
+- `tags[]` — теги для агрегации в `tag_preferences`
 
 ---
 
