@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/admin-auth';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -12,6 +13,9 @@ const supabase = createClient(
  * Body: { sceneIds: string[], format?: 'single' | 'array' }
  */
 export async function POST(req: NextRequest) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const body = await req.json();
   const { sceneIds, format = 'array' } = body;
 
@@ -63,6 +67,9 @@ export async function POST(req: NextRequest) {
  * Export a single scene by slug
  */
 export async function GET(req: NextRequest) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const { searchParams } = new URL(req.url);
   const slug = searchParams.get('slug');
   const id = searchParams.get('id');

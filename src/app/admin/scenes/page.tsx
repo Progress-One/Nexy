@@ -1611,27 +1611,6 @@ export default function AdminScenesPage() {
             <Button
               variant="outline"
               size="sm"
-              onClick={async () => {
-                addLog('Importing V2 scenes...', 'info');
-                try {
-                  const res = await fetch('/api/admin/import-scenes-v2', { method: 'POST' });
-                  const data = await res.json();
-                  if (data.success) {
-                    addLog(`Imported ${data.imported} V2 scenes (${data.errors} errors)`, 'success');
-                    loadScenes();
-                  } else {
-                    addLog(`Import failed: ${data.error}`, 'error');
-                  }
-                } catch (e) {
-                  addLog(`Import error: ${(e as Error).message}`, 'error');
-                }
-              }}
-            >
-              Import V2
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
               onClick={() => setShowV3Creator(true)}
             >
               <Wand2 className="size-4 mr-1" />

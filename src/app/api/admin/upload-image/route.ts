@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/admin-auth';
 
 // Use service role for admin operations (bypasses RLS)
 const supabase = createClient(
@@ -15,6 +16,9 @@ interface ImageVariant {
 }
 
 export async function POST(req: Request) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
     const formData = await req.formData();
     const file = formData.get('file') as File | null;

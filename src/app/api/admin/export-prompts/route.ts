@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/admin-auth';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -7,6 +8,9 @@ const supabase = createClient(
 );
 
 export async function GET() {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
     // Fetch all scenes with prompts
     const { data: scenes, error } = await supabase

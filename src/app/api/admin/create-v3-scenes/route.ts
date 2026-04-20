@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
 import { ALL_V3_TEMPLATES, getTemplatesByGroup, V3SceneTemplate } from '@/lib/v3-scene-templates';
+import { requireAdmin } from '@/lib/admin-auth';
 
 /**
  * Create V3 scenes from templates
@@ -11,6 +12,9 @@ import { ALL_V3_TEMPLATES, getTemplatesByGroup, V3SceneTemplate } from '@/lib/v3
  * - all: boolean - create all templates
  */
 export async function POST(req: Request) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const supabase = await createServiceClient();
 
   try {
@@ -124,6 +128,9 @@ export async function POST(req: Request) {
  * GET - List available templates and their status
  */
 export async function GET() {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const supabase = await createServiceClient();
 
   try {

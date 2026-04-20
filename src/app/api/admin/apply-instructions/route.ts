@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { applyInstructionsToPrompt } from '@/lib/prompt-rewriter';
+import { requireAdmin } from '@/lib/admin-auth';
 
 // Use service role for admin operations (bypasses RLS)
 const supabase = createClient(
@@ -9,6 +10,9 @@ const supabase = createClient(
 );
 
 export async function POST(req: Request) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
     const { sceneId, instructions } = await req.json();
 

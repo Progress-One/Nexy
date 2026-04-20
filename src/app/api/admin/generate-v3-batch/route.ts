@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
 import { generateWithReplicate } from '@/lib/replicate';
 import { ALL_V3_TEMPLATES, getTemplatesByGroup } from '@/lib/v3-scene-templates';
+import { requireAdmin } from '@/lib/admin-auth';
 
 const DEFAULT_MODEL = 'black-forest-labs/flux-1.1-pro';
 const DEFAULT_ASPECT_RATIO = '3:4';
@@ -16,6 +17,9 @@ const DEFAULT_ASPECT_RATIO = '3:4';
  * - modelId: string - Replicate model to use (optional)
  */
 export async function POST(req: Request) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const supabase = await createServiceClient();
 
   try {
@@ -171,6 +175,9 @@ export async function POST(req: Request) {
  * GET - Check generation status for V3 scenes
  */
 export async function GET() {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const supabase = await createServiceClient();
 
   try {

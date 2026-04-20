@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/admin-auth';
 
 // Use service role for admin operations (bypasses RLS)
 const supabase = createClient(
@@ -8,6 +9,9 @@ const supabase = createClient(
 );
 
 export async function GET() {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
     // Get all profiles with response counts
     const { data: profiles, error: profilesError } = await supabase

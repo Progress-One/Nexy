@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import Anthropic from '@anthropic-ai/sdk';
+import { requireAdmin } from '@/lib/admin-auth';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -153,6 +154,9 @@ function buildEnrichedPrompt(originalPrompt: string, booruTags: string[], partic
 }
 
 export async function GET() {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
     // Fetch all scenes with prompts
     const { data: scenes, error } = await supabase
@@ -184,6 +188,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   try {
     const { sceneIds, dryRun = true } = await req.json();
 

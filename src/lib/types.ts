@@ -837,22 +837,6 @@ export interface ClarificationTracking {
 }
 
 // ============================================
-// ORIENTATION WISHLIST TYPES
-// ============================================
-
-/** Types of orientations users can request */
-export type RequestedOrientation = 'gay_male' | 'gay_female' | 'bisexual';
-
-/** Entry in orientation wishlist - for users wanting unavailable orientations */
-export interface OrientationWishlist {
-  id: string;
-  user_id: string;
-  requested_orientation: RequestedOrientation;
-  email?: string | null;
-  created_at: string;
-}
-
-// ============================================
 // ONBOARDING RESPONSE TYPES
 // ============================================
 

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
+import { requireAdmin } from '@/lib/admin-auth';
 
 /**
  * Delete a scene by ID or slug
@@ -9,6 +10,9 @@ import { createServiceClient } from '@/lib/supabase/server';
  * - slug: string - delete by slug
  */
 export async function POST(req: Request) {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const supabase = await createServiceClient();
 
   try {

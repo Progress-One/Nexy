@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
+import { requireAdmin } from '@/lib/admin-auth';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -47,6 +48,9 @@ interface V4FileJSON {
 }
 
 export async function POST() {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const supabase = await createServiceClient();
 
   try {
@@ -157,6 +161,9 @@ export async function POST() {
 
 // GET endpoint to check V4 import status
 export async function GET() {
+  const authError = await requireAdmin();
+  if (authError) return authError;
+
   const supabase = await createServiceClient();
 
   try {
