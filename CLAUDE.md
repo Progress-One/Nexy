@@ -1,144 +1,148 @@
 # Nexy
 
-> Intimate Discovery — приложение для пар для исследования предпочтений через AI-driven сцены, body map и matching алгоритмы.
+> Web-приложение для пар — анонимный matching интимных предпочтений через свайп-карточки с иллюстрациями. Несовпавшие желания никогда не раскрываются партнёру.
 
 ## Общие ресурсы студии
 
-Студийные скиллы (submodule): `.studio/skills/`
-- UI система: `.studio/skills/skills/ui-system/SKILL.md`
-- Лендинги: `.studio/skills/skills/landing-page/SKILL.md`
-- Запуск: `.studio/skills/skills/launch-plan/SKILL.md`
-- CLAUDE.md генератор: `.studio/skills/skills/claude-md-generator/SKILL.md`
-- Тема проекта: `./themes/ui-theme.md`
+Перед любой UI-работой ОБЯЗАТЕЛЬНО прочитай:
+- UI система: ~/venture-studio/ui-skill/SKILL.md
+- Тема проекта: ~/venture-studio/ui-skill/themes/nexy.md
 
 ## Tech Stack
 
 ```
-Runtime:      Node.js 20+ (TypeScript)
-Frontend:     Next.js (React 19, App Router)
-UI:           shadcn/ui + Radix + Tailwind CSS
-State:        React hooks + Supabase realtime
-Database:     Supabase (PostgreSQL, Auth, Storage)
-AI:           Claude API (scene generation, QA), Replicate (image generation)
-Images:       CivitAI + Replicate (NSFW scene images)
-Payments:     Stripe (subscriptions: free/monthly/yearly/lifetime)
-Auth:         Supabase Auth
-Hosting:      Vercel (frontend + API routes)
+Frontend:     Next.js 16 (App Router), TypeScript, Tailwind CSS 4, shadcn/ui, Framer Motion, Zustand
+Backend:      Supabase (PostgreSQL + Auth + Realtime + Storage + RLS)
+AI:           OpenAI gpt-4o-mini (чат, exclusion detection), Anthropic (SDK установлен), Replicate + CivitAI (генерация изображений)
+Платежи:      Stripe (Checkout + Webhooks + Customer Portal)
+Email:        Resend (noreply@nexy.life)
+Хостинг:      Vercel
+Домен:        nexy.life
 ```
 
 ## Текущий статус
 
 **Работает:**
-- V2 Composite Scenes Flow (полностью)
-- Body Map (интерактивный выбор зон тела)
-- Follow-up система (3 уровня глубины, 10 типов ответов)
-- Tag Preferences агрегация
-- Adaptive Scene Progression (scoring, exploration/exploitation)
-- Onboarding Gates (фильтрация сцен по ответам онбординга)
-- Partner matching (tag-based)
-- Admin панель (управление сценами и пользователями)
-- Stripe подписки
-- 34 миграции в Supabase
+- Онбординг (свайпы, 20 категорий, gates)
+- Body Map (SVG-силуэты, зоны, действия)
+- Discovery flow (адаптивный, свайп + SceneRendererV3)
+- Partner invite + matching (legacy + tag-based)
+- Date Night (mood → мини-свайп → результаты)
+- AI Chat + Partner Avatar Chat
+- Premium (Stripe Checkout + Customer Portal)
+- Лендинг
+- Admin panel
+- i18n (RU + EN)
 
-**В процессе:**
-- Генерация изображений для всех composite scenes
-- AI-предсказания для улучшения scoring
+**Сломано:**
+- Proposals: UI создания есть, но discovery flow НЕ ЧИТАЕТ proposals из БД — партнёр не видит предложенные сцены
+- generateQuestion(): AI-генерация существует в src/lib/ai.ts, но не вызывается в discovery flow
+
+## Скоуп текущего этапа
+
+### P0 — без этого не запуск
+- [ ] Настроить Vitest + базовые тесты
+- [ ] Fix proposals flow — discovery должен читать proposals и показывать партнёру
+- [ ] Onboarding analytics — трекинг drop-off по шагам воронки
+- [ ] Invite flow optimization — ключевой growth lever
+
+### P1 — важно, но можно после запуска
+- [ ] PWA (home screen → retention)
+- [ ] Profile analytics (Premium value proposition)
+
+### P2 — nice to have
+- [ ] Referral program
+- [ ] Push notifications (via PWA)
+
+## Документация
+
+Подробная техническая документация: `docs/INDEX.md`
 
 ## Архитектура
 
 ### Структура проекта
+
+> Корень Next.js проекта — `src/`. CLAUDE.md лежит на уровень выше.
+
 ```
-intimate-discovery/
-├── CLAUDE.md
-├── src/
-│   ├── app/
-│   │   ├── (app)/              # Authenticated pages
-│   │   │   ├── discover/       # Discovery flow (основной)
-│   │   │   ├── discover-v3/    # V3 discovery
-│   │   │   ├── onboarding/     # Визуальный онбординг
-│   │   │   ├── partners/       # Партнёры
-│   │   │   ├── profile/        # Профиль
-│   │   │   ├── premium/        # Подписки
-│   │   │   ├── chat/           # Чат
-│   │   │   ├── date/           # Дата
-│   │   │   └── settings/       # Настройки
-│   │   ├── (auth)/             # Auth pages (login, register)
-│   │   ├── admin/              # Admin panel
-│   │   └── api/                # API routes
-│   ├── components/
-│   │   ├── discovery/          # Composite scenes, follow-ups, body map
-│   │   ├── landing/            # Landing page
-│   │   ├── partners/           # Partner management
-│   │   ├── premium/            # Subscription UI
-│   │   ├── profile/            # User profile
-│   │   ├── admin/              # Admin components
-│   │   ├── shared/             # Shared components
-│   │   └── ui/                 # shadcn/ui components
-│   └── lib/
-│       ├── scene-progression.ts  # Adaptive scoring + selection
-│       ├── tag-preferences.ts    # Preference aggregation
-│       ├── topic-flow.ts         # Topic-based discovery
-│       ├── matching.ts           # Partner matching
-│       ├── onboarding-gates.ts   # Scene filtering
-│       ├── body-map-processing.ts # Body zone processing
-│       ├── ai.ts                 # Claude API
-│       ├── replicate.ts          # Image generation
-│       ├── stripe.ts             # Payments
-│       └── supabase/             # Supabase client
-├── scenes/                       # Scene definitions (JSON)
-├── supabase/
-│   ├── migrations/               # 34 SQL migrations
-│   ├── schema.sql                # Full schema
-│   └── seed.sql                  # Seed data
-├── docs/                         # Documentation
-│   ├── INDEX.md                  # Docs index
-│   ├── architecture.md           # Discovery system design
-│   ├── database.md               # DB schema
-│   ├── scenes.md                 # 135 composite scenes
-│   ├── body-map.md               # Body map system
-│   ├── admin-panel.md            # Admin panel
-│   └── status.md                 # Implementation status
-└── themes/
-    └── ui-theme.md               # Product UI theme
+src/
+  app/
+    (auth)/        — /login, /signup, /callback (callback — route.ts, не page)
+    (app)/         — /onboarding, /discover, /profile, /chat, /partners, /date, /premium, /settings
+    admin/         — 10 страниц админки (scenes, users, prompts, topics, image-pairs и др.)
+    api/           — серверные routes (ai, partner-chat, discovery, stripe, webhooks, admin, invite, notifications и др.)
+    page.tsx       — лендинг
+  components/
+    landing/       — компоненты лендинга
+    discovery/     — SwipeableSceneCard, SceneRendererV3, BodyMap (BodyMapAnswer + силуэты), SmartIntro, ExclusionDialog
+    ui/            — shadcn/ui компоненты
+    admin/         — компоненты админки
+    date/          — DateCard, DateResults, QuickSceneCard
+    partners/      — MatchList, PartnerCard, PartnerChat
+    premium/       — PricingCards
+    profile/       — DimensionCard, PreferenceMap
+    shared/        — BottomNav, Header
+  lib/
+    ai.ts          — OpenAI integration
+    matching.ts    — алгоритм matching между партнёрами
+    locale.ts      — i18n (ru/en)
+    onboarding-gates.ts    — маппинги сцен → gates
+    scene-progression.ts   — адаптивный алгоритм discovery + inter-scene gates
+    scene-conditions.ts    — skip/prefill движок
+    scene-matcher.ts       — подбор сцен
+    tag-preferences.ts     — per-tag предпочтения
+    stripe.ts              — Stripe integration
+    resend.ts              — Email integration
+    types.ts               — общие типы
+    utils.ts               — утилиты
+    body-map-processing.ts
+    profile-signals.ts     — психологическое профилирование
+    smart-intro.ts
+    topic-flow.ts
+    supabase/        — client.ts, server.ts, middleware.ts
+    email-templates/ — шаблоны email (invite)
+  hooks/
+    useNotifications.ts
+  scenes/            — данные сцен (v2/composite/, topics.json, flow-rules.json)
+supabase/
+  migrations/        — НЕ МЕНЯТЬ существующие
 ```
 
-### Ключевые сущности
-
-**Composite Scene** — сцена с изображением, содержащая несколько элементов для выбора.
-**Follow-up** — уточняющий вопрос после выбора элемента (до 3 уровней глубины).
-**Tag Preferences** — агрегированные предпочтения пользователя по тегам.
-**Gates** — условия, блокирующие определённые сцены на основе онбординга.
+### Ключевые решения
+- Privacy-first: несовпавшие предпочтения НИКОГДА не передаются клиенту партнёра
+- Gates: автоматически вычисляются триггером `compute_gates_from_scene_responses()` при каждом ответе
+- Tag preferences: monotonic growth — interest_level никогда не снижается (берётся max)
+- Matching: два алгоритма параллельно (legacy JSONB + tag-based с role complementarity), tag-based приоритетнее
+- Discovery: 70% exploitation (то что нравится) / 30% exploration (новое)
 
 ### Схема БД (ключевые таблицы)
-- `profiles` — пользователи (gender, interested_in, language)
-- `preference_profiles` — JSONB предпочтения
+- `profiles` — пользователь (gender, interested_in, language)
+- `scenes` — все сцены (composite format, slug, elements, tags, gates)
+- `scene_responses` — единая таблица всех ответов
+- `tag_preferences` — per-tag предпочтения (interest, role, intensity, experience)
+- `user_gates` — вычисленные gates (onboarding + body_map + activity → unified)
+- `partnerships` — партнёрства (invite_code, status, expires_at)
 - `subscriptions` — Stripe подписки
-- `partnerships` — пары (invite_code, status)
-- `scene_responses` — ответы на сцены (elements_selected, element_responses JSONB)
-- `tag_preferences` — агрегированные предпочтения (interest_level, role, intensity)
-
-### Discovery Flow
-```
-Onboarding → Body Map → Composite Scenes → Follow-ups → Tag Aggregation → Matching
-                              ↑                                    |
-                              └── Adaptive Scoring ←───────────────┘
-```
+- `partner_chat_messages` — история чата с AI-аватаром
+- `proposals` — предложения партнёру (СЛОМАНО — не читается в discovery)
+- `dates` / `date_responses` — свидания
 
 ## Coding Standards
 
+- Node.js 18+
 - TypeScript strict, no `any`
-- Next.js App Router (React Server Components where possible)
-- shadcn/ui + Tailwind для UI
-- Supabase client через `@supabase/ssr`
-- Все пользовательские строки через i18n (`lib/locale.ts`). Хардкод текста = баг
-- После каждой фичи: `npm run build && npm run lint`
+- Tailwind для стилей, НЕ inline styles и НЕ CSS modules
+- shadcn/ui для базовых компонентов
+- ВСЕ пользовательские строки через `t()` из `src/lib/locale.ts` (RU + EN). Хардкод текста = баг
+- После каждой фичи: `npm run build && npm run lint && npm test`
 - Коммиты: conventional commits (`feat:`, `fix:`, `refactor:`)
 
 ## Git
 
-- После завершения каждой задачи — сделай коммит
+- После завершения каждой задачи из скоупа — сделай коммит
 - НЕ коммить промежуточные/сломанные состояния
-- Перед коммитом: build + lint должны проходить
+- Перед коммитом: build + lint + tests должны проходить
+- Формат: `feat: add proposals to discovery flow` / `fix: invite expiry check`
 - НИКОГДА не коммить .env файлы
 
 ## Env Variables
@@ -148,23 +152,21 @@ Onboarding → Body Map → Composite Scenes → Follow-ups → Tag Aggregation 
 ## Запуск
 
 ```bash
-npm install
-npm run dev              # http://localhost:3000
-npm run build            # Production build
-npm run lint             # ESLint
+npm run dev          # http://localhost:3000
+npm test             # запуск тестов
 ```
 
-## Документация
+После каждой фичи — открой в браузере и проверь что работает.
 
-Подробная документация в `docs/`:
-- `docs/INDEX.md` — оглавление со ссылками на все документы
-- `docs/status.md` — текущий статус реализации
-- `docs/architecture.md` — архитектура Discovery системы
-- `docs/database.md` — полная схема БД
+## Деплой
+
+- Платформа: Vercel
+- Авто-деплой: да, на push в main
 
 ## Out of Scope — НЕ ДЕЛАТЬ
 
-- ❌ Не менять существующие миграции (только новые)
-- ❌ Не хранить API ключи в коде
-- ❌ Не менять существующие docs/ без необходимости
+- ❌ Не менять существующие миграции БД
+- ❌ Не рефакторить legacy preference_profiles → tag_preferences (техдолг, не сейчас)
+- ❌ Не менять структуру сцен (composite format)
+- ❌ Не добавлять Gay/Bi контент (версия 2)
 - ❌ Не добавлять новые зависимости без обоснования
