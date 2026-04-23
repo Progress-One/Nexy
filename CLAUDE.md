@@ -172,16 +172,37 @@ npm test             # запуск тестов
 
 ## Деплой
 
-- Платформа: собственный VPS (shared со студией), см. `docs/VPS_INFRASTRUCTURE.md`
-- Сервер: 173.242.60.76 (Ubuntu 24.04, 2 GB RAM, 20 GB NVMe)
-- Доступ: `ssh root@173.242.60.76` (ed25519 key)
-- Reverse proxy: Caddy (`/opt/studio/caddy/Caddyfile`) — автоматически выпускает SSL через Let's Encrypt, проксирует домен `nexy.life` на контейнер приложения
-- Общие сервисы на той же машине: PostgreSQL (5432), MinIO (9000/9001), pgAdmin (8080)
-- БД: `nexy_db` в общем PostgreSQL. Connection string в `.env.local` (`DATABASE_URL`)
-- Storage: MinIO bucket `scenes` (905 MB, 859 объектов). Endpoint `http://173.242.60.76:9000/scenes/`
-- Бэкап БД: ежедневно в 3:00 UTC, хранится 7 дней в `/opt/studio/backups/daily/`
+**Платформа:** собственный VPS студии (shared), **не** Vercel.
 
-**TODO:** добавить в `VPS_INFRASTRUCTURE.md` и в этот CLAUDE.md конкретику по Next.js-контейнеру Nexy (docker-compose сервис, порт, команда билда, последовательность `git pull && npm run build && pm2 restart` или аналог) — пока в репо деплой-конфигурации (Dockerfile / docker-compose / скрипт) нет.
+- Сервер: 173.242.60.76 (Ubuntu 24.04, 2 GB RAM, 20 GB NVMe) — `ssh root@173.242.60.76` (ed25519)
+- Инфра-документация: [../pulse_factory/docs/MIGRATION_GUIDE.md](../../pulse_factory/docs/MIGRATION_GUIDE.md) и `docs/VPS_INFRASTRUCTURE.md`
+- Reverse proxy: Caddy (`/opt/studio/caddy/Caddyfile`) — auto-SSL Let's Encrypt
+- Shared сервисы на этой же машине: PostgreSQL 16+pgvector (5432), MinIO (9000/9001), pgAdmin (8080)
+
+**Что уже мигрировано на VPS (Phase 3 готово):**
+- БД `nexy_db` — 29 таблиц. Connection в `.env.local` (`DATABASE_URL`)
+- Storage: MinIO bucket `scenes` — 859 объектов, 905 MB, endpoint `http://173.242.60.76:9000/scenes/`
+- Auth: свой JWT через jose (`/api/auth/{login,signup,logout,me}`, cookie `nexy_session`, 30 дней)
+- Кодовая база: Kysely вместо shim (см. `src/lib/db/`, 0 TS-ошибок, 146 тестов зелёные)
+- Бэкап БД: ежедневно в 3:00 UTC, 7-дневное хранение в `/opt/studio/backups/daily/`
+
+**Что ещё НЕ готово — deploy scaffolding для Next.js-контейнера:**
+
+Паттерн студии (по PulseFactory — см. MIGRATION_GUIDE.md):
+```
+deploy/
+├── Dockerfile.web              — Next.js standalone image (non-root)
+├── docker-compose.nexy.yml     — services bound to 127.0.0.1, joined to studio_default network
+├── Caddyfile.nexy              — nexy.life → контейнер (WS + gzip + auto-SSL)
+└── bootstrap.sh                — idempotent one-shot: clone → .env → build → up -d → Caddy reload
+```
+
+Когда будет создана папка `deploy/`, деплой чеклист:
+- [ ] DNS: `A nexy.life → 173.242.60.76` (проверить)
+- [ ] `cd /opt/studio/nexy && bash deploy/bootstrap.sh` (первый запуск сидит `.env` и выходит)
+- [ ] Заполнить `/opt/studio/nexy/.env`: `DATABASE_URL`, `JWT_SECRET`, `MINIO_*`, `RESEND_API_KEY`, `STRIPE_*`, `OPENAI_API_KEY`
+- [ ] Повторно `bash deploy/bootstrap.sh` — билд, старт, reload Caddy
+- [ ] Smoke: `curl https://nexy.life/` → 200, login с тестовым аккаунтом
 
 ## Out of Scope — НЕ ДЕЛАТЬ
 
