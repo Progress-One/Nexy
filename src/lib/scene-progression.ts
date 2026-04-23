@@ -1,6 +1,6 @@
-import type { SupabaseClient } from '@/lib/supabase/compat-types';
 import type { Scene, SceneV2 } from './types';
 import { fetchUserGates, isSceneAllowed } from './onboarding-gates';
+import { db } from '@/lib/db';
 
 // ============================================================================
 // CONSTANTS
@@ -71,24 +71,22 @@ const SCENE_REQUIRES_SCENE: Record<string, { requires: string[]; minInterest: nu
  * Get all element IDs that user has already selected across all scenes
  */
 export async function getAnsweredElementIds(
-  supabase: SupabaseClient,
   userId: string
 ): Promise<Set<string>> {
   const answeredElements = new Set<string>();
 
   // Get all scene responses with selected elements
-  const { data: responses } = await supabase
-    .from('scene_responses')
+  const responses = await db
+    .selectFrom('scene_responses')
     .select('elements_selected')
-    .eq('user_id', userId)
-    .eq('skipped', false);
+    .where('user_id', '=', userId)
+    .where('skipped', '=', false)
+    .execute();
 
-  if (responses) {
-    for (const response of responses) {
-      if (response.elements_selected && Array.isArray(response.elements_selected)) {
-        for (const elementId of response.elements_selected) {
-          answeredElements.add(elementId);
-        }
+  for (const response of responses) {
+    if (response.elements_selected && Array.isArray(response.elements_selected)) {
+      for (const elementId of response.elements_selected) {
+        answeredElements.add(elementId);
       }
     }
   }
@@ -101,24 +99,24 @@ export async function getAnsweredElementIds(
  * Includes both positive (interested) and negative (rejected) preferences
  */
 export async function getAnsweredTagRefs(
-  supabase: SupabaseClient,
   userId: string
 ): Promise<Set<string>> {
   const answeredTags = new Set<string>();
 
   // Get all tag preferences where user expressed an opinion (positive or negative)
   // interest_level > 0: interested, interest_level < 0: rejected
-  const { data: tagPrefs } = await supabase
-    .from('tag_preferences')
-    .select('tag_ref, interest_level, experience_level')
-    .eq('user_id', userId)
-    .or('interest_level.neq.0,experience_level.not.is.null');
+  const tagPrefs = await db
+    .selectFrom('tag_preferences')
+    .select(['tag_ref', 'interest_level', 'experience_level'])
+    .where('user_id', '=', userId)
+    .where((eb) =>
+      eb.or([eb('interest_level', '!=', 0), eb('experience_level', 'is not', null)])
+    )
+    .execute();
 
-  if (tagPrefs) {
-    for (const pref of tagPrefs) {
-      if (pref.tag_ref) {
-        answeredTags.add(pref.tag_ref);
-      }
+  for (const pref of tagPrefs) {
+    if (pref.tag_ref) {
+      answeredTags.add(pref.tag_ref);
     }
   }
 
@@ -146,19 +144,17 @@ export function shouldSkipSceneByDedupe(
  * Returns map of scene slug pattern -> max interest level (0-100)
  */
 export async function getSceneResponseInterests(
-  supabase: SupabaseClient,
   userId: string
 ): Promise<Map<string, number>> {
   const interests = new Map<string, number>();
 
   // Get all scene responses with elements selected
-  const { data: responses } = await supabase
-    .from('scene_responses')
-    .select('scene_slug, elements_selected, skipped')
-    .eq('user_id', userId)
-    .eq('skipped', false);
-
-  if (!responses) return interests;
+  const responses = await db
+    .selectFrom('scene_responses')
+    .select(['scene_slug', 'elements_selected', 'skipped'])
+    .where('user_id', '=', userId)
+    .where('skipped', '=', false)
+    .execute();
 
   for (const response of responses) {
     if (!response.scene_slug) continue;
@@ -283,29 +279,31 @@ export function matchesRolePreference(
  * Higher comfort = allow higher intensity scenes
  */
 export async function getUserComfortLevel(
-  supabase: SupabaseClient,
   userId: string
 ): Promise<{ maxIntensity: number; answeredCount: number; avgInterest: number }> {
   // Get count of answered scenes
-  const { count: answeredCount } = await supabase
-    .from('scene_responses')
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', userId)
-    .eq('skipped', false);
+  const countRow = await db
+    .selectFrom('scene_responses')
+    .select((eb) => eb.fn.countAll<number>().as('count'))
+    .where('user_id', '=', userId)
+    .where('skipped', '=', false)
+    .executeTakeFirstOrThrow();
+  const answeredCount = Number(countRow.count);
 
   // Get average interest level from tag preferences
-  const { data: tagPrefs } = await supabase
-    .from('tag_preferences')
-    .select('interest_level, intensity_preference')
-    .eq('user_id', userId);
+  const tagPrefs = await db
+    .selectFrom('tag_preferences')
+    .select(['interest_level', 'intensity_preference'])
+    .where('user_id', '=', userId)
+    .execute();
 
-  const validInterests = tagPrefs?.filter(p => p.interest_level && p.interest_level > 0) || [];
+  const validInterests = tagPrefs.filter((p) => p.interest_level && p.interest_level > 0);
   const avgInterest = validInterests.length > 0
     ? validInterests.reduce((sum, p) => sum + (p.interest_level || 0), 0) / validInterests.length
     : 50;
 
   // Get average intensity preference
-  const validIntensities = tagPrefs?.filter(p => p.intensity_preference && p.intensity_preference > 0) || [];
+  const validIntensities = tagPrefs.filter((p) => p.intensity_preference && p.intensity_preference > 0);
   const avgIntensityPref = validIntensities.length > 0
     ? validIntensities.reduce((sum, p) => sum + (p.intensity_preference || 0), 0) / validIntensities.length
     : 50;
@@ -347,23 +345,21 @@ export async function getUserComfortLevel(
  * Get categories that user has already seen
  */
 export async function getSeenCategories(
-  supabase: SupabaseClient,
   userId: string
 ): Promise<Set<string>> {
   const seenCategories = new Set<string>();
 
   // Join with scenes table to get actual category field
-  const { data: responses } = await supabase
-    .from('scene_responses')
-    .select('scene_id, scenes!inner(category)')
-    .eq('user_id', userId);
+  const responses = await db
+    .selectFrom('scene_responses')
+    .innerJoin('scenes', 'scenes.id', 'scene_responses.scene_id')
+    .select('scenes.category')
+    .where('scene_responses.user_id', '=', userId)
+    .execute();
 
-  if (responses) {
-    for (const r of responses) {
-      const category = (r.scenes as unknown as { category: string | null })?.category;
-      if (category) {
-        seenCategories.add(category);
-      }
+  for (const r of responses) {
+    if (r.category) {
+      seenCategories.add(r.category);
     }
   }
 
@@ -593,7 +589,6 @@ export function calculateSceneScoreSync(
  */
 export async function calculateSceneScore(
   scene: SceneV2,
-  supabase: SupabaseClient,
   userId: string,
   context?: {
     seenCategories?: Set<string>;
@@ -602,14 +597,25 @@ export async function calculateSceneScore(
   }
 ): Promise<number> {
   // Fetch data and delegate to sync version
-  const { data: tagPrefs } = await supabase
-    .from('tag_preferences')
-    .select('tag_ref, interest_level, intensity_preference, role_preference')
-    .eq('user_id', userId);
+  const tagPrefs = await db
+    .selectFrom('tag_preferences')
+    .select(['tag_ref', 'interest_level', 'intensity_preference', 'role_preference'])
+    .where('user_id', '=', userId)
+    .execute();
 
-  const answeredElementIds = await getAnsweredElementIds(supabase, userId);
+  const answeredElementIds = await getAnsweredElementIds(userId);
 
-  return calculateSceneScoreSync(scene, tagPrefs || [], {
+  // Filter to entries that have a non-null tag_ref (required by TagPref)
+  const validPrefs: TagPref[] = tagPrefs
+    .filter((p): p is typeof p & { tag_ref: string } => p.tag_ref !== null)
+    .map((p) => ({
+      tag_ref: p.tag_ref,
+      interest_level: p.interest_level,
+      intensity_preference: p.intensity_preference,
+      role_preference: p.role_preference,
+    }));
+
+  return calculateSceneScoreSync(scene, validPrefs, {
     seenCategories: context?.seenCategories,
     answeredCount: context?.answeredCount,
     answeredElementIds,
@@ -626,7 +632,6 @@ export async function calculateSceneScore(
  * - Exploration vs exploitation (70/30 split)
  */
 export async function getAdaptiveScenes(
-  supabase: SupabaseClient,
   userId: string,
   allScenes: Scene[],
   options: {
@@ -658,7 +663,7 @@ export async function getAdaptiveScenes(
 
   if (enableComfortProgression && !options.maxIntensity) {
     // Get user's comfort level to determine max intensity
-    const comfort = await getUserComfortLevel(supabase, userId);
+    const comfort = await getUserComfortLevel(userId);
     maxIntensity = comfort.maxIntensity;
     answeredCount = comfort.answeredCount;
   }
@@ -692,7 +697,7 @@ export async function getAdaptiveScenes(
   // 3.5. INTER-SCENE GATES FILTERING
   // ========================================
   if (enableInterSceneGates) {
-    const sceneInterests = await getSceneResponseInterests(supabase, userId);
+    const sceneInterests = await getSceneResponseInterests(userId);
     filteredScenes = filteredScenes.filter(
       (scene) => !isSceneBlockedByPrerequisites(scene, sceneInterests)
     );
@@ -702,8 +707,8 @@ export async function getAdaptiveScenes(
   // 4. PRE-FETCH DATA FOR DEDUPE AND SCORING
   // ========================================
   // Fetch once, use for both dedupe and scoring
-  const answeredElementIds = await getAnsweredElementIds(supabase, userId);
-  const answeredTagRefs = enableDedupe ? await getAnsweredTagRefs(supabase, userId) : new Set<string>();
+  const answeredElementIds = await getAnsweredElementIds(userId);
+  const answeredTagRefs = enableDedupe ? await getAnsweredTagRefs(userId) : new Set<string>();
 
   if (enableDedupe) {
     filteredScenes = filteredScenes.filter(
@@ -716,26 +721,36 @@ export async function getAdaptiveScenes(
   // ========================================
   if (enableAdaptiveScoring) {
     // Get context for scoring - fetch ONCE, not per scene
-    const seenCategories = await getSeenCategories(supabase, userId);
+    const seenCategories = await getSeenCategories(userId);
 
     // Pre-fetch tag preferences ONCE (was being fetched 200+ times in calculateSceneScore!)
-    const { data: tagPrefs } = await supabase
-      .from('tag_preferences')
-      .select('tag_ref, interest_level, intensity_preference, role_preference')
-      .eq('user_id', userId);
+    const tagPrefsRows = await db
+      .selectFrom('tag_preferences')
+      .select(['tag_ref', 'interest_level', 'intensity_preference', 'role_preference'])
+      .where('user_id', '=', userId)
+      .execute();
+
+    const tagPrefs: TagPref[] = tagPrefsRows
+      .filter((p): p is typeof p & { tag_ref: string } => p.tag_ref !== null)
+      .map((p) => ({
+        tag_ref: p.tag_ref,
+        interest_level: p.interest_level,
+        intensity_preference: p.intensity_preference,
+        role_preference: p.role_preference,
+      }));
 
     // Fetch body_map_gates for scoring boost
-    const { data: userGatesData } = await supabase
-      .from('user_gates')
+    const userGatesData = await db
+      .selectFrom('user_gates')
       .select('body_map_gates')
-      .eq('user_id', userId)
-      .single();
-    const bodyMapGates = (userGatesData?.body_map_gates as Record<string, boolean>) || {};
+      .where('user_id', '=', userId)
+      .executeTakeFirst();
+    const bodyMapGates = (userGatesData?.body_map_gates as Record<string, boolean> | null) ?? {};
 
     // Calculate scores synchronously now that we have all data
     const scoredScenes = filteredScenes.map((scene) => ({
       scene,
-      score: calculateSceneScoreSync(scene, tagPrefs || [], {
+      score: calculateSceneScoreSync(scene, tagPrefs, {
         seenCategories,
         answeredCount,
         answeredElementIds,

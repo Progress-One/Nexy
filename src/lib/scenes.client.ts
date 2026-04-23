@@ -177,7 +177,6 @@ export async function getFilteredScenesClient(
   // Use adaptive flow if enabled
   if (enableAdaptiveFlow) {
     const adaptiveScenes = await getAdaptiveScenes(
-      supabaseClient,
       userId,
       data as Scene[],
       {
