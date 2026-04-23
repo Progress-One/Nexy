@@ -60,23 +60,12 @@ if [[ ! -f "$ENV_FILE" ]]; then
 fi
 chmod 600 "$ENV_FILE"
 
-# ── 3. Merge compose fragment into /opt/studio/docker-compose.yml ──
-MARKER_BEGIN="# >>> nexy compose (managed by bootstrap.sh) >>>"
-MARKER_END="# <<< nexy compose <<<"
-COMPOSE_FILE="$STUDIO_DIR/docker-compose.yml"
-
-if grep -qF "$MARKER_BEGIN" "$COMPOSE_FILE"; then
-  log "compose fragment already merged into $COMPOSE_FILE (skipping)"
-else
-  log "appending Nexy service to $COMPOSE_FILE"
-  {
-    echo ""
-    echo "$MARKER_BEGIN"
-    echo "# Edit via deploy/docker-compose.nexy.yml and re-run bootstrap.sh"
-    cat "$SRC_DIR/$COMPOSE_FRAGMENT"
-    echo "$MARKER_END"
-  } >> "$COMPOSE_FILE"
-fi
+# ── 3. Copy compose fragment as standalone nexy compose file ──
+# Pattern: each project has its own docker-compose.yml next to its .env.
+# Studio stack (postgres/minio/caddy) reached via shared studio_default network.
+NEXY_COMPOSE="$APP_DIR/docker-compose.yml"
+cp "$SRC_DIR/$COMPOSE_FRAGMENT" "$NEXY_COMPOSE"
+log "standalone nexy compose written to $NEXY_COMPOSE"
 
 # ── 4. Merge Caddy fragment ────────────────────────────────
 CADDY_FILE="$STUDIO_DIR/caddy/Caddyfile"
@@ -106,8 +95,8 @@ cd "$SRC_DIR"
 docker build -f deploy/Dockerfile.web -t nexy-web:latest .
 
 # ── 6. Up services ──────────────────────────────────────────
-log "starting service via $COMPOSE_FILE"
-cd "$STUDIO_DIR"
+log "starting service via $NEXY_COMPOSE"
+cd "$APP_DIR"
 docker compose up -d nexy-web
 
 # ── 7. Reload Caddy (if running) ────────────────────────────

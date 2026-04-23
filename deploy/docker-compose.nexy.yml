@@ -27,9 +27,10 @@ services:
       - "127.0.0.1:3002:3000"
     networks:
       - studio
-    depends_on:
-      - studio-postgres
-      - studio-minio
+    # No depends_on: studio-postgres / studio-minio — they live in a separate
+    # compose project (/opt/studio/docker-compose.yml). Docker cross-project
+    # dependencies aren't supported. Both are reachable via the shared
+    # studio_default network by DNS (studio-postgres, studio-minio).
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
       interval: 30s
