@@ -7,14 +7,11 @@ import { type ExperienceLevel } from '@/components/discovery/ExperienceSelector'
 import { type SceneV3Response } from '@/components/discovery/SceneRendererV3';
 import { getFilteredScenesClient } from '@/lib/scenes.client';
 import { fetchPendingProposals, updateProposalStatus } from '@/lib/proposals.client';
-import { fetchUserGates, isSceneAllowed } from '@/lib/onboarding-gates';
+import { isSceneAllowed, type OnboardingGates } from '@/lib/onboarding-gates-pure';
 import {
   calculateSignalUpdates,
   calculateTestScoreUpdates,
-  updatePsychologicalProfile,
-} from '@/lib/profile-signals';
-import { updateTagPreferencesFromSwipe } from '@/lib/tag-preferences';
-import { processBodyMapToGatesAndTags } from '@/lib/body-map-processing';
+} from '@/lib/profile-signals-pure';
 import { getLocale } from '@/lib/locale';
 import type {
   Scene,
@@ -266,7 +263,16 @@ export function useDiscovery() {
       try {
         const proposalsWithScenes = await fetchPendingProposals(supabase, userId);
         if (proposalsWithScenes.length > 0) {
-          const gates = await fetchUserGates(userId);
+          let gates: OnboardingGates = {};
+          try {
+            const res = await fetch('/api/user-gates');
+            if (res.ok) {
+              const json = await res.json();
+              gates = (json.gates as OnboardingGates) ?? {};
+            }
+          } catch (err) {
+            console.error('[Discover] Error fetching gates:', err);
+          }
 
           for (const { proposal, scene } of proposalsWithScenes) {
             // Respect safety gates — partner A never knows if gates blocked it
@@ -571,13 +577,16 @@ export function useDiscovery() {
 
       if (sceneV2.tags && sceneV2.tags.length > 0) {
         try {
-          await updateTagPreferencesFromSwipe(
-            user.id,
-            sceneV2.tags,
-            sceneV2.slug || sceneV2.id,
-            value,
-            experience
-          );
+          await fetch('/api/tag-preferences/swipe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              sceneTags: sceneV2.tags,
+              sceneSlug: sceneV2.slug || sceneV2.id,
+              responseValue: value,
+              experienceLevel: experience,
+            }),
+          });
         } catch (err) {
           console.error('Failed to update tag preferences:', err);
         }
@@ -590,7 +599,15 @@ export function useDiscovery() {
           const testScoreUpdates = calculateTestScoreUpdates(answer, sceneV2);
 
           if (signalUpdates.length > 0 || Object.keys(testScoreUpdates).length > 0) {
-            await updatePsychologicalProfile(user.id, signalUpdates, testScoreUpdates, sceneV2);
+            await fetch('/api/profile-signals/update', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                signalUpdates,
+                testScoreUpdates,
+                scene: sceneV2,
+              }),
+            });
           }
         } catch (err) {
           console.error('Failed to update psychological profile:', err);
@@ -706,7 +723,11 @@ export function useDiscovery() {
       }, { onConflict: 'user_id' });
 
       try {
-        await processBodyMapToGatesAndTags(user.id, bodyMapAnswer, sceneSlug);
+        await fetch('/api/body-map/process', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ bodyMapAnswer, sceneSlug }),
+        });
       } catch (err) {
         console.error('Error processing body map:', err);
       }
