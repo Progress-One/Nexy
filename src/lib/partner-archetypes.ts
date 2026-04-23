@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@/lib/supabase/compat-types';
+import { db } from '@/lib/db';
 import { ARCHETYPES, tagMatchesPrefixes, type ArchetypeDefinition } from './archetype-definitions';
 
 interface TagPreference {
@@ -158,27 +158,37 @@ function calculateArchetypeScore(
  * Calculate partner archetypes from tag_preferences.
  */
 export async function calculatePartnerArchetypes(
-  supabase: SupabaseClient,
   partnerId: string
 ): Promise<MatchedArchetype[]> {
   // Get all tag preferences for partner
-  const { data: tagPrefs } = await supabase
-    .from('tag_preferences')
-    .select('tag_ref, interest_level, role_preference, intensity_preference, experience_level')
-    .eq('user_id', partnerId);
+  const tagPrefsRows = await db
+    .selectFrom('tag_preferences')
+    .select(['tag_ref', 'interest_level', 'role_preference', 'intensity_preference', 'experience_level'])
+    .where('user_id', '=', partnerId)
+    .execute();
 
-  if (!tagPrefs || tagPrefs.length === 0) {
+  if (tagPrefsRows.length === 0) {
     return [];
   }
 
+  const tagPrefs: TagPreference[] = tagPrefsRows
+    .filter((p): p is typeof p & { tag_ref: string } => p.tag_ref !== null)
+    .map((p) => ({
+      tag_ref: p.tag_ref,
+      interest_level: p.interest_level,
+      role_preference: p.role_preference as 'give' | 'receive' | 'both' | null,
+      intensity_preference: p.intensity_preference,
+      experience_level: p.experience_level as 'tried' | 'want_to_try' | 'not_interested' | 'curious' | null,
+    }));
+
   // Calculate give/receive balance
-  const giveReceiveBalance = calculateGiveReceiveBalance(tagPrefs as TagPreference[]);
+  const giveReceiveBalance = calculateGiveReceiveBalance(tagPrefs);
 
   // Calculate archetype scores
   const archetypeScores: { archetype: ArchetypeDefinition; score: number }[] = [];
 
   for (const archetype of ARCHETYPES) {
-    const score = calculateArchetypeScore(archetype, tagPrefs as TagPreference[], giveReceiveBalance);
+    const score = calculateArchetypeScore(archetype, tagPrefs, giveReceiveBalance);
 
     if (score >= ARCHETYPE_THRESHOLD) {
       archetypeScores.push({ archetype, score });
@@ -201,16 +211,16 @@ export async function calculatePartnerArchetypes(
  * Get average intensity preference from tag_preferences.
  */
 export async function getAverageIntensity(
-  supabase: SupabaseClient,
   partnerId: string
 ): Promise<number | null> {
-  const { data: tagPrefs } = await supabase
-    .from('tag_preferences')
+  const tagPrefs = await db
+    .selectFrom('tag_preferences')
     .select('intensity_preference')
-    .eq('user_id', partnerId)
-    .not('intensity_preference', 'is', null);
+    .where('user_id', '=', partnerId)
+    .where('intensity_preference', 'is not', null)
+    .execute();
 
-  if (!tagPrefs || tagPrefs.length === 0) {
+  if (tagPrefs.length === 0) {
     return null;
   }
 

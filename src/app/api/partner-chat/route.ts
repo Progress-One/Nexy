@@ -78,11 +78,11 @@ export async function POST(req: Request) {
     .eq('scene_slug', 'verbal-preference')
     .single();
 
-  // Calculate archetypes (use serviceClient to bypass RLS)
-  const archetypes = await calculatePartnerArchetypes(serviceClient, partnerId);
+  // Calculate archetypes (uses direct db access, bypasses RLS)
+  const archetypes = await calculatePartnerArchetypes(partnerId);
 
-  // Get average intensity (use serviceClient to bypass RLS)
-  const avgIntensity = await getAverageIntensity(serviceClient, partnerId);
+  // Get average intensity (uses direct db access, bypasses RLS)
+  const avgIntensity = await getAverageIntensity(partnerId);
 
   // Get chat history (last 20 messages)
   const { data: chatHistory } = await supabase
