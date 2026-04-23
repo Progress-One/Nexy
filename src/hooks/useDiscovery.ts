@@ -706,7 +706,7 @@ export function useDiscovery() {
       }, { onConflict: 'user_id' });
 
       try {
-        await processBodyMapToGatesAndTags(supabase, user.id, bodyMapAnswer, sceneSlug);
+        await processBodyMapToGatesAndTags(user.id, bodyMapAnswer, sceneSlug);
       } catch (err) {
         console.error('Error processing body map:', err);
       }

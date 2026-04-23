@@ -1,4 +1,5 @@
-import type { SupabaseClient } from '@/lib/supabase/compat-types';
+import { db } from '@/lib/db';
+import type { Json } from '@/lib/db/schema';
 
 /**
  * Body Map Processing
@@ -86,7 +87,6 @@ interface BodyMapAnswer {
  * Process body map answer and update gates + tag_preferences
  */
 export async function processBodyMapToGatesAndTags(
-  supabase: SupabaseClient,
   userId: string,
   bodyMapAnswer: BodyMapAnswer,
   sceneSlug: string // e.g., 'bodymap-self', 'bodymap-partner-female'
@@ -225,13 +225,13 @@ export async function processBodyMapToGatesAndTags(
   if (gatesToOpen.size > 0) {
     try {
       // Get existing gates
-      const { data: existingGates } = await supabase
-        .from('user_gates')
+      const existingGates = await db
+        .selectFrom('user_gates')
         .select('body_map_gates')
-        .eq('user_id', userId)
-        .single();
+        .where('user_id', '=', userId)
+        .executeTakeFirst();
 
-      const currentBodyMapGates = (existingGates?.body_map_gates as Record<string, boolean>) || {};
+      const currentBodyMapGates = (existingGates?.body_map_gates as Record<string, boolean> | null) ?? {};
 
       // Merge new gates
       for (const gate of gatesToOpen) {
@@ -239,20 +239,20 @@ export async function processBodyMapToGatesAndTags(
       }
 
       // Upsert
-      const { error: gatesError } = await supabase
-        .from('user_gates')
-        .upsert({
+      await db
+        .insertInto('user_gates')
+        .values({
           user_id: userId,
-          body_map_gates: currentBodyMapGates,
-        }, {
-          onConflict: 'user_id',
-        });
+          body_map_gates: currentBodyMapGates as Json,
+        })
+        .onConflict((oc) =>
+          oc.columns(['user_id']).doUpdateSet({
+            body_map_gates: currentBodyMapGates as Json,
+          })
+        )
+        .execute();
 
-      if (gatesError) {
-        result.errors.push(`Gates update error: ${gatesError.message}`);
-      } else {
-        result.gatesUpdated = Array.from(gatesToOpen);
-      }
+      result.gatesUpdated = Array.from(gatesToOpen);
     } catch (error) {
       result.errors.push(`Gates exception: ${error}`);
     }
@@ -263,18 +263,18 @@ export async function processBodyMapToGatesAndTags(
     try {
       for (const [tagRef, data] of Object.entries(tagScores)) {
         // Get existing preference
-        const { data: existing } = await supabase
-          .from('tag_preferences')
-          .select('*')
-          .eq('user_id', userId)
-          .eq('tag_ref', tagRef)
-          .single();
+        const existing = await db
+          .selectFrom('tag_preferences')
+          .selectAll()
+          .where('user_id', '=', userId)
+          .where('tag_ref', '=', tagRef)
+          .executeTakeFirst();
 
         // Calculate new interest level (keep max)
-        const newInterest = Math.max(existing?.interest_level || 0, data.interest);
+        const newInterest = Math.max(existing?.interest_level ?? 0, data.interest);
 
         // Determine role preference
-        let rolePreference = data.role;
+        let rolePreference: 'give' | 'receive' | 'both' = data.role;
         if (existing?.role_preference) {
           if (existing.role_preference !== data.role) {
             rolePreference = 'both';
@@ -282,29 +282,35 @@ export async function processBodyMapToGatesAndTags(
         }
 
         // Get source scenes list
-        const sourceScenes = existing?.source_scenes || [];
+        const sourceScenes: string[] = (existing?.source_scenes as string[] | null) ?? [];
         if (!sourceScenes.includes(sceneSlug)) {
           sourceScenes.push(sceneSlug);
         }
 
         // Upsert tag preference
-        const { error: tagError } = await supabase
-          .from('tag_preferences')
-          .upsert({
-            user_id: userId,
-            tag_ref: tagRef,
-            interest_level: newInterest,
-            role_preference: rolePreference,
-            source_scenes: sourceScenes,
-            updated_at: new Date().toISOString(),
-          }, {
-            onConflict: 'user_id,tag_ref',
-          });
-
-        if (tagError) {
-          result.errors.push(`Tag ${tagRef} error: ${tagError.message}`);
-        } else {
+        try {
+          await db
+            .insertInto('tag_preferences')
+            .values({
+              user_id: userId,
+              tag_ref: tagRef,
+              interest_level: newInterest,
+              role_preference: rolePreference,
+              source_scenes: sourceScenes,
+              updated_at: new Date(),
+            })
+            .onConflict((oc) =>
+              oc.columns(['user_id', 'tag_ref']).doUpdateSet({
+                interest_level: newInterest,
+                role_preference: rolePreference,
+                source_scenes: sourceScenes,
+                updated_at: new Date(),
+              })
+            )
+            .execute();
           result.tagsUpdated.push(tagRef);
+        } catch (err) {
+          result.errors.push(`Tag ${tagRef} error: ${err instanceof Error ? err.message : String(err)}`);
         }
       }
     } catch (error) {
