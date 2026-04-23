@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // VPS deploy: emit .next/standalone for minimal runtime image.
+  output: 'standalone',
 };
 
 export default nextConfig;

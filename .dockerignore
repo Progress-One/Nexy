@@ -1,0 +1,23 @@
+# Keep the Docker build context lean — only what next build needs.
+node_modules
+.next
+.git
+.env
+.env.local
+.env.*.local
+docs
+scripts
+supabase
+themes
+*.md
+!README.md
+.claude
+.studio
+.vscode
+.idea
+coverage
+.nyc_output
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db

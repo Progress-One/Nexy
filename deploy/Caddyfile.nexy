@@ -1,0 +1,30 @@
+# ============================================================
+# Nexy - Caddy routes
+# ============================================================
+# Append to /opt/studio/caddy/Caddyfile. Caddy terminates TLS
+# (auto Let's Encrypt) and forwards to the container.
+#
+# DNS: add at your registrar:
+#   nexy.life     A  173.242.60.76
+#   www.nexy.life A  173.242.60.76   (optional)
+
+# ── Nexy web (Next.js) ──────────────────────────────────────
+nexy.life {
+    encode zstd gzip
+    # Caddy lives in its own container (studio-caddy) on the studio_default
+    # network; address the backend by Docker service DNS, not host loopback.
+    reverse_proxy nexy-web:3000 {
+        header_up X-Real-IP {remote_host}
+    }
+    log {
+        output file /var/log/caddy/nexy-web.log {
+            roll_size 10mb
+            roll_keep 10
+        }
+    }
+}
+
+# www redirect to apex
+www.nexy.life {
+    redir https://nexy.life{uri} permanent
+}

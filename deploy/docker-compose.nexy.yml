@@ -1,0 +1,43 @@
+# ============================================================
+# Nexy — VPS compose fragment
+# ============================================================
+# Append to /opt/studio/docker-compose.yml (same Postgres/MinIO/Caddy stack
+# as the other studio projects - see ../pulse_factory/docs/MIGRATION_GUIDE.md).
+#
+# Service binds to 127.0.0.1 only; Caddy publishes the public routes
+# over HTTPS (see deploy/Caddyfile.nexy).
+#
+# Shared .env lives at /opt/studio/nexy/.env (chmod 600).
+
+services:
+  nexy-web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.web
+    image: nexy-web:latest
+    container_name: nexy-web
+    restart: unless-stopped
+    env_file:
+      - /opt/studio/nexy/.env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+    ports:
+      - "127.0.0.1:3002:3000"
+    networks:
+      - studio
+    depends_on:
+      - studio-postgres
+      - studio-minio
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+networks:
+  studio:
+    external: true
+    name: studio_default

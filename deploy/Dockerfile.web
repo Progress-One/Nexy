@@ -1,0 +1,45 @@
+# syntax=docker/dockerfile:1.7
+# ============================================================
+# Nexy Web — Next.js 16 standalone
+# ============================================================
+# Multi-stage build: deps -> build -> runtime. Final image ~150MB,
+# runs as non-root on :3000, no build tools included.
+# Build from repo root: `docker build -f deploy/Dockerfile.web -t nexy-web .`
+
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . ./
+# Build-time env placeholders so module init (new Pool) doesn't crash.
+# Real values come from env_file at runtime.
+ENV DATABASE_URL=postgres://build-dummy:none@127.0.0.1:5432/none
+ENV JWT_SECRET=build-time-placeholder-secret-do-not-use-at-runtime-32chars
+ENV NEXT_PUBLIC_APP_URL=http://localhost:3000
+ENV NEXT_PUBLIC_MINIO_URL=http://localhost:9000
+RUN npm run build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+RUN addgroup --system --gid 1001 nodejs \
+ && adduser  --system --uid 1001 nextjs
+
+# Standalone output ships its own minimal node_modules; no npm install at runtime.
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+
+USER nextjs
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:3000/api/health 2>/dev/null || exit 1
+
+CMD ["node", "server.js"]
