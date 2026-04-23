@@ -590,7 +590,7 @@ export function useDiscovery() {
           const testScoreUpdates = calculateTestScoreUpdates(answer, sceneV2);
 
           if (signalUpdates.length > 0 || Object.keys(testScoreUpdates).length > 0) {
-            await updatePsychologicalProfile(supabase, user.id, signalUpdates, testScoreUpdates, sceneV2);
+            await updatePsychologicalProfile(user.id, signalUpdates, testScoreUpdates, sceneV2);
           }
         } catch (err) {
           console.error('Failed to update psychological profile:', err);

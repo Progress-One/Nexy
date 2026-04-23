@@ -6,7 +6,8 @@ import type {
   BodyMapAnswer,
   BodyZoneId,
 } from './types';
-import type { SupabaseClient } from '@/lib/supabase/compat-types';
+import { db } from '@/lib/db';
+import type { Json } from '@/lib/db/schema';
 
 /**
  * Get response category from answer
@@ -164,22 +165,24 @@ export function detectCorrelations(
  * Update psychological profile in database
  */
 export async function updatePsychologicalProfile(
-  supabase: SupabaseClient,
   userId: string,
   signalUpdates: SignalUpdate[],
   testScoreUpdates: Record<string, number>,
   scene: SceneV2
 ): Promise<void> {
   // Fetch current profile
-  const { data: profile } = await supabase
-    .from('psychological_profiles')
-    .select('*')
-    .eq('user_id', userId)
-    .single();
+  const profile = await db
+    .selectFrom('psychological_profiles')
+    .selectAll()
+    .where('user_id', '=', userId)
+    .executeTakeFirst();
 
-  const currentSignals: Record<string, number> = profile?.profile_signals || {};
-  const currentTests: Record<string, number> = profile?.test_scores || {};
-  const currentCorrelations: string[] = profile?.correlations_detected || [];
+  const currentSignals: Record<string, number> =
+    (profile?.profile_signals as Record<string, number> | null) ?? {};
+  const currentTests: Record<string, number> =
+    (profile?.test_scores as Record<string, number> | null) ?? {};
+  const currentCorrelations: string[] =
+    (profile?.correlations_detected as string[] | null) ?? [];
 
   // Update signal counts
   for (const update of signalUpdates) {
@@ -192,7 +195,7 @@ export async function updatePsychologicalProfile(
   }
 
   // Detect new correlations
-  const correlations = (scene.ai_context as any)?.correlations;
+  const correlations = (scene.ai_context as { correlations?: { positive: string[]; negative: string[] } } | undefined)?.correlations;
   if (correlations) {
     const newCorrelations = detectCorrelations(currentSignals, correlations);
     for (const corr of newCorrelations) {
@@ -203,63 +206,72 @@ export async function updatePsychologicalProfile(
   }
 
   // Upsert profile
-  await supabase.from('psychological_profiles').upsert(
-    {
+  await db
+    .insertInto('psychological_profiles')
+    .values({
       user_id: userId,
-      profile_signals: currentSignals,
-      test_scores: currentTests,
-      correlations_detected: currentCorrelations,
-      updated_at: new Date().toISOString(),
-    },
-    {
-      onConflict: 'user_id',
-    }
-  );
+      profile_signals: currentSignals as Json,
+      test_scores: currentTests as Json,
+      correlations_detected: currentCorrelations as Json,
+      updated_at: new Date(),
+    })
+    .onConflict((oc) =>
+      oc.columns(['user_id']).doUpdateSet({
+        profile_signals: currentSignals as Json,
+        test_scores: currentTests as Json,
+        correlations_detected: currentCorrelations as Json,
+        updated_at: new Date(),
+      })
+    )
+    .execute();
 }
 
 /**
  * Add a follow-up signal to the profile
  */
 export async function addFollowUpSignal(
-  supabase: SupabaseClient,
   userId: string,
   signal: string
 ): Promise<void> {
-  const { data: profile } = await supabase
-    .from('psychological_profiles')
+  const profile = await db
+    .selectFrom('psychological_profiles')
     .select('profile_signals')
-    .eq('user_id', userId)
-    .single();
+    .where('user_id', '=', userId)
+    .executeTakeFirst();
 
-  const signals: Record<string, number> = profile?.profile_signals || {};
+  const signals: Record<string, number> =
+    (profile?.profile_signals as Record<string, number> | null) ?? {};
   signals[signal] = (signals[signal] || 0) + 1.5; // Follow-up answers are weighted more
 
-  await supabase.from('psychological_profiles').upsert(
-    {
+  await db
+    .insertInto('psychological_profiles')
+    .values({
       user_id: userId,
-      profile_signals: signals,
-      updated_at: new Date().toISOString(),
-    },
-    {
-      onConflict: 'user_id',
-    }
-  );
+      profile_signals: signals as Json,
+      updated_at: new Date(),
+    })
+    .onConflict((oc) =>
+      oc.columns(['user_id']).doUpdateSet({
+        profile_signals: signals as Json,
+        updated_at: new Date(),
+      })
+    )
+    .execute();
 }
 
 /**
  * Get user's psychological profile
  */
 export async function getPsychologicalProfile(
-  supabase: SupabaseClient,
   userId: string
 ): Promise<PsychologicalProfile | null> {
-  const { data } = await supabase
-    .from('psychological_profiles')
-    .select('*')
-    .eq('user_id', userId)
-    .single();
+  const row = await db
+    .selectFrom('psychological_profiles')
+    .selectAll()
+    .where('user_id', '=', userId)
+    .executeTakeFirst();
 
-  return data;
+  return (row as unknown as PsychologicalProfile | undefined) ?? null;
 }
 
 /**
