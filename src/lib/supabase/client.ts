@@ -23,6 +23,11 @@ class BrowserQueryBuilder {
   lte(col: string, val: unknown) { this.filters.push({ col, op: 'lte', val }); return this; }
   in(col: string, vals: unknown[]) { this.filters.push({ col, op: 'in', val: vals }); return this; }
   is(col: string, val: unknown) { this.filters.push({ col, op: 'is', val }); return this; }
+  overlaps(col: string, vals: unknown[]) { this.filters.push({ col, op: 'overlaps', val: vals }); return this; }
+  contains(col: string, obj: unknown) { this.filters.push({ col, op: 'contains', val: obj }); return this; }
+  not(col: string, op: string, val: unknown) { this.filters.push({ col, op: `not_${op}`, val }); return this; }
+  or(conditions: string) { this.filters.push({ col: '__or', op: 'or', val: conditions }); return this; }
+  range(from: number, to: number) { this.filters.push({ col: '__range', op: 'range', val: [from, to] }); return this; }
   order(col: string, opts?: { ascending?: boolean }) { this._order.push({ col, asc: opts?.ascending !== false }); return this; }
   limit(n: number) { this._limit = n; return this; }
   single() { this._single = true; this._limit = 1; return this; }
