@@ -12,7 +12,7 @@
 
 ```
 Frontend:     Next.js 16 (App Router), TypeScript, Tailwind CSS 4, shadcn/ui, Framer Motion, Zustand
-Backend:      Supabase (PostgreSQL + Auth + Realtime + Storage + RLS)
+Backend:      VPS PostgreSQL + Kysely (typed queries) + jose (JWT auth) + MinIO (S3-compatible storage)
 AI:           OpenAI gpt-4o-mini (чат, exclusion detection), Anthropic (SDK установлен), Replicate + CivitAI (генерация изображений)
 Платежи:      Stripe (Checkout + Webhooks + Customer Portal)
 Email:        Resend (noreply@nexy.life)
@@ -99,7 +99,8 @@ src/
     profile-signals.ts     — психологическое профилирование
     smart-intro.ts
     topic-flow.ts
-    supabase/        — client.ts, server.ts, middleware.ts
+    http-client/     — client.ts, middleware.ts (browser HTTP wrapper for /api/* routes)
+    db/              — Kysely pool + schema types (index.ts, schema.ts — auto-generated)
     email-templates/ — шаблоны email (invite)
   hooks/
     useNotifications.ts
@@ -114,6 +115,17 @@ supabase/
 - Tag preferences: monotonic growth — interest_level никогда не снижается (берётся max)
 - Matching: два алгоритма параллельно (legacy JSONB + tag-based с role complementarity), tag-based приоритетнее
 - Discovery: 70% exploitation (то что нравится) / 30% exploration (новое)
+
+### Database types
+
+Kysely schema types are auto-generated from the VPS DB via `kysely-codegen`.
+After any DB schema change, regenerate:
+
+```bash
+npm run db:types
+```
+
+Do NOT hand-edit `src/lib/db/schema.ts`.
 
 ### Схема БД (ключевые таблицы)
 - `profiles` — пользователь (gender, interested_in, language)
