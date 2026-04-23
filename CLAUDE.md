@@ -16,7 +16,7 @@ Backend:      VPS PostgreSQL + Kysely (typed queries) + jose (JWT auth) + MinIO 
 AI:           OpenAI gpt-4o-mini (чат, exclusion detection), Anthropic (SDK установлен), Replicate + CivitAI (генерация изображений)
 Платежи:      Stripe (Checkout + Webhooks + Customer Portal)
 Email:        Resend (noreply@nexy.life)
-Хостинг:      Vercel
+Хостинг:      VPS (Hosting Ukraine, 173.242.60.76) — Caddy reverse proxy + Docker
 Домен:        nexy.life
 ```
 
@@ -172,8 +172,16 @@ npm test             # запуск тестов
 
 ## Деплой
 
-- Платформа: Vercel
-- Авто-деплой: да, на push в main
+- Платформа: собственный VPS (shared со студией), см. `docs/VPS_INFRASTRUCTURE.md`
+- Сервер: 173.242.60.76 (Ubuntu 24.04, 2 GB RAM, 20 GB NVMe)
+- Доступ: `ssh root@173.242.60.76` (ed25519 key)
+- Reverse proxy: Caddy (`/opt/studio/caddy/Caddyfile`) — автоматически выпускает SSL через Let's Encrypt, проксирует домен `nexy.life` на контейнер приложения
+- Общие сервисы на той же машине: PostgreSQL (5432), MinIO (9000/9001), pgAdmin (8080)
+- БД: `nexy_db` в общем PostgreSQL. Connection string в `.env.local` (`DATABASE_URL`)
+- Storage: MinIO bucket `scenes` (905 MB, 859 объектов). Endpoint `http://173.242.60.76:9000/scenes/`
+- Бэкап БД: ежедневно в 3:00 UTC, хранится 7 дней в `/opt/studio/backups/daily/`
+
+**TODO:** добавить в `VPS_INFRASTRUCTURE.md` и в этот CLAUDE.md конкретику по Next.js-контейнеру Nexy (docker-compose сервис, порт, команда билда, последовательность `git pull && npm run build && pm2 restart` или аналог) — пока в репо деплой-конфигурации (Dockerfile / docker-compose / скрипт) нет.
 
 ## Out of Scope — НЕ ДЕЛАТЬ
 
