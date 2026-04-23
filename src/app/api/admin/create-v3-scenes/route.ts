@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { createServiceClient } from '@/lib/supabase/server';
+import { db } from '@/lib/db';
 import { ALL_V3_TEMPLATES, getTemplatesByGroup, V3SceneTemplate } from '@/lib/v3-scene-templates';
+import type { Json } from '@/lib/db/schema';
 
 /**
  * Create V3 scenes from templates
@@ -11,8 +12,6 @@ import { ALL_V3_TEMPLATES, getTemplatesByGroup, V3SceneTemplate } from '@/lib/v3
  * - all: boolean - create all templates
  */
 export async function POST(req: Request) {
-  const supabase = await createServiceClient();
-
   try {
     const body = await req.json();
     const { groupId, slugs, all } = body;
@@ -36,15 +35,14 @@ export async function POST(req: Request) {
 
     // Check which scenes already exist
     const existingSlugs = new Set<string>();
-    const { data: existingScenes } = await supabase
-      .from('scenes')
+    const existingScenes = await db
+      .selectFrom('scenes')
       .select('slug')
-      .in('slug', templatesToCreate.map(t => t.slug));
+      .where('slug', 'in', templatesToCreate.map(t => t.slug))
+      .execute();
 
-    if (existingScenes) {
-      for (const scene of existingScenes) {
-        if (scene.slug) existingSlugs.add(scene.slug);
-      }
+    for (const scene of existingScenes) {
+      if (scene.slug) existingSlugs.add(scene.slug);
     }
 
     // Filter out existing scenes
@@ -63,7 +61,7 @@ export async function POST(req: Request) {
     // Create scenes from templates
     const scenesToInsert = newTemplates.map(template => ({
       slug: template.slug,
-      title: template.title,
+      title: template.title as unknown as Json,
       category: template.category,
       intensity: template.intensity,
       is_active: template.is_active,
@@ -77,37 +75,28 @@ export async function POST(req: Request) {
       role_direction: template.role_direction || 'mutual',
       paired_scene: template.paired_scene || null, // Slug reference to paired scene
       // Descriptions (minimal for now)
-      ai_description: template.title,
-      user_description: template.title,
+      ai_description: template.title as unknown as Json,
+      user_description: template.title as unknown as Json,
       // Default empty arrays/objects
       tags: [template.category, template.scene_type],
-      elements: [],
+      elements: [] as unknown as Json,
       ai_context: {
         tests_primary: [template.slug],
         tests_secondary: [],
-      },
+      } as unknown as Json,
     }));
 
-    const { data: insertedScenes, error: insertError } = await supabase
-      .from('scenes')
-      .insert(scenesToInsert)
-      .select('id, slug');
-
-    if (insertError) {
-      console.error('Insert error:', insertError);
-      return NextResponse.json(
-        { error: `Failed to insert scenes: ${insertError.message}` },
-        { status: 500 }
-      );
-    }
-
-    // Note: paired_scene slugs are already set during insert, no need to link UUIDs
+    const insertedScenes = await db
+      .insertInto('scenes')
+      .values(scenesToInsert)
+      .returning(['id', 'slug'])
+      .execute();
 
     return NextResponse.json({
       success: true,
-      created: insertedScenes?.length || 0,
+      created: insertedScenes.length,
       skipped: existingSlugs.size,
-      scenes: insertedScenes?.map(s => s.slug) || [],
+      scenes: insertedScenes.map(s => s.slug),
       existing: Array.from(existingSlugs),
     });
   } catch (error) {
@@ -124,24 +113,21 @@ export async function POST(req: Request) {
  * GET - List available templates and their status
  */
 export async function GET() {
-  const supabase = await createServiceClient();
-
   try {
     // Get all existing V3 template slugs
-    const { data: existingScenes } = await supabase
-      .from('scenes')
-      .select('slug, image_url, is_active')
-      .in('slug', ALL_V3_TEMPLATES.map(t => t.slug));
+    const existingScenes = await db
+      .selectFrom('scenes')
+      .select(['slug', 'image_url', 'is_active'])
+      .where('slug', 'in', ALL_V3_TEMPLATES.map(t => t.slug))
+      .execute();
 
     const existingMap = new Map<string, { image_url: string | null; is_active: boolean }>();
-    if (existingScenes) {
-      for (const scene of existingScenes) {
-        if (scene.slug) {
-          existingMap.set(scene.slug, {
-            image_url: scene.image_url,
-            is_active: scene.is_active ?? false,
-          });
-        }
+    for (const scene of existingScenes) {
+      if (scene.slug) {
+        existingMap.set(scene.slug, {
+          image_url: scene.image_url,
+          is_active: scene.is_active ?? false,
+        });
       }
     }
 

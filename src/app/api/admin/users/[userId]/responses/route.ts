@@ -1,11 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/compat-types';
-
-// Use service role for admin operations (bypasses RLS)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { db } from '@/lib/db';
 
 export async function GET(
   req: Request,
@@ -18,81 +12,89 @@ export async function GET(
       return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
     }
 
-    // Get scene responses with scene info
-    const { data: sceneResponses, error: sceneError } = await supabase
-      .from('scene_responses')
-      .select(`
-        id,
-        scene_id,
-        liked,
-        rating,
-        elements_selected,
-        follow_up_answers,
-        created_at,
-        scenes (
-          slug,
-          title,
-          category
-        )
-      `)
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-
-    if (sceneError) {
+    // Get scene responses with scene info via join
+    let sceneResponses: unknown[] = [];
+    try {
+      sceneResponses = await db
+        .selectFrom('scene_responses as sr')
+        .leftJoin('scenes as s', 's.id', 'sr.scene_id')
+        .select([
+          'sr.id',
+          'sr.scene_id',
+          'sr.liked',
+          'sr.rating',
+          'sr.elements_selected',
+          'sr.follow_up_answers',
+          'sr.created_at',
+          's.slug as scene_slug',
+          's.title as scene_title',
+          's.category as scene_category',
+        ])
+        .where('sr.user_id', '=', userId)
+        .orderBy('sr.created_at', 'desc')
+        .execute();
+    } catch (sceneError) {
       console.error('[UserResponses] Scene error:', sceneError);
     }
 
     // Get body map responses
-    const { data: bodyMapResponses, error: bodyMapError } = await supabase
-      .from('body_map_responses')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-
-    if (bodyMapError) {
+    let bodyMapResponses: unknown[] = [];
+    try {
+      bodyMapResponses = await db
+        .selectFrom('body_map_responses')
+        .selectAll()
+        .where('user_id', '=', userId)
+        .orderBy('created_at', 'desc')
+        .execute();
+    } catch (bodyMapError) {
       console.error('[UserResponses] Body map error:', bodyMapError);
     }
 
     // Get user flow state
-    const { data: flowState, error: flowError } = await supabase
-      .from('user_flow_state')
-      .select('*')
-      .eq('user_id', userId)
-      .single();
-
-    if (flowError && flowError.code !== 'PGRST116') {
+    let flowState: unknown = null;
+    try {
+      flowState = (await db
+        .selectFrom('user_flow_state')
+        .selectAll()
+        .where('user_id', '=', userId)
+        .executeTakeFirst()) ?? null;
+    } catch (flowError) {
       console.error('[UserResponses] Flow state error:', flowError);
     }
 
     // Get preference profile
-    const { data: preferenceProfile, error: prefError } = await supabase
-      .from('preference_profiles')
-      .select('*')
-      .eq('user_id', userId)
-      .single();
-
-    if (prefError && prefError.code !== 'PGRST116') {
+    let preferenceProfile: unknown = null;
+    try {
+      preferenceProfile = (await db
+        .selectFrom('preference_profiles')
+        .selectAll()
+        .where('user_id', '=', userId)
+        .executeTakeFirst()) ?? null;
+    } catch (prefError) {
       console.error('[UserResponses] Preference error:', prefError);
     }
 
     // Get discovery profile
-    const { data: discoveryProfile, error: discError } = await supabase
-      .from('user_discovery_profiles')
-      .select('*')
-      .eq('user_id', userId)
-      .single();
-
-    if (discError && discError.code !== 'PGRST116') {
+    let discoveryProfile: unknown = null;
+    try {
+      discoveryProfile = (await db
+        .selectFrom('user_discovery_profiles')
+        .selectAll()
+        .where('user_id', '=', userId)
+        .executeTakeFirst()) ?? null;
+    } catch (discError) {
       console.error('[UserResponses] Discovery error:', discError);
     }
 
     // Get excluded preferences
-    const { data: excludedPrefs, error: exclError } = await supabase
-      .from('excluded_preferences')
-      .select('*')
-      .eq('user_id', userId);
-
-    if (exclError) {
+    let excludedPrefs: unknown[] = [];
+    try {
+      excludedPrefs = await db
+        .selectFrom('excluded_preferences')
+        .selectAll()
+        .where('user_id', '=', userId)
+        .execute();
+    } catch (exclError) {
       console.error('[UserResponses] Excluded error:', exclError);
     }
 

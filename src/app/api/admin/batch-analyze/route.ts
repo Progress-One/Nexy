@@ -4,8 +4,10 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/compat-types';
+import { db } from '@/lib/db';
+import { listStorageFiles, getStoragePublicUrl } from '@/lib/storage';
 import { analyzeImage, ImageAnalysis } from '@/lib/image-analyzer';
+import type { Json } from '@/lib/db/schema';
 
 const DEFAULT_BATCH_SIZE = 5;
 
@@ -21,26 +23,13 @@ export async function POST(request: Request) {
     const body = await request.json().catch(() => ({}));
     const batchSize = body.batchSize || DEFAULT_BATCH_SIZE;
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json(
-        { error: 'Missing Supabase configuration' },
-        { status: 500 }
-      );
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
     // 1. Get all storage files
-    const { data: files, error: storageError } = await supabase.storage
-      .from('scenes')
-      .list('', { limit: 2000, sortBy: { column: 'created_at', order: 'desc' } });
-
-    if (storageError) {
+    let files;
+    try {
+      files = await listStorageFiles('scenes', { limit: 2000 });
+    } catch (storageError) {
       return NextResponse.json(
-        { error: `Storage error: ${storageError.message}` },
+        { error: `Storage error: ${(storageError as Error).message}` },
         { status: 500 }
       );
     }
@@ -56,22 +45,24 @@ export async function POST(request: Request) {
     let hasMore = true;
 
     while (hasMore) {
-      const { data, error: dbError, count } = await supabase
-        .from('image_analysis')
-        .select('file_name', { count: 'exact' })
-        .range(page * pageSize, (page + 1) * pageSize - 1);
+      try {
+        const data = await db
+          .selectFrom('image_analysis')
+          .select('file_name')
+          .offset(page * pageSize)
+          .limit(pageSize)
+          .execute();
 
-      if (dbError) {
+        if (data && data.length > 0) {
+          allAnalyzed = allAnalyzed.concat(data);
+          page++;
+          hasMore = data.length === pageSize; // Continue if we got a full page
+        } else {
+          hasMore = false;
+        }
+      } catch (dbError) {
         console.error('[batch-analyze] DB error:', dbError);
         break;
-      }
-
-      if (data && data.length > 0) {
-        allAnalyzed = allAnalyzed.concat(data);
-        page++;
-        hasMore = data.length === pageSize; // Continue if we got a full page
-      } else {
-        hasMore = false;
       }
 
       // Safety limit: don't fetch more than 20 pages (20k records)
@@ -112,29 +103,35 @@ export async function POST(request: Request) {
     const results: BatchResult[] = [];
 
     for (const file of toAnalyze) {
-      const url = supabase.storage.from('scenes').getPublicUrl(file.name).data.publicUrl;
+      const url = getStoragePublicUrl('scenes', file.name);
 
       try {
         console.log(`[batch-analyze] Analyzing: ${file.name}`);
         const analysis = await analyzeImage(url);
 
         // Save to DB
-        const { data: upsertData, error: upsertError } = await supabase
-          .from('image_analysis')
-          .upsert({
-            file_name: file.name,
-            file_url: url,
-            analysis,
-            updated_at: new Date().toISOString()
-          }, { onConflict: 'file_name' })
-          .select();
+        try {
+          const upsertData = await db
+            .insertInto('image_analysis')
+            .values({
+              file_name: file.name,
+              file_url: url,
+              analysis: analysis as unknown as Json,
+              updated_at: new Date(),
+            })
+            .onConflict(oc => oc.column('file_name').doUpdateSet({
+              file_url: url,
+              analysis: analysis as unknown as Json,
+              updated_at: new Date(),
+            }))
+            .returningAll()
+            .execute();
 
-        if (upsertError) {
-          console.error(`[batch-analyze] Upsert error for ${file.name}:`, upsertError);
-          results.push({ file_name: file.name, success: false, error: upsertError.message });
-        } else {
-          console.log(`[batch-analyze] ✓ Saved: ${file.name}, keywords: ${analysis.keywords?.join(', ')}, upsert returned ${upsertData?.length} rows`);
+          console.log(`[batch-analyze] Saved: ${file.name}, keywords: ${analysis.keywords?.join(', ')}, upsert returned ${upsertData?.length} rows`);
           results.push({ file_name: file.name, success: true, analysis });
+        } catch (upsertError) {
+          console.error(`[batch-analyze] Upsert error for ${file.name}:`, upsertError);
+          results.push({ file_name: file.name, success: false, error: (upsertError as Error).message });
         }
       } catch (error) {
         console.error(`[batch-analyze] Error analyzing ${file.name}:`, error);
@@ -167,33 +164,19 @@ export async function POST(request: Request) {
 // GET - retrieve all analysis data
 export async function GET() {
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json(
-        { error: 'Missing Supabase configuration' },
-        { status: 500 }
-      );
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    const { data, error } = await supabase
-      .from('image_analysis')
-      .select('file_name, file_url, analysis, created_at')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      // Table might not exist yet
-      if (error.code === '42P01') {
-        return NextResponse.json({ data: [] });
-      }
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
+    const data = await db
+      .selectFrom('image_analysis')
+      .select(['file_name', 'file_url', 'analysis', 'created_at'])
+      .orderBy('created_at', 'desc')
+      .execute();
 
     return NextResponse.json({ data: data || [] });
   } catch (error) {
+    // Table might not exist yet — handle gracefully
+    const err = error as Error & { code?: string };
+    if (err.code === '42P01') {
+      return NextResponse.json({ data: [] });
+    }
     console.error('[batch-analyze] GET error:', error);
     return NextResponse.json(
       { error: `Unexpected error: ${(error as Error).message}` },

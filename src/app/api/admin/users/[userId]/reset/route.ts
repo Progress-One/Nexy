@@ -1,11 +1,23 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/compat-types';
+import { db } from '@/lib/db';
+import type { DB } from '@/lib/db/schema';
 
-// Use service role for admin operations (bypasses RLS)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+type ResetableTable =
+  | 'scene_responses'
+  | 'body_map_responses'
+  | 'user_flow_state'
+  | 'preference_profiles'
+  | 'user_discovery_profiles'
+  | 'excluded_preferences';
+
+const ALLOWED_TABLES: ResetableTable[] = [
+  'scene_responses',
+  'body_map_responses',
+  'user_flow_state',
+  'preference_profiles',
+  'user_discovery_profiles',
+  'excluded_preferences',
+];
 
 export async function POST(
   req: Request,
@@ -20,29 +32,21 @@ export async function POST(
     }
 
     // Default to all tables if not specified
-    const tablesToReset: string[] = tables || [
-      'scene_responses',
-      'body_map_responses',
-      'user_flow_state',
-      'preference_profiles',
-      'user_discovery_profiles',
-      'excluded_preferences',
-    ];
+    const requestedTables: string[] = tables || [...ALLOWED_TABLES];
+    const tablesToReset = requestedTables.filter((t): t is ResetableTable =>
+      (ALLOWED_TABLES as string[]).includes(t)
+    );
 
     const results: Record<string, { deleted: number; error?: string }> = {};
 
     for (const table of tablesToReset) {
       try {
-        const { error, count } = await supabase
-          .from(table)
-          .delete({ count: 'exact' })
-          .eq('user_id', userId);
+        const result = await db
+          .deleteFrom(table as keyof DB)
+          .where('user_id', '=', userId)
+          .executeTakeFirst();
 
-        if (error) {
-          results[table] = { deleted: 0, error: error.message };
-        } else {
-          results[table] = { deleted: count || 0 };
-        }
+        results[table] = { deleted: Number(result.numDeletedRows) || 0 };
       } catch (err) {
         results[table] = { deleted: 0, error: (err as Error).message };
       }

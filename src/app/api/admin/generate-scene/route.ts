@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createServiceClient } from '@/lib/supabase/server';
+import { db } from '@/lib/db';
+import { uploadToStorage, getStoragePublicUrl } from '@/lib/storage';
 import { generateWithRetry } from '@/lib/civitai';
 import { generateWithReplicate } from '@/lib/replicate';
 import { buildPrompt, STYLE_VARIANTS } from '@/lib/civitai-config';
@@ -18,6 +19,7 @@ import {
   rewritePromptWithAI,
   cleanAccumulatedEmphasis,
 } from '@/lib/prompt-rewriter';
+import type { Json } from '@/lib/db/schema';
 
 type QAEvaluator = 'replicate' | 'claude';
 
@@ -25,14 +27,14 @@ const ATTEMPTS_PER_ROUND = 3;
 const MAX_ROUNDS = 4;
 
 // Helper: resolve paired_scene slug to ID
-async function resolvePairedSceneId(supabase: any, pairedSlug: string | null): Promise<string | null> {
+async function resolvePairedSceneId(pairedSlug: string | null | undefined): Promise<string | null> {
   if (!pairedSlug) return null;
-  const { data } = await supabase
-    .from('scenes')
+  const row = await db
+    .selectFrom('scenes')
     .select('id')
-    .eq('slug', pairedSlug)
-    .single();
-  return data?.id || null;
+    .where('slug', '=', pairedSlug)
+    .executeTakeFirst();
+  return row?.id || null;
 }
 
 interface GenerationResult {
@@ -84,53 +86,37 @@ async function generateImage(params: {
   });
 }
 
-async function uploadToStorage(
-  supabase: Awaited<ReturnType<typeof createServiceClient>>,
+async function uploadImageToStorage(
   sceneId: string,
   imageUrl: string
 ): Promise<string> {
   const response = await fetch(imageUrl);
   const blob = await response.blob();
-  const buffer = await blob.arrayBuffer();
+  const buffer = Buffer.from(await blob.arrayBuffer());
 
   // Use unique filename with timestamp to avoid overwriting previous images
   const fileName = `${sceneId}_${Date.now()}.webp`;
 
-  const { error: uploadError } = await supabase.storage
-    .from('scenes')
-    .upload(fileName, buffer, {
-      contentType: 'image/webp',
-      cacheControl: '0',
-      upsert: false, // Don't overwrite - each generation is unique
-    });
-
-  if (uploadError) {
-    throw uploadError;
-  }
-
-  const { data: { publicUrl } } = supabase.storage
-    .from('scenes')
-    .getPublicUrl(fileName);
-
+  await uploadToStorage('scenes', fileName, buffer, { contentType: 'image/webp' });
+  const publicUrl = getStoragePublicUrl('scenes', fileName);
   return `${publicUrl}?t=${Date.now()}`;
 }
 
 async function generateWithQA(params: {
   originalPrompt: string;
   qaContext: SceneQAContext;
-  stylePrefix?: string; // Added only at generation, not saved to DB
+  stylePrefix?: string;
   styleVariant: string;
   customNegative?: string;
-  promptInstructions?: string; // User instructions for AI prompt rewriting
+  promptInstructions?: string;
   service: string;
   modelId: string | number;
   width: number;
   height: number;
   aspectRatio: string;
-  // Img2img parameters
   sourceImage?: string;
   strength?: number;
-  qaEvaluator?: QAEvaluator; // 'replicate' (default, NSFW-safe) or 'claude'
+  qaEvaluator?: QAEvaluator;
   onProgress?: (message: string) => void;
 }): Promise<GenerationResult> {
   const {
@@ -147,7 +133,7 @@ async function generateWithQA(params: {
     aspectRatio,
     sourceImage,
     strength,
-    qaEvaluator = 'replicate', // Default to Replicate for NSFW support
+    qaEvaluator = 'replicate',
     onProgress = console.log,
   } = params;
 
@@ -172,7 +158,6 @@ async function generateWithQA(params: {
       totalAttempts++;
       onProgress(`[QA] Round ${round}, Attempt ${attempt}/${ATTEMPTS_PER_ROUND}`);
 
-      // Build full prompt with styles (stylePrefix added only for generation, not saved)
       const promptForGeneration = stylePrefix ? `${stylePrefix}, ${currentPrompt}` : currentPrompt;
       const { prompt: fullPrompt, negativePrompt } = buildPrompt(
         promptForGeneration,
@@ -183,7 +168,6 @@ async function generateWithQA(params: {
         ? `${negativePrompt}, ${customNegative}`
         : negativePrompt;
 
-      // Generate image
       try {
         onProgress(`[QA] Generating image with ${service}${sourceImage ? ' (img2img)' : ''}...`);
         lastImageUrl = await generateImage({
@@ -213,7 +197,6 @@ async function generateWithQA(params: {
       onProgress(`[QA] Generated image, evaluating with ${qaEvaluator}...`);
       console.log('[QA] qaContext:', JSON.stringify(qaContext, null, 2));
 
-      // Evaluate image with chosen evaluator
       try {
         console.log(`[QA] Calling ${qaEvaluator} evaluator...`);
         lastAssessment = await evaluate(lastImageUrl, qaContext);
@@ -225,7 +208,6 @@ async function generateWithQA(params: {
 
         if (approved) {
           onProgress(`[QA] PASSED on round ${round}, attempt ${attempt}`);
-          // Clean the prompt from QA iteration artifacts before saving
           const cleanedPrompt = cleanAccumulatedEmphasis(currentPrompt);
           return {
             imageUrl: lastImageUrl,
@@ -245,7 +227,6 @@ async function generateWithQA(params: {
           onProgress(`[QA] Fail reason: ${lastAssessment.failReason}`);
         }
 
-        // Improve prompt for next attempt within same round
         if (attempt < ATTEMPTS_PER_ROUND && lastAssessment.regenerationHints) {
           currentPrompt = improvePromptFromHints(currentPrompt, lastAssessment.regenerationHints);
           onProgress(`[QA] Improved prompt: ${currentPrompt.substring(0, 50)}...`);
@@ -256,8 +237,6 @@ async function generateWithQA(params: {
         console.error('[QA] Full evaluation error:', error);
         evaluationErrors.push(`Attempt ${totalAttempts}: ${errMsg}`);
 
-        // Create fallback assessment so we have data to show
-        // Only if we don't have any assessment yet
         if (!lastAssessment) {
           lastAssessment = {
             essenceCaptured: false,
@@ -280,14 +259,11 @@ async function generateWithQA(params: {
             },
           };
         }
-        // Continue to next attempt
       }
 
-      // Small delay between attempts
       await new Promise(r => setTimeout(r, 500));
     }
 
-    // After failing all attempts in a round, rewrite prompt completely
     if (round < MAX_ROUNDS) {
       onProgress(`[QA] Round ${round} failed, rewriting prompt with AI...`);
 
@@ -295,9 +271,9 @@ async function generateWithQA(params: {
         const rewritten = await rewritePromptWithAI(
           originalPrompt,
           qaContext.essence,
-          failReasons.slice(-4), // Last 4 fail reasons
-          qaContext.participants, // Pass participants for gender info
-          promptInstructions // User instructions for prompt changes
+          failReasons.slice(-4),
+          qaContext.participants,
+          promptInstructions
         );
 
         currentPrompt = rewritten.newPrompt;
@@ -305,15 +281,12 @@ async function generateWithQA(params: {
         onProgress(`[QA] Changes: ${rewritten.changes.join(', ')}`);
       } catch (error) {
         onProgress(`[QA] Prompt rewrite failed: ${(error as Error).message}`);
-        // Continue with improved prompt from hints
       }
     }
   }
 
-  // All rounds failed
   onProgress(`[QA] FAILED after ${totalAttempts} attempts across ${MAX_ROUNDS} rounds`);
 
-  // Clean the prompt from QA iteration artifacts before saving
   const cleanedPrompt = cleanAccumulatedEmphasis(currentPrompt);
 
   return {
@@ -330,15 +303,13 @@ async function generateWithQA(params: {
 }
 
 export async function POST(req: Request) {
-  const supabase = await createServiceClient();
-
   const {
     sceneId,
     prompt,
-    stylePrefix, // Additional style prefix (added only at generation time, not saved)
+    stylePrefix,
     styleVariant,
     negativePrompt: customNegative,
-    promptInstructions, // User instructions for AI prompt rewriting
+    promptInstructions,
     modelId,
     service = 'civitai',
     width = 1024,
@@ -346,10 +317,9 @@ export async function POST(req: Request) {
     aspectRatio = '3:2',
     enableQA = false,
     qaContext,
-    qaEvaluator = 'replicate', // 'replicate' (default, NSFW-safe) or 'claude'
-    // Img2img parameters
-    sourceImage, // URL of source image for img2img
-    strength = 0.7, // 0-1, how much to deviate from source
+    qaEvaluator = 'replicate',
+    sourceImage,
+    strength = 0.7,
   } = await req.json();
 
   if (!prompt) {
@@ -359,7 +329,6 @@ export async function POST(req: Request) {
   try {
     // Simple generation without QA
     if (!enableQA || !qaContext) {
-      // Add stylePrefix only at generation time
       const promptWithPrefix = stylePrefix ? `${stylePrefix}, ${prompt}` : prompt;
       const { prompt: fullPrompt, negativePrompt } = buildPrompt(
         promptWithPrefix,
@@ -391,7 +360,6 @@ export async function POST(req: Request) {
           strength,
         });
       } else {
-        // CivitAI SDK does not support img2img
         if (sourceImage) {
           return NextResponse.json(
             { error: 'img2img is only supported with Replicate service' },
@@ -411,62 +379,59 @@ export async function POST(req: Request) {
 
       if (sceneId) {
         console.log('[Generate] Downloading image...');
-        const storageUrl = await uploadToStorage(supabase, sceneId, imageUrl);
+        const storageUrl = await uploadImageToStorage(sceneId, imageUrl);
         console.log('[Generate] Public URL:', storageUrl);
 
         // Check if scene exists and get linked scenes
-        const { data: existingScene, error: selectError } = await supabase
-          .from('scenes')
-          .select('id, slug, image_url, paired_scene, shared_images_with')
-          .eq('id', sceneId)
-          .single();
+        const existingScene = await db
+          .selectFrom('scenes')
+          .select(['id', 'slug', 'image_url', 'paired_scene', 'shared_images_with'])
+          .where('id', '=', sceneId)
+          .executeTakeFirst();
 
         console.log('[Generate] Scene lookup:', {
           sceneId,
           found: !!existingScene,
           slug: existingScene?.slug,
           currentImageUrl: existingScene?.image_url,
-          selectError: selectError?.message
         });
 
-        const { data: updateData, error: updateError } = await supabase
-          .from('scenes')
-          .update({ image_url: storageUrl })
-          .eq('id', sceneId)
-          .select();
+        const updateData = await db
+          .updateTable('scenes')
+          .set({ image_url: storageUrl })
+          .where('id', '=', sceneId)
+          .returningAll()
+          .execute();
 
         const debug = {
           sceneId,
           sceneFound: !!existingScene,
           sceneSlug: existingScene?.slug,
           storageUrl,
-          updateError: updateError?.message || null,
-          rowsUpdated: updateData?.length || 0,
-          updatedImageUrl: updateData?.[0]?.image_url || null,
+          updateError: null,
+          rowsUpdated: updateData.length,
+          updatedImageUrl: updateData[0]?.image_url || null,
         };
 
-        if (updateError) {
-          console.error('[Generate] DB update error:', updateError);
-        } else {
-          console.log('[Generate] DB update success, rows:', updateData?.length || 0);
-          if (updateData && updateData[0]) {
-            console.log('[Generate] Updated image_url:', updateData[0].image_url);
-          }
+        console.log('[Generate] DB update success, rows:', updateData.length);
+        if (updateData[0]) {
+          console.log('[Generate] Updated image_url:', updateData[0].image_url);
+        }
 
-          // Sync image_url to paired and shared scenes
-          const pairedId = await resolvePairedSceneId(supabase, existingScene?.paired_scene);
-          const linkedIds = [
-            pairedId,
-            existingScene?.shared_images_with,
-          ].filter(Boolean) as string[];
+        // Sync image_url to paired and shared scenes
+        const pairedId = await resolvePairedSceneId(existingScene?.paired_scene);
+        const linkedIds = [
+          pairedId,
+          existingScene?.shared_images_with,
+        ].filter(Boolean) as string[];
 
-          if (linkedIds.length > 0) {
-            console.log('[Generate] Syncing image_url to linked scenes:', linkedIds);
-            await supabase
-              .from('scenes')
-              .update({ image_url: storageUrl })
-              .in('id', linkedIds);
-          }
+        if (linkedIds.length > 0) {
+          console.log('[Generate] Syncing image_url to linked scenes:', linkedIds);
+          await db
+            .updateTable('scenes')
+            .set({ image_url: storageUrl })
+            .where('id', 'in', linkedIds)
+            .execute();
         }
 
         console.log('[Generate] Done!');
@@ -485,10 +450,10 @@ export async function POST(req: Request) {
     const result = await generateWithQA({
       originalPrompt: prompt,
       qaContext: qaContext as SceneQAContext,
-      stylePrefix, // Added only at generation, not saved to DB
+      stylePrefix,
       styleVariant: styleVariant || 'default',
       customNegative,
-      promptInstructions, // User instructions for AI prompt rewriting
+      promptInstructions,
       service,
       modelId: service === 'civitai' ? (modelId || 4201) : (modelId || 'sdxl'),
       width,
@@ -496,7 +461,7 @@ export async function POST(req: Request) {
       aspectRatio,
       sourceImage,
       strength,
-      qaEvaluator: qaEvaluator as QAEvaluator, // 'replicate' or 'claude'
+      qaEvaluator: qaEvaluator as QAEvaluator,
       onProgress: console.log,
     });
 
@@ -507,8 +472,7 @@ export async function POST(req: Request) {
     });
 
     if (sceneId && result.imageUrl) {
-      // Upload final image to storage
-      const storageUrl = await uploadToStorage(supabase, sceneId, result.imageUrl);
+      const storageUrl = await uploadImageToStorage(sceneId, result.imageUrl);
 
       console.log('[Generate+QA] Saving to DB:', {
         sceneId,
@@ -517,41 +481,39 @@ export async function POST(req: Request) {
         hasAssessment: !!result.lastAssessment,
       });
 
-      // First check if scene exists and get linked scenes
-      const { data: existingScene, error: selectError } = await supabase
-        .from('scenes')
-        .select('id, slug, paired_scene, shared_images_with')
-        .eq('id', sceneId)
-        .single();
+      const existingScene = await db
+        .selectFrom('scenes')
+        .select(['id', 'slug', 'paired_scene', 'shared_images_with'])
+        .where('id', '=', sceneId)
+        .executeTakeFirst();
 
-      if (selectError || !existingScene) {
-        console.error('[Generate+QA] Scene not found:', sceneId, selectError);
+      if (!existingScene) {
+        console.error('[Generate+QA] Scene not found:', sceneId);
       } else {
         console.log('[Generate+QA] Found scene:', existingScene.slug);
       }
 
-      // Update scene in database
-      // Also update generation_prompt to finalPrompt so user sees the improved version
-      const { data: updateData, error: updateError } = await supabase
-        .from('scenes')
-        .update({
+      const updateData = await db
+        .updateTable('scenes')
+        .set({
           image_url: storageUrl,
-          generation_prompt: result.finalPrompt, // Update to show improved prompt in UI
+          generation_prompt: result.finalPrompt,
           qa_status: result.qaStatus,
           qa_attempts: result.totalAttempts,
-          qa_last_assessment: result.lastAssessment,
+          qa_last_assessment: result.lastAssessment as unknown as Json,
         })
-        .eq('id', sceneId)
-        .select();
+        .where('id', '=', sceneId)
+        .returningAll()
+        .execute();
 
       const debug = {
         sceneId,
         sceneFound: !!existingScene,
         sceneSlug: existingScene?.slug,
         storageUrl,
-        updateError: updateError?.message || null,
-        rowsUpdated: updateData?.length || 0,
-        updatedImageUrl: updateData?.[0]?.image_url || null,
+        updateError: null,
+        rowsUpdated: updateData.length,
+        updatedImageUrl: updateData[0]?.image_url || null,
         qaStatus: result.qaStatus,
         hasAssessment: !!result.lastAssessment,
         essenceScore: result.lastAssessment?.essenceScore,
@@ -560,25 +522,22 @@ export async function POST(req: Request) {
         evaluationErrorsCount: result.evaluationErrors.length,
       };
 
-      if (updateError) {
-        console.error('[Generate+QA] DB update error:', updateError);
-      } else {
-        console.log('[Generate+QA] DB update success, rows affected:', updateData?.length || 0);
+      console.log('[Generate+QA] DB update success, rows affected:', updateData.length);
 
-        // Sync image_url to paired and shared scenes
-        const pairedId = await resolvePairedSceneId(supabase, existingScene?.paired_scene);
-        const linkedIds = [
-          pairedId,
-          existingScene?.shared_images_with,
-        ].filter(Boolean) as string[];
+      // Sync image_url to paired and shared scenes
+      const pairedId = await resolvePairedSceneId(existingScene?.paired_scene);
+      const linkedIds = [
+        pairedId,
+        existingScene?.shared_images_with,
+      ].filter(Boolean) as string[];
 
-        if (linkedIds.length > 0) {
-          console.log('[Generate+QA] Syncing image_url to linked scenes:', linkedIds);
-          await supabase
-            .from('scenes')
-            .update({ image_url: storageUrl })
-            .in('id', linkedIds);
-        }
+      if (linkedIds.length > 0) {
+        console.log('[Generate+QA] Syncing image_url to linked scenes:', linkedIds);
+        await db
+          .updateTable('scenes')
+          .set({ image_url: storageUrl })
+          .where('id', 'in', linkedIds)
+          .execute();
       }
 
       console.log('[Generate+QA] Done!');

@@ -1,11 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/compat-types';
+import { db } from '@/lib/db';
 import Anthropic from '@anthropic-ai/sdk';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
@@ -155,26 +150,30 @@ function buildEnrichedPrompt(originalPrompt: string, booruTags: string[], partic
 export async function GET() {
   try {
     // Fetch all scenes with prompts
-    const { data: scenes, error } = await supabase
-      .from('scenes')
-      .select('id, slug, generation_prompt, ai_context, tags, role_direction')
-      .not('generation_prompt', 'is', null)
-      .order('slug');
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
+    const scenes = await db
+      .selectFrom('scenes')
+      .select(['id', 'slug', 'generation_prompt', 'ai_context', 'tags', 'role_direction'])
+      .where('generation_prompt', 'is not', null)
+      .orderBy('slug')
+      .execute();
 
     // Return scenes for preview
     return NextResponse.json({
-      total: scenes?.length || 0,
-      scenes: scenes?.map(s => ({
+      total: scenes.length,
+      scenes: scenes.map(s => ({
         id: s.id,
         slug: s.slug,
         current_prompt: s.generation_prompt,
         tags: s.tags,
         role_direction: s.role_direction,
-        detected_participants: detectParticipants(s as SceneData),
+        detected_participants: detectParticipants({
+          id: s.id || '',
+          slug: s.slug || '',
+          generation_prompt: s.generation_prompt,
+          ai_context: s.ai_context as Record<string, unknown> | null,
+          tags: s.tags || [],
+          role_direction: s.role_direction || undefined,
+        }),
       })),
     });
   } catch (error) {
@@ -188,20 +187,16 @@ export async function POST(req: Request) {
     const { sceneIds, dryRun = true } = await req.json();
 
     // Fetch scenes to process
-    let query = supabase
-      .from('scenes')
-      .select('id, slug, generation_prompt, ai_context, tags, role_direction')
-      .not('generation_prompt', 'is', null);
+    let query = db
+      .selectFrom('scenes')
+      .select(['id', 'slug', 'generation_prompt', 'ai_context', 'tags', 'role_direction'])
+      .where('generation_prompt', 'is not', null);
 
     if (sceneIds && sceneIds.length > 0) {
-      query = query.in('id', sceneIds);
+      query = query.where('id', 'in', sceneIds);
     }
 
-    const { data: scenes, error } = await query.order('slug');
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
+    const scenes = await query.orderBy('slug').execute();
 
     if (!scenes || scenes.length === 0) {
       return NextResponse.json({ error: 'No scenes found' }, { status: 404 });
@@ -218,7 +213,14 @@ export async function POST(req: Request) {
     }> = [];
 
     for (const scene of scenes) {
-      const sceneData = scene as SceneData;
+      const sceneData: SceneData = {
+        id: scene.id || '',
+        slug: scene.slug || '',
+        generation_prompt: scene.generation_prompt,
+        ai_context: scene.ai_context as Record<string, unknown> | null,
+        tags: scene.tags || [],
+        role_direction: scene.role_direction || undefined,
+      };
       const participants = detectParticipants(sceneData);
 
       console.log(`[EnrichPrompts] Processing ${scene.slug} (${participants})`);
@@ -238,8 +240,8 @@ export async function POST(req: Request) {
       );
 
       const result = {
-        id: scene.id,
-        slug: scene.slug,
+        id: scene.id || '',
+        slug: scene.slug || '',
         participants,
         original_prompt: scene.generation_prompt || '',
         suggested_tags: suggestedTags,
@@ -249,15 +251,15 @@ export async function POST(req: Request) {
 
       // Update in DB if not dry run
       if (!dryRun) {
-        const { error: updateError } = await supabase
-          .from('scenes')
-          .update({ generation_prompt: enrichedPrompt })
-          .eq('id', scene.id);
-
-        if (updateError) {
-          console.error(`[EnrichPrompts] Failed to update ${scene.slug}:`, updateError);
-        } else {
+        try {
+          await db
+            .updateTable('scenes')
+            .set({ generation_prompt: enrichedPrompt })
+            .where('id', '=', scene.id || '')
+            .execute();
           result.updated = true;
+        } catch (updateError) {
+          console.error(`[EnrichPrompts] Failed to update ${scene.slug}:`, updateError);
         }
       }
 

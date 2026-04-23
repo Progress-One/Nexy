@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
-import { createServiceClient } from '@/lib/supabase/server';
+import { db } from '@/lib/db';
+import { sql } from 'kysely';
+import type { Json } from '@/lib/db/schema';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -42,8 +44,6 @@ interface V2SceneJSON {
 }
 
 export async function POST() {
-  const supabase = await createServiceClient();
-
   try {
     const scenesDir = path.join(process.cwd(), 'scenes', 'v2-ACTIVE-92-scenes', 'composite');
 
@@ -85,14 +85,12 @@ export async function POST() {
 
     for (const scene of scenes) {
       try {
-        // Validate V2 format
         if (scene.version !== 2) {
           errors.push(`${scene.slug}: Not a V2 file (version: ${scene.version})`);
           totalErrors++;
           continue;
         }
 
-        // Build AI description (English only, technical for AI matching)
         const aiTags = [
           scene.category,
           scene.role_direction,
@@ -105,44 +103,52 @@ export async function POST() {
           slug: scene.slug,
           version: scene.version || 2,
           role_direction: scene.role_direction || 'mutual',
-          title: scene.title,
-          subtitle: scene.subtitle || { ru: '', en: '' },
-          // ai_description - English only, technical tags for AI matching
+          title: scene.title as unknown as Json,
+          subtitle: (scene.subtitle || { ru: '', en: '' }) as unknown as Json,
           ai_description: {
             en: aiTags,
-            ru: '', // AI uses English only
-          },
-          // user_description - multilingual, short action descriptions for users
-          // Left empty for manual entry via admin panel (JSON's ai_description is too long/poetic)
-          user_description: scene.user_description || { ru: '', en: '' },
+            ru: '',
+          } as unknown as Json,
+          user_description: (scene.user_description || { ru: '', en: '' }) as unknown as Json,
           image_url: '',
           image_prompt: scene.image_prompt || '',
-          // generation_prompt - original prompt for image generation
           generation_prompt: scene.image_prompt || '',
           intensity: scene.intensity,
           category: scene.category,
           tags: scene.tags,
-          elements: scene.elements || [],
-          question: scene.question || null,
-          ai_context: scene.ai_context,
-          // Legacy compatibility fields
-          participants: { count: 2 },
-          dimensions: scene.ai_context.tests_primary,
-          relevant_for: { gender: 'any', interested_in: 'any' },
+          elements: (scene.elements || []) as unknown as Json,
+          question: (scene.question || null) as unknown as Json,
+          ai_context: scene.ai_context as unknown as Json,
           priority: 50,
         };
 
-        const { error } = await supabase
-          .from('scenes')
-          .upsert(dbScene, {
-            onConflict: 'slug',
-          });
-
-        if (error) {
-          errors.push(`${scene.slug}: ${error.message}`);
-          totalErrors++;
-        } else {
+        try {
+          await db
+            .insertInto('scenes')
+            .values(dbScene)
+            .onConflict(oc => oc.column('slug').doUpdateSet({
+              version: dbScene.version,
+              role_direction: dbScene.role_direction,
+              title: dbScene.title,
+              subtitle: dbScene.subtitle,
+              ai_description: dbScene.ai_description,
+              user_description: dbScene.user_description,
+              image_url: dbScene.image_url,
+              image_prompt: dbScene.image_prompt,
+              generation_prompt: dbScene.generation_prompt,
+              intensity: dbScene.intensity,
+              category: dbScene.category,
+              tags: dbScene.tags,
+              elements: dbScene.elements,
+              question: dbScene.question,
+              ai_context: dbScene.ai_context,
+              priority: dbScene.priority,
+            }))
+            .execute();
           totalImported++;
+        } catch (err) {
+          errors.push(`${scene.slug}: ${(err as Error).message}`);
+          totalErrors++;
         }
       } catch (e) {
         errors.push(`${scene.slug}: ${(e as Error).message}`);
@@ -167,23 +173,23 @@ export async function POST() {
 
 // GET endpoint to check V2 import status
 export async function GET() {
-  const supabase = await createServiceClient();
-
   try {
     // Count V2 scenes
-    const { count: v2Count } = await supabase
-      .from('scenes')
-      .select('*', { count: 'exact', head: true })
-      .eq('version', 2);
+    const v2Row = await db
+      .selectFrom('scenes')
+      .select(sql<number>`count(*)::int`.as('count'))
+      .where('version', '=', 2)
+      .executeTakeFirstOrThrow();
 
     // Count total scenes
-    const { count: totalCount } = await supabase
-      .from('scenes')
-      .select('*', { count: 'exact', head: true });
+    const totalRow = await db
+      .selectFrom('scenes')
+      .select(sql<number>`count(*)::int`.as('count'))
+      .executeTakeFirstOrThrow();
 
     return NextResponse.json({
-      v2_scenes: v2Count || 0,
-      total_scenes: totalCount || 0,
+      v2_scenes: v2Row.count || 0,
+      total_scenes: totalRow.count || 0,
     });
   } catch (error) {
     return NextResponse.json(

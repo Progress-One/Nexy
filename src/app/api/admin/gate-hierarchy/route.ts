@@ -1,27 +1,20 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/compat-types';
+import { db } from '@/lib/db';
 import { SCENE_GATES, ALL_GATES } from '@/lib/onboarding-gates';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import type { Json } from '@/lib/db/schema';
 
 export async function GET() {
   try {
     // Fetch all active scenes
-    const { data: scenes, error } = await supabase
-      .from('scenes')
-      .select('id, slug, title, image_url, is_active, category')
-      .eq('is_active', true)
-      .order('slug');
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
+    const scenes = await db
+      .selectFrom('scenes')
+      .select(['id', 'slug', 'title', 'image_url', 'is_active', 'category'])
+      .where('is_active', '=', true)
+      .orderBy('slug')
+      .execute();
 
     // Build scene map
-    const sceneMap = new Map(scenes?.map(s => [s.slug, s]) || []);
+    const sceneMap = new Map(scenes.map(s => [s.slug, s]));
 
     // Build hierarchy by gate
     const hierarchy: Record<string, {
@@ -46,11 +39,12 @@ export async function GET() {
     for (const [slug, req] of Object.entries(SCENE_GATES)) {
       const primaryGate = req.gates[0];
       const scene = sceneMap.get(slug);
+      const titleObj = (scene?.title as { ru?: string; en?: string } | null) || { ru: slug, en: slug };
 
       hierarchy[primaryGate].scenes.push({
         slug,
-        title: scene?.title || { ru: slug, en: slug },
-        image_url: scene?.image_url,
+        title: titleObj,
+        image_url: scene?.image_url || undefined,
         gates: req.gates,
         operator: req.operator,
         level: req.level,
@@ -69,7 +63,7 @@ export async function GET() {
       }
       return false;
     };
-    const ungatedScenes = scenes?.filter(s => !isGated(s.slug)) || [];
+    const ungatedScenes = scenes.filter(s => s.slug && !isGated(s.slug));
 
     return NextResponse.json({
       gates: ALL_GATES,
@@ -83,7 +77,7 @@ export async function GET() {
       stats: {
         totalGated: Object.keys(SCENE_GATES).length,
         totalUngated: ungatedScenes.length,
-        totalActive: scenes?.length || 0,
+        totalActive: scenes.length,
       },
     });
   } catch (error) {

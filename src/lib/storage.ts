@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 
 let _s3: S3Client | null = null;
 function getS3(): S3Client {
@@ -33,4 +33,32 @@ export async function uploadToStorage(
 
 export function getStoragePublicUrl(bucket: string, path: string): string {
   return `${process.env['MINIO_PUBLIC_URL'] || 'http://173.242.60.76:9000'}/${bucket}/${path}`;
+}
+
+export interface StorageFile {
+  name: string;
+  size?: number;
+  created_at?: string;
+}
+
+export async function listStorageFiles(
+  bucket: string,
+  opts?: { limit?: number; prefix?: string }
+): Promise<StorageFile[]> {
+  const command = new ListObjectsV2Command({
+    Bucket: bucket,
+    MaxKeys: opts?.limit || 1000,
+    Prefix: opts?.prefix,
+  });
+  const result = await getS3().send(command);
+  const files: StorageFile[] = [];
+  for (const obj of result.Contents || []) {
+    if (!obj.Key) continue;
+    files.push({
+      name: obj.Key,
+      size: obj.Size,
+      created_at: obj.LastModified?.toISOString(),
+    });
+  }
+  return files;
 }

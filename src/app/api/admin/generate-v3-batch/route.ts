@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createServiceClient } from '@/lib/supabase/server';
+import { db } from '@/lib/db';
+import { uploadToStorage, getStoragePublicUrl } from '@/lib/storage';
 import { generateWithReplicate } from '@/lib/replicate';
 import { ALL_V3_TEMPLATES, getTemplatesByGroup } from '@/lib/v3-scene-templates';
 
@@ -16,8 +17,6 @@ const DEFAULT_ASPECT_RATIO = '3:4';
  * - modelId: string - Replicate model to use (optional)
  */
 export async function POST(req: Request) {
-  const supabase = await createServiceClient();
-
   try {
     const body = await req.json();
     const { groupId, slugs, all, modelId = DEFAULT_MODEL } = body;
@@ -40,24 +39,22 @@ export async function POST(req: Request) {
     }
 
     // Get existing scenes that need images
-    const { data: existingScenes } = await supabase
-      .from('scenes')
-      .select('id, slug, image_url')
-      .in('slug', templates.map(t => t.slug));
+    const existingScenes = await db
+      .selectFrom('scenes')
+      .select(['id', 'slug', 'image_url'])
+      .where('slug', 'in', templates.map(t => t.slug))
+      .execute();
 
     const existingMap = new Map<string, { id: string; image_url: string | null }>();
-    if (existingScenes) {
-      for (const scene of existingScenes) {
-        if (scene.slug) {
-          existingMap.set(scene.slug, { id: scene.id, image_url: scene.image_url });
-        }
+    for (const scene of existingScenes) {
+      if (scene.slug && scene.id) {
+        existingMap.set(scene.slug, { id: scene.id, image_url: scene.image_url });
       }
     }
 
     // Filter to only scenes without images (or all if forced)
     const toGenerate = templates.filter(t => {
       const existing = existingMap.get(t.slug);
-      // Scene must exist and not have an image yet
       return existing && !existing.image_url;
     });
 
@@ -80,7 +77,6 @@ export async function POST(req: Request) {
       try {
         console.log(`[V3 Batch] Generating image for ${template.slug}...`);
 
-        // Generate image with Replicate
         const imageUrl = await generateWithReplicate({
           prompt: template.image_prompt,
           negativePrompt: 'text, watermark, logo, ugly, deformed, blurry, low quality',
@@ -90,40 +86,33 @@ export async function POST(req: Request) {
           aspectRatio: DEFAULT_ASPECT_RATIO,
         });
 
-        // Upload to Supabase Storage
+        // Upload to storage
         const response = await fetch(imageUrl);
         const blob = await response.blob();
-        const buffer = await blob.arrayBuffer();
+        const buffer = Buffer.from(await blob.arrayBuffer());
 
         const fileName = `${sceneId}_${Date.now()}.webp`;
 
-        const { error: uploadError } = await supabase.storage
-          .from('scenes')
-          .upload(fileName, buffer, {
-            contentType: 'image/webp',
-            cacheControl: '0',
-            upsert: false,
-          });
-
-        if (uploadError) {
-          throw new Error(`Upload failed: ${uploadError.message}`);
+        try {
+          await uploadToStorage('scenes', fileName, buffer, { contentType: 'image/webp' });
+        } catch (uploadError) {
+          throw new Error(`Upload failed: ${(uploadError as Error).message}`);
         }
 
-        const { data: { publicUrl } } = supabase.storage
-          .from('scenes')
-          .getPublicUrl(fileName);
+        const publicUrl = getStoragePublicUrl('scenes', fileName);
 
         // Update scene with image URL
-        const { error: updateError } = await supabase
-          .from('scenes')
-          .update({
-            image_url: publicUrl,
-            generation_prompt: template.image_prompt,
-          })
-          .eq('id', sceneId);
-
-        if (updateError) {
-          throw new Error(`Update failed: ${updateError.message}`);
+        try {
+          await db
+            .updateTable('scenes')
+            .set({
+              image_url: publicUrl,
+              generation_prompt: template.image_prompt,
+            })
+            .where('id', '=', sceneId)
+            .execute();
+        } catch (updateError) {
+          throw new Error(`Update failed: ${(updateError as Error).message}`);
         }
 
         results.push({
@@ -171,23 +160,22 @@ export async function POST(req: Request) {
  * GET - Check generation status for V3 scenes
  */
 export async function GET() {
-  const supabase = await createServiceClient();
-
   try {
-    const { data: scenes } = await supabase
-      .from('scenes')
-      .select('slug, image_url')
-      .in('slug', ALL_V3_TEMPLATES.map(t => t.slug));
+    const scenes = await db
+      .selectFrom('scenes')
+      .select(['slug', 'image_url'])
+      .where('slug', 'in', ALL_V3_TEMPLATES.map(t => t.slug))
+      .execute();
 
-    const withImages = scenes?.filter(s => s.image_url) || [];
-    const withoutImages = scenes?.filter(s => !s.image_url) || [];
+    const withImages = scenes.filter(s => s.image_url);
+    const withoutImages = scenes.filter(s => !s.image_url);
     const notCreated = ALL_V3_TEMPLATES.filter(
-      t => !scenes?.some(s => s.slug === t.slug)
+      t => !scenes.some(s => s.slug === t.slug)
     );
 
     return NextResponse.json({
       total: ALL_V3_TEMPLATES.length,
-      created: scenes?.length || 0,
+      created: scenes.length,
       withImages: withImages.length,
       withoutImages: withoutImages.length,
       notCreated: notCreated.length,

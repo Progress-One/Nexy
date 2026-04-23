@@ -1,11 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/compat-types';
-
-// Use service role for admin operations (bypasses RLS)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { db } from '@/lib/db';
+import type { Json } from '@/lib/db/schema';
 
 interface ImageVariant {
   url: string;
@@ -19,16 +14,15 @@ interface ImageVariant {
 // Helper: resolve paired_scene slug to ID
 async function resolvePairedSceneId(pairedSlug: string | null): Promise<string | null> {
   if (!pairedSlug) return null;
-  const { data } = await supabase
-    .from('scenes')
+  const row = await db
+    .selectFrom('scenes')
     .select('id')
-    .eq('slug', pairedSlug)
-    .single();
-  return data?.id || null;
+    .where('slug', '=', pairedSlug)
+    .executeTakeFirst();
+  return row?.id || null;
 }
 
 // Sync image_variants to linked scenes (paired_scene and shared_images_with)
-// Also syncs to scenes that reference this scene via shared_images_with (reverse sync)
 async function syncVariantsToLinkedScenes(
   sceneId: string,
   variants: ImageVariant[],
@@ -42,30 +36,28 @@ async function syncVariantsToLinkedScenes(
   const linkedIds = [pairedId, sharedImagesWith].filter(Boolean) as string[];
 
   // Reverse links: scenes that have shared_images_with pointing to this scene
-  const { data: reverseLinked } = await supabase
-    .from('scenes')
+  const reverseLinked = await db
+    .selectFrom('scenes')
     .select('id')
-    .eq('shared_images_with', sceneId);
+    .where('shared_images_with', '=', sceneId)
+    .execute();
 
-  if (reverseLinked) {
-    linkedIds.push(...reverseLinked.map(s => s.id));
+  for (const row of reverseLinked) {
+    if (row.id) linkedIds.push(row.id);
   }
 
-  // Deduplicate
   const uniqueLinkedIds = [...new Set(linkedIds)];
 
   for (const linkedId of uniqueLinkedIds) {
-    // Get current variants of linked scene
-    const { data: linked } = await supabase
-      .from('scenes')
+    const linked = await db
+      .selectFrom('scenes')
       .select('image_variants')
-      .eq('id', linkedId)
-      .single();
+      .where('id', '=', linkedId)
+      .executeTakeFirst();
 
     if (!linked) continue;
 
-    // Merge variants (add new ones that don't exist)
-    const linkedVariants: ImageVariant[] = linked.image_variants || [];
+    const linkedVariants: ImageVariant[] = (linked.image_variants as unknown as ImageVariant[]) || [];
     const getBaseUrl = (url: string) => url?.split('?')[0] || '';
     const existingUrls = new Set(linkedVariants.map(v => getBaseUrl(v.url)));
 
@@ -78,10 +70,11 @@ async function syncVariantsToLinkedScenes(
     }
 
     if (updated) {
-      await supabase
-        .from('scenes')
-        .update({ image_variants: linkedVariants })
-        .eq('id', linkedId);
+      await db
+        .updateTable('scenes')
+        .set({ image_variants: linkedVariants as unknown as Json })
+        .where('id', '=', linkedId)
+        .execute();
       console.log(`[SaveVariant] Synced variants to linked scene ${linkedId}`);
     }
   }
@@ -89,7 +82,6 @@ async function syncVariantsToLinkedScenes(
 
 export async function POST(req: Request) {
   try {
-    // Read body once at the beginning
     const body = await req.json();
     const { sceneId, action, variantUrl, imageUrl, prompt } = body;
 
@@ -97,20 +89,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing sceneId' }, { status: 400 });
     }
 
-    // Get current scene with linked scenes
-    const { data: scene, error: selectError } = await supabase
-      .from('scenes')
-      .select('image_url, generation_prompt, image_variants, qa_status, qa_last_assessment, paired_scene, shared_images_with')
-      .eq('id', sceneId)
-      .single();
+    const scene = await db
+      .selectFrom('scenes')
+      .select(['image_url', 'generation_prompt', 'image_variants', 'qa_status', 'qa_last_assessment', 'paired_scene', 'shared_images_with'])
+      .where('id', '=', sceneId)
+      .executeTakeFirst();
 
-    if (selectError || !scene) {
+    if (!scene) {
       return NextResponse.json({ error: 'Scene not found' }, { status: 404 });
     }
 
     // Action: save - Save specified image to variants
     if (action === 'save') {
-      // Use imageUrl from request if provided, otherwise fall back to DB
       const urlToSave = imageUrl || scene.image_url;
       const promptToSave = prompt || scene.generation_prompt || '';
 
@@ -118,18 +108,16 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'No image to save' }, { status: 400 });
       }
 
-      const currentVariants: ImageVariant[] = scene.image_variants || [];
+      const currentVariants: ImageVariant[] = (scene.image_variants as unknown as ImageVariant[]) || [];
 
       console.log('[SaveVariant] Scene:', sceneId);
       console.log('[SaveVariant] Current variants in DB:', currentVariants.length);
       currentVariants.forEach((v, i) => console.log(`  [${i}] ${v.url?.substring(0, 60)}...`));
       console.log('[SaveVariant] URL to save:', urlToSave?.substring(0, 60) + '...');
 
-      // Helper to compare URLs without query params (like ?t=timestamp)
       const getBaseUrl = (url: string) => url.split('?')[0];
       const baseUrlToSave = getBaseUrl(urlToSave);
 
-      // Check if this URL is already saved (ignore query params)
       if (currentVariants.some(v => getBaseUrl(v.url) === baseUrlToSave)) {
         return NextResponse.json({
           success: true,
@@ -138,40 +126,37 @@ export async function POST(req: Request) {
         });
       }
 
-      // Create new variant from specified image
       const newVariant: ImageVariant = {
         url: urlToSave,
         prompt: promptToSave,
         created_at: new Date().toISOString(),
-        qa_status: scene.qa_status || null,
-        qa_score: (scene.qa_last_assessment as { essenceScore?: number })?.essenceScore,
+        qa_status: (scene.qa_status as 'passed' | 'failed' | null) || null,
+        qa_score: (scene.qa_last_assessment as { essenceScore?: number } | null)?.essenceScore,
       };
 
       const updatedVariants = [...currentVariants, newVariant];
 
-      // If scene has no image_url, set it from the first variant
-      const updateData: { image_variants: ImageVariant[]; image_url?: string } = {
-        image_variants: updatedVariants,
+      const updateData: { image_variants: Json; image_url?: string } = {
+        image_variants: updatedVariants as unknown as Json,
       };
       if (!scene.image_url) {
         updateData.image_url = urlToSave;
         console.log('[SaveVariant] Also setting image_url (was empty)');
       }
 
-      // Update scene with new variants array (and possibly image_url)
-      const { error: updateError } = await supabase
-        .from('scenes')
-        .update(updateData)
-        .eq('id', sceneId);
-
-      if (updateError) {
+      try {
+        await db
+          .updateTable('scenes')
+          .set(updateData)
+          .where('id', '=', sceneId)
+          .execute();
+      } catch (updateError) {
         console.error('[SaveVariant] Update error:', updateError);
-        return NextResponse.json({ error: updateError.message }, { status: 500 });
+        return NextResponse.json({ error: (updateError as Error).message }, { status: 500 });
       }
 
       console.log('[SaveVariant] Saved! New total:', updatedVariants.length);
 
-      // Sync to linked scenes (paired_scene and shared_images_with)
       await syncVariantsToLinkedScenes(
         sceneId,
         updatedVariants,
@@ -179,22 +164,22 @@ export async function POST(req: Request) {
         scene.shared_images_with
       );
 
-      // If we set image_url, also sync it to linked scenes that have no image_url
       if (updateData.image_url) {
         const pairedId = await resolvePairedSceneId(scene.paired_scene);
         const linkedIds = [pairedId, scene.shared_images_with].filter(Boolean) as string[];
         for (const linkedId of linkedIds) {
-          const { data: linked } = await supabase
-            .from('scenes')
+          const linked = await db
+            .selectFrom('scenes')
             .select('image_url')
-            .eq('id', linkedId)
-            .single();
+            .where('id', '=', linkedId)
+            .executeTakeFirst();
 
           if (linked && !linked.image_url) {
-            await supabase
-              .from('scenes')
-              .update({ image_url: updateData.image_url })
-              .eq('id', linkedId);
+            await db
+              .updateTable('scenes')
+              .set({ image_url: updateData.image_url })
+              .where('id', '=', linkedId)
+              .execute();
             console.log(`[SaveVariant] Synced image_url to linked scene ${linkedId}`);
           }
         }
@@ -213,25 +198,24 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'Missing variantUrl' }, { status: 400 });
       }
 
-      // For shared images, the variant may be in the source scene
-      // Just set the image_url directly - we trust the URL is valid
-      const { error: updateError } = await supabase
-        .from('scenes')
-        .update({ image_url: variantUrl })
-        .eq('id', sceneId);
-
-      if (updateError) {
+      try {
+        await db
+          .updateTable('scenes')
+          .set({ image_url: variantUrl })
+          .where('id', '=', sceneId)
+          .execute();
+      } catch (updateError) {
         console.error('[SaveVariant] Update error:', updateError);
-        return NextResponse.json({ error: updateError.message }, { status: 500 });
+        return NextResponse.json({ error: (updateError as Error).message }, { status: 500 });
       }
 
-      // Sync image_url to paired scene (but NOT to shared_images_with source)
       if (scene.paired_scene) {
         console.log('[SaveVariant] Syncing selected image_url to paired scene:', scene.paired_scene);
-        await supabase
-          .from('scenes')
-          .update({ image_url: variantUrl })
-          .eq('slug', scene.paired_scene);
+        await db
+          .updateTable('scenes')
+          .set({ image_url: variantUrl })
+          .where('slug', '=', scene.paired_scene)
+          .execute();
       }
 
       return NextResponse.json({
@@ -250,22 +234,20 @@ export async function POST(req: Request) {
       const getBaseUrl = (url: string) => url?.split('?')[0] || '';
       const deletedBaseUrl = getBaseUrl(variantUrl);
 
-      let currentVariants: ImageVariant[] = scene.image_variants || [];
+      let currentVariants: ImageVariant[] = (scene.image_variants as unknown as ImageVariant[]) || [];
       let targetSceneId = sceneId;
 
-      // If variant not in current scene, check if it's from shared_images_with source
       const variantInCurrent = currentVariants.some(v => getBaseUrl(v.url) === deletedBaseUrl);
 
       if (!variantInCurrent && scene.shared_images_with) {
-        // Get source scene's variants
-        const { data: sourceScene } = await supabase
-          .from('scenes')
+        const sourceScene = await db
+          .selectFrom('scenes')
           .select('image_variants')
-          .eq('id', scene.shared_images_with)
-          .single();
+          .where('id', '=', scene.shared_images_with)
+          .executeTakeFirst();
 
         if (sourceScene?.image_variants) {
-          currentVariants = sourceScene.image_variants;
+          currentVariants = sourceScene.image_variants as unknown as ImageVariant[];
           targetSceneId = scene.shared_images_with;
           console.log('[SaveVariant] Deleting from shared source scene:', targetSceneId);
         }
@@ -273,75 +255,75 @@ export async function POST(req: Request) {
 
       const updatedVariants = currentVariants.filter(v => getBaseUrl(v.url) !== deletedBaseUrl);
 
-      const { error: updateError } = await supabase
-        .from('scenes')
-        .update({ image_variants: updatedVariants })
-        .eq('id', targetSceneId);
-
-      if (updateError) {
+      try {
+        await db
+          .updateTable('scenes')
+          .set({ image_variants: updatedVariants as unknown as Json })
+          .where('id', '=', targetSceneId)
+          .execute();
+      } catch (updateError) {
         console.error('[SaveVariant] Update error:', updateError);
-        return NextResponse.json({ error: updateError.message }, { status: 500 });
+        return NextResponse.json({ error: (updateError as Error).message }, { status: 500 });
       }
 
-      // If deleted from source, also sync to paired scene of source
       if (targetSceneId !== sceneId) {
-        const { data: sourceScene } = await supabase
-          .from('scenes')
+        const sourceScene = await db
+          .selectFrom('scenes')
           .select('paired_scene')
-          .eq('id', targetSceneId)
-          .single();
+          .where('id', '=', targetSceneId)
+          .executeTakeFirst();
 
         if (sourceScene?.paired_scene) {
-          const { data: pairedScene } = await supabase
-            .from('scenes')
+          const pairedScene = await db
+            .selectFrom('scenes')
             .select('image_variants')
-            .eq('slug', sourceScene.paired_scene)
-            .single();
+            .where('slug', '=', sourceScene.paired_scene)
+            .executeTakeFirst();
 
           if (pairedScene?.image_variants) {
-            const pairedVariants = (pairedScene.image_variants as ImageVariant[]).filter(
+            const pairedVariants = (pairedScene.image_variants as unknown as ImageVariant[]).filter(
               v => getBaseUrl(v.url) !== deletedBaseUrl
             );
-            await supabase
-              .from('scenes')
-              .update({ image_variants: pairedVariants })
-              .eq('slug', sourceScene.paired_scene);
+            await db
+              .updateTable('scenes')
+              .set({ image_variants: pairedVariants as unknown as Json })
+              .where('slug', '=', sourceScene.paired_scene)
+              .execute();
             console.log(`[SaveVariant] Synced deletion to paired scene of source`);
           }
         }
       } else {
-        // Sync deletion to linked scenes (direct + reverse)
         const pairedId = await resolvePairedSceneId(scene.paired_scene);
         const linkedIds = [pairedId, scene.shared_images_with].filter(Boolean) as string[];
 
-        // Also find scenes that reference this scene via shared_images_with (reverse links)
-        const { data: reverseLinked } = await supabase
-          .from('scenes')
+        const reverseLinked = await db
+          .selectFrom('scenes')
           .select('id')
-          .eq('shared_images_with', sceneId);
+          .where('shared_images_with', '=', sceneId)
+          .execute();
 
-        if (reverseLinked) {
-          linkedIds.push(...reverseLinked.map(s => s.id));
+        for (const r of reverseLinked) {
+          if (r.id) linkedIds.push(r.id);
         }
 
-        // Deduplicate
         const uniqueLinkedIds = [...new Set(linkedIds)];
 
         for (const linkedId of uniqueLinkedIds) {
-          const { data: linked } = await supabase
-            .from('scenes')
+          const linked = await db
+            .selectFrom('scenes')
             .select('image_variants')
-            .eq('id', linkedId)
-            .single();
+            .where('id', '=', linkedId)
+            .executeTakeFirst();
 
           if (linked?.image_variants) {
-            const linkedVariants = (linked.image_variants as ImageVariant[]).filter(
+            const linkedVariants = (linked.image_variants as unknown as ImageVariant[]).filter(
               v => getBaseUrl(v.url) !== deletedBaseUrl
             );
-            await supabase
-              .from('scenes')
-              .update({ image_variants: linkedVariants })
-              .eq('id', linkedId);
+            await db
+              .updateTable('scenes')
+              .set({ image_variants: linkedVariants as unknown as Json })
+              .where('id', '=', linkedId)
+              .execute();
             console.log(`[SaveVariant] Synced deletion to linked scene ${linkedId}`);
           }
         }
@@ -351,7 +333,7 @@ export async function POST(req: Request) {
         success: true,
         message: 'Variant deleted',
         variants: updatedVariants,
-        modifiedSceneId: targetSceneId, // Return which scene was actually modified
+        modifiedSceneId: targetSceneId,
       });
     }
 
@@ -362,17 +344,18 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'Missing placeholderIndex' }, { status: 400 });
       }
 
-      const currentVariants: ImageVariant[] = scene.image_variants || [];
+      const currentVariants: ImageVariant[] = (scene.image_variants as unknown as ImageVariant[]) || [];
       const updatedVariants = currentVariants.filter((_, idx) => idx !== placeholderIndex);
 
-      const { error: updateError } = await supabase
-        .from('scenes')
-        .update({ image_variants: updatedVariants })
-        .eq('id', sceneId);
-
-      if (updateError) {
+      try {
+        await db
+          .updateTable('scenes')
+          .set({ image_variants: updatedVariants as unknown as Json })
+          .where('id', '=', sceneId)
+          .execute();
+      } catch (updateError) {
         console.error('[SaveVariant] Update error:', updateError);
-        return NextResponse.json({ error: updateError.message }, { status: 500 });
+        return NextResponse.json({ error: (updateError as Error).message }, { status: 500 });
       }
 
       return NextResponse.json({
@@ -384,7 +367,7 @@ export async function POST(req: Request) {
 
     // Action: add_placeholder - Add an empty slot for future generation
     if (action === 'add_placeholder') {
-      const currentVariants: ImageVariant[] = scene.image_variants || [];
+      const currentVariants: ImageVariant[] = (scene.image_variants as unknown as ImageVariant[]) || [];
 
       const placeholder: ImageVariant = {
         url: `placeholder_${Date.now()}`,
@@ -395,14 +378,15 @@ export async function POST(req: Request) {
 
       const updatedVariants = [...currentVariants, placeholder];
 
-      const { error: updateError } = await supabase
-        .from('scenes')
-        .update({ image_variants: updatedVariants })
-        .eq('id', sceneId);
-
-      if (updateError) {
+      try {
+        await db
+          .updateTable('scenes')
+          .set({ image_variants: updatedVariants as unknown as Json })
+          .where('id', '=', sceneId)
+          .execute();
+      } catch (updateError) {
         console.error('[SaveVariant] Update error:', updateError);
-        return NextResponse.json({ error: updateError.message }, { status: 500 });
+        return NextResponse.json({ error: (updateError as Error).message }, { status: 500 });
       }
 
       return NextResponse.json({
@@ -420,13 +404,12 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'Missing index or imageUrl' }, { status: 400 });
       }
 
-      const currentVariants: ImageVariant[] = scene.image_variants || [];
+      const currentVariants: ImageVariant[] = (scene.image_variants as unknown as ImageVariant[]) || [];
 
       if (index < 0 || index >= currentVariants.length) {
         return NextResponse.json({ error: 'Invalid index' }, { status: 400 });
       }
 
-      // Replace placeholder with actual image
       currentVariants[index] = {
         url: imageUrl,
         prompt: prompt || scene.generation_prompt || '',
@@ -434,17 +417,17 @@ export async function POST(req: Request) {
         is_placeholder: false,
       };
 
-      const { error: updateError } = await supabase
-        .from('scenes')
-        .update({ image_variants: currentVariants })
-        .eq('id', sceneId);
-
-      if (updateError) {
+      try {
+        await db
+          .updateTable('scenes')
+          .set({ image_variants: currentVariants as unknown as Json })
+          .where('id', '=', sceneId)
+          .execute();
+      } catch (updateError) {
         console.error('[SaveVariant] Update error:', updateError);
-        return NextResponse.json({ error: updateError.message }, { status: 500 });
+        return NextResponse.json({ error: (updateError as Error).message }, { status: 500 });
       }
 
-      // Sync to linked scenes
       await syncVariantsToLinkedScenes(
         sceneId,
         currentVariants,

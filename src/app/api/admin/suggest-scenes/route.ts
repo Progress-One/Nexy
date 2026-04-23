@@ -4,9 +4,9 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/compat-types';
+import { db } from '@/lib/db';
 import { analyzeImage, ImageAnalysis } from '@/lib/image-analyzer';
-import { matchScenesToImage, SceneSuggestion } from '@/lib/scene-matcher';
+import { matchScenesToImage } from '@/lib/scene-matcher';
 
 export async function POST(request: Request) {
   try {
@@ -33,34 +33,25 @@ export async function POST(request: Request) {
     }
 
     // 2. Load all scenes from database
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json(
-        { error: 'Missing Supabase configuration' },
-        { status: 500 }
-      );
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    const { data: scenes, error: dbError } = await supabase
-      .from('scenes')
-      .select('id, slug, title, category, tags, ai_description, image_prompt')
-      .gte('version', 2);
-
-    if (dbError) {
+    let scenes;
+    try {
+      scenes = await db
+        .selectFrom('scenes')
+        .select(['id', 'slug', 'title', 'category', 'tags', 'ai_description', 'image_prompt'])
+        .where('version', '>=', 2)
+        .execute();
+    } catch (dbError) {
       console.error('[suggest-scenes] Database error:', dbError);
       return NextResponse.json(
-        { error: `Database error: ${dbError.message}` },
+        { error: `Database error: ${(dbError as Error).message}` },
         { status: 500 }
       );
     }
 
     // 3. Match scenes to the image analysis
     console.log('[suggest-scenes] Matching against', scenes?.length || 0, 'scenes...');
-    const suggestions = matchScenesToImage(analysis, scenes || []);
+    // scene-matcher expects arrays of Record<string, unknown>
+    const suggestions = matchScenesToImage(analysis, (scenes || []) as unknown as Parameters<typeof matchScenesToImage>[1]);
 
     console.log('[suggest-scenes] Found', suggestions.length, 'matches, top 3:',
       suggestions.slice(0, 3).map(s => `${s.slug} (${s.score})`).join(', ')

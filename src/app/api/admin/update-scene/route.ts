@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import type { Scenes } from '@/lib/db/schema';
 
 type UpdatableField =
   | 'user_description'
@@ -52,9 +51,10 @@ export async function POST(req: Request) {
       );
     }
 
-    const updateSet = { [field]: value } as unknown as Partial<Scenes>;
+    // Kysely needs a typed update object; runtime value is validated via ALLOWED_FIELDS
+    const updateSet = { [field]: value };
 
-    let query = db.updateTable('scenes').set(updateSet);
+    let query = db.updateTable('scenes').set(updateSet as never);
 
     if (sceneId) {
       query = query.where('id', '=', sceneId);
