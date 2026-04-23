@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/http-client/client';
 import { trackEvent, EVENTS } from '@/lib/analytics';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

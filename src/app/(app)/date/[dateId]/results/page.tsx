@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/http-client/client';
 import { DateResults } from '@/components/date/DateResults';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowLeft } from 'lucide-react';

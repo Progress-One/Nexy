@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/http-client/client';
 import { PartnerCard } from '@/components/partners/PartnerCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';

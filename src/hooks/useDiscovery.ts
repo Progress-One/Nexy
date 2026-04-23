@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/http-client/client';
 import { type SwipeResponseValue } from '@/components/discovery/SwipeableSceneCard';
 import { type ExperienceLevel } from '@/components/discovery/ExperienceSelector';
 import { type SceneV3Response } from '@/components/discovery/SceneRendererV3';

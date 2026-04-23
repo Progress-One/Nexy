@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/http-client/client';
 import { generateInviteCode } from '@/lib/matching';
 import { trackEvent, EVENTS } from '@/lib/analytics';
 import { Button } from '@/components/ui/button';

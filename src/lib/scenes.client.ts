@@ -1,5 +1,5 @@
 import type { Scene } from '@/lib/types';
-import type { createClient } from '@/lib/supabase/client';
+import type { createClient } from '@/lib/http-client/client';
 
 type BrowserClient = ReturnType<typeof createClient>;
 

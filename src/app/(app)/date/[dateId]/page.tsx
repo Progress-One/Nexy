@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/http-client/client';
 import { getTagBasedMatches, type TagPreference } from '@/lib/matching';
 import { QuickSceneCard } from '@/components/date/QuickSceneCard';
 import { Card, CardContent } from '@/components/ui/card';

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/http-client/client';
 import { getTagBasedMatches, type TagPreference } from '@/lib/matching';
 import { MatchList } from '@/components/partners/MatchList';
 import { Button } from '@/components/ui/button';

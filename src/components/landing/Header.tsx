@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/http-client/client";
 import { t, getLocale } from "@/lib/locale";
 
 type User = { id: string; email?: string | null };

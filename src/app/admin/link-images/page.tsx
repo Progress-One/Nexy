@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/http-client/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Loader2, Check, Image as ImageIcon, Link2, Search, X, ChevronLeft, ChevronRight, SkipForward, Grid, Layers, Sparkles, Eye, EyeOff, Zap, StopCircle, Unlink, Trash2, Star, AlertTriangle, RotateCcw } from 'lucide-react';
