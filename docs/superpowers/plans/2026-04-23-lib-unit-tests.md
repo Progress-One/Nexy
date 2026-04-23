@@ -163,9 +163,10 @@ describe('getAllowedScenes', () => {
 
 describe('getBlockedScenes', () => {
   it('returns only blocked scenes', () => {
+    // romantic-sex requires 'romantic' gate; with only oral, both anal and romantic scenes are blocked
     const all = ['blowjob', 'anal-play-on-her', 'romantic-sex'];
     const result = getBlockedScenes(all, { oral: true });
-    expect(result).toEqual(['anal-play-on-her']);
+    expect(result).toEqual(['anal-play-on-her', 'romantic-sex']);
   });
 
   it('returns empty array when everything allowed', () => {
