@@ -7,7 +7,7 @@ import {
   applyExplorationExploitation,
   calculateSceneScoreSync,
 } from '../scene-progression';
-import type { SceneV2 } from '../types';
+import type { SceneV2, V2Element } from '../types';
 
 const makeScene = (partial: Partial<SceneV2> & { slug: string }): SceneV2 => ({
   id: partial.slug,
@@ -106,6 +106,13 @@ describe('matchesRolePreference', () => {
     expect(matchesRolePreference('receive', 'pet_owner')).toBe(true);
     expect(matchesRolePreference('receive', 'locked_keyholder')).toBe(true);
   });
+
+  it('falls back to allowing m_to_f/f_to_m for either give or receive without gender', () => {
+    expect(matchesRolePreference('give', 'm_to_f')).toBe(true);
+    expect(matchesRolePreference('receive', 'f_to_m')).toBe(true);
+    expect(matchesRolePreference('give', 'f_to_m')).toBe(true);
+    expect(matchesRolePreference('receive', 'm_to_f')).toBe(true);
+  });
 });
 
 describe('calculateBreadthBonus', () => {
@@ -131,12 +138,12 @@ describe('calculateBreadthBonus', () => {
   });
 
   it('returns 0 when scene has no category and no tags', () => {
-    const scene = makeScene({ slug: 's', category: undefined as any, tags: [] });
+    const scene = makeScene({ slug: 's', category: undefined as unknown as string, tags: [] });
     expect(calculateBreadthBonus(scene, new Set(), 0)).toBe(0);
   });
 
   it('falls back to first tag when category missing', () => {
-    const scene = makeScene({ slug: 's', category: undefined as any, tags: ['anal'] });
+    const scene = makeScene({ slug: 's', category: undefined as unknown as string, tags: ['anal'] });
     expect(calculateBreadthBonus(scene, new Set(), 0)).toBe(20);
     expect(calculateBreadthBonus(scene, new Set(['anal']), 0)).toBe(0);
   });
@@ -197,7 +204,7 @@ describe('calculateSceneScoreSync', () => {
   it('deterministic — same inputs produce same output', () => {
     const scene = makeScene({
       slug: 's',
-      elements: [{ id: 'e1', tag_ref: 'bondage' } as any],
+      elements: [{ id: 'e1', tag_ref: 'bondage' } as unknown as V2Element],
       intensity: 2,
     });
     const prefs = [
@@ -211,7 +218,7 @@ describe('calculateSceneScoreSync', () => {
   it('boost when user has high interest in scene elements', () => {
     const scene = makeScene({
       slug: 's',
-      elements: [{ id: 'e1', tag_ref: 'bondage' } as any],
+      elements: [{ id: 'e1', tag_ref: 'bondage' } as unknown as V2Element],
       intensity: 2,
     });
     const withInterest = calculateSceneScoreSync(
