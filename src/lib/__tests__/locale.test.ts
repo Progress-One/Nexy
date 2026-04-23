@@ -24,6 +24,16 @@ describe('t()', () => {
     expect(t('partnerSuggested', 'ru')).toBe('Партнёр предложил эту тему');
     expect(t('partnerSuggested', 'en')).toBe('Your partner suggested this');
   });
+
+  it('interpolates the year parameter into the copyright string', () => {
+    const copyright = t('landing_footer_copyright', 'en', { year: 2026 });
+    expect(copyright).toBe('© 2026 Nexy. Adults only.');
+  });
+
+  it('interpolates string parameters (not only numbers)', () => {
+    const result = t('legal_last_updated', 'en', { date: '2026-04-23' });
+    expect(result).toBe('Last updated: 2026-04-23');
+  });
 });
 
 describe('getLocalizedText()', () => {
@@ -42,6 +52,21 @@ describe('getLocalizedText()', () => {
   it('returns empty string for null/undefined', () => {
     expect(getLocalizedText(null, 'ru')).toBe('');
     expect(getLocalizedText(undefined, 'ru')).toBe('');
+  });
+
+  it('falls back to ru when requested locale value is empty', () => {
+    // en is empty string → falsy → should fall back to ru
+    const partial = { ru: 'Привет', en: '' } as unknown as import('../types').LocalizedString;
+    expect(getLocalizedText(partial, 'en')).toBe('Привет');
+  });
+
+  it('falls back to en when both requested locale and ru are empty', () => {
+    const partial = { ru: '', en: 'Hello' } as unknown as import('../types').LocalizedString;
+    expect(getLocalizedText(partial, 'ru')).toBe('Hello');
+  });
+
+  it('defaults to en locale when no locale argument provided', () => {
+    expect(getLocalizedText({ ru: 'Привет', en: 'Hello' })).toBe('Hello');
   });
 });
 
@@ -71,6 +96,16 @@ describe('isLocalizedString()', () => {
   it('returns false for null/undefined', () => {
     expect(isLocalizedString(null)).toBe(false);
     expect(isLocalizedString(undefined)).toBe(false);
+  });
+
+  it('returns true for object with only one of ru/en keys', () => {
+    expect(isLocalizedString({ ru: 'only ru' })).toBe(true);
+    expect(isLocalizedString({ en: 'only en' })).toBe(true);
+  });
+
+  it('returns false for object without ru or en keys', () => {
+    expect(isLocalizedString({ fr: 'bonjour' })).toBe(false);
+    expect(isLocalizedString({})).toBe(false);
   });
 });
 

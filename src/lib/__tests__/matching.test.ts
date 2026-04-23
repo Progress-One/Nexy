@@ -83,6 +83,93 @@ describe('getTagBasedMatches', () => {
     expect(result.iWantButHidden.length).toBe(1);
     expect(result.partnerDoesntWant.length).toBe(1);
   });
+
+  it('counts interest at exactly default threshold (>= 50)', () => {
+    const my = [makeTag('bondage', 50, null)];
+    const partner = [makeTag('bondage', 50, null)];
+
+    const result = getTagBasedMatches(my, partner);
+
+    expect(result.matches.length).toBe(1);
+  });
+
+  it('excludes interest just below default threshold (49)', () => {
+    const my = [makeTag('bondage', 49, null)];
+    const partner = [makeTag('bondage', 49, null)];
+
+    const result = getTagBasedMatches(my, partner);
+
+    // Neither crosses threshold → both buckets empty, tag effectively skipped
+    expect(result.matches.length).toBe(0);
+    expect(result.iWantButHidden.length).toBe(0);
+    expect(result.partnerDoesntWant.length).toBe(0);
+  });
+
+  it('respects a custom threshold override', () => {
+    const my = [makeTag('bondage', 30, null)];
+    const partner = [makeTag('bondage', 30, null)];
+
+    // Default 50 would reject; threshold 20 accepts
+    const strict = getTagBasedMatches(my, partner);
+    const lenient = getTagBasedMatches(my, partner, 20);
+
+    expect(strict.matches.length).toBe(0);
+    expect(lenient.matches.length).toBe(1);
+  });
+
+  it('is deterministic for identical inputs', () => {
+    const my = [
+      makeTag('bondage', 80, 'give'),
+      makeTag('roleplay', 60, null),
+      makeTag('kissing', 90, null),
+    ];
+    const partner = [
+      makeTag('bondage', 70, 'receive'),
+      makeTag('kissing', 80, null),
+      makeTag('spanking', 85, 'give'),
+    ];
+
+    const a = getTagBasedMatches(my, partner);
+    const b = getTagBasedMatches(my, partner);
+
+    expect(a).toEqual(b);
+  });
+
+  it('sorts matches by myValue descending', () => {
+    const my = [
+      makeTag('a', 60, null),
+      makeTag('b', 90, null),
+      makeTag('c', 75, null),
+    ];
+    const partner = [
+      makeTag('a', 80, null),
+      makeTag('b', 80, null),
+      makeTag('c', 80, null),
+    ];
+
+    const result = getTagBasedMatches(my, partner);
+
+    expect(result.matches.map(m => m.dimension)).toEqual(['b', 'c', 'a']);
+  });
+
+  it('returns empty buckets for empty inputs', () => {
+    const result = getTagBasedMatches([], []);
+
+    expect(result.matches).toEqual([]);
+    expect(result.iWantButHidden).toEqual([]);
+    expect(result.partnerDoesntWant).toEqual([]);
+  });
+
+  it('skips tags neither partner wants', () => {
+    const my = [makeTag('bondage', 10, null)];
+    const partner = [makeTag('bondage', 5, null)];
+
+    const result = getTagBasedMatches(my, partner);
+
+    expect(result.matches.length).toBe(0);
+    expect(result.iWantButHidden.length).toBe(0);
+    expect(result.partnerDoesntWant.length).toBe(0);
+  });
 });
 
 describe('generateInviteCode', () => {
