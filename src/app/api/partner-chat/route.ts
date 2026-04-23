@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { createClient, createServiceClient } from '@/lib/supabase/server';
+import { db } from '@/lib/db';
+import { getCurrentUser } from '@/lib/auth';
 import { calculatePartnerArchetypes, getAverageIntensity } from '@/lib/partner-archetypes';
 
 const openai = new OpenAI();
@@ -17,23 +18,23 @@ interface ExclusionRecord {
 }
 
 export async function POST(req: Request) {
-  const supabase = await createClient();
-  const serviceClient = await createServiceClient(); // Bypass RLS for partner data
-  const { data: { user } } = await supabase.auth.getUser();
-
+  const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const { partnerId, message } = await req.json();
 
-  // Check active partnership (use regular client - user's own data)
-  const { data: partnership } = await supabase
-    .from('partnerships')
-    .select('*')
-    .or(`and(user_id.eq.${user.id},partner_id.eq.${partnerId}),and(user_id.eq.${partnerId},partner_id.eq.${user.id})`)
-    .eq('status', 'active')
-    .single();
+  // Check active partnership
+  const partnership = await db
+    .selectFrom('partnerships')
+    .selectAll()
+    .where(eb => eb.or([
+      eb.and([eb('user_id', '=', user.id), eb('partner_id', '=', partnerId)]),
+      eb.and([eb('user_id', '=', partnerId), eb('partner_id', '=', user.id)]),
+    ]))
+    .where('status', '=', 'active')
+    .executeTakeFirst();
 
   if (!partnership) {
     return NextResponse.json({ error: 'No active partnership' }, { status: 403 });
@@ -42,71 +43,83 @@ export async function POST(req: Request) {
   // Get partner name from partnership
   const partnerName = partnership.nickname || 'Partner';
 
-  // Get partner profile (use serviceClient to bypass RLS)
-  const { data: partnerProfile } = await serviceClient
-    .from('profiles')
+  // Get partner profile
+  const partnerProfile = await db
+    .selectFrom('profiles')
     .select('gender')
-    .eq('id', partnerId)
-    .single();
+    .where('id', '=', partnerId)
+    .executeTakeFirst();
 
-  // Get partner tag preferences (V2) - serviceClient bypasses RLS
-  const { data: tagPreferences } = await serviceClient
-    .from('tag_preferences')
-    .select('tag_ref, interest_level, role_preference, intensity_preference, experience_level')
-    .eq('user_id', partnerId)
-    .order('interest_level', { ascending: false })
-    .limit(50); // Top 50 preferences
+  // Get partner tag preferences (V2)
+  const tagPreferences = await db
+    .selectFrom('tag_preferences')
+    .select(['tag_ref', 'interest_level', 'role_preference', 'intensity_preference', 'experience_level'])
+    .where('user_id', '=', partnerId)
+    .orderBy('interest_level', 'desc')
+    .limit(50)
+    .execute();
 
-  // Get partner exclusions - serviceClient bypasses RLS
-  const { data: partnerExclusions } = await serviceClient
-    .from('excluded_preferences')
-    .select('category:categories(slug, name), excluded_tag, exclusion_level')
-    .eq('user_id', partnerId);
+  // Get partner exclusions with category join
+  const partnerExclusionsRaw = await db
+    .selectFrom('excluded_preferences as e')
+    .leftJoin('categories as c', 'c.id', 'e.category_id')
+    .select([
+      'e.excluded_tag',
+      'e.exclusion_level',
+      'c.slug as category_slug',
+      'c.name as category_name',
+    ])
+    .where('e.user_id', '=', partnerId)
+    .execute();
 
-  // Get preference profile summary (includes personality description)
-  const { data: preferenceProfile } = await serviceClient
-    .from('preference_profiles')
+  const partnerExclusions: ExclusionRecord[] = partnerExclusionsRaw.map(e => ({
+    category: e.category_slug ? { slug: e.category_slug, name: e.category_name || '' } : null,
+    excluded_tag: e.excluded_tag,
+    exclusion_level: e.exclusion_level || 'soft',
+  }));
+
+  // Get preference profile summary
+  const preferenceProfile = await db
+    .selectFrom('preference_profiles')
     .select('preferences')
-    .eq('user_id', partnerId)
-    .single();
+    .where('user_id', '=', partnerId)
+    .executeTakeFirst();
 
   // Get verbal preference scene response for communication style
-  const { data: verbalPreference } = await serviceClient
-    .from('scene_responses')
+  const verbalPreference = await db
+    .selectFrom('scene_responses')
     .select('element_responses')
-    .eq('user_id', partnerId)
-    .eq('scene_slug', 'verbal-preference')
-    .single();
+    .where('user_id', '=', partnerId)
+    .where('scene_slug', '=', 'verbal-preference')
+    .executeTakeFirst();
 
-  // Calculate archetypes (uses direct db access, bypasses RLS)
+  // Calculate archetypes
   const archetypes = await calculatePartnerArchetypes(partnerId);
 
-  // Get average intensity (uses direct db access, bypasses RLS)
+  // Get average intensity
   const avgIntensity = await getAverageIntensity(partnerId);
 
   // Get chat history (last 20 messages)
-  const { data: chatHistory } = await supabase
-    .from('partner_chat_messages')
-    .select('role, content')
-    .eq('user_id', user.id)
-    .eq('partner_id', partnerId)
-    .order('created_at', { ascending: true })
-    .limit(20);
+  const chatHistory = await db
+    .selectFrom('partner_chat_messages')
+    .select(['role', 'content'])
+    .where('user_id', '=', user.id)
+    .where('partner_id', '=', partnerId)
+    .orderBy('created_at', 'asc')
+    .limit(20)
+    .execute();
 
   // Format preferences for AI
-  const prefsContext = formatTagPreferencesForAI(tagPreferences || []);
-  const exclusionsContext = formatExclusionsForAI((partnerExclusions || []).map(e => ({
-    category: Array.isArray(e.category) ? e.category[0] : e.category,
-    excluded_tag: e.excluded_tag,
-    exclusion_level: e.exclusion_level,
-  })) as ExclusionRecord[]);
+  const prefsContext = formatTagPreferencesForAI((tagPreferences || []) as unknown as TagPreference[]);
+  const exclusionsContext = formatExclusionsForAI(partnerExclusions);
   const archetypesContext = formatArchetypesForAI(archetypes);
   const intensityContext = avgIntensity !== null ? `Average preferred intensity: ${Math.round(avgIntensity)}/100` : null;
 
   // Extract profile summary and verbal preferences
-  const profileSummary = preferenceProfile?.preferences?.summary as string | undefined;
-  const uniqueTraits = preferenceProfile?.preferences?.unique_traits as string[] | undefined;
-  const verbalStyles = extractVerbalStyles(verbalPreference?.element_responses);
+  const prefsData = preferenceProfile?.preferences as { summary?: string; unique_traits?: string[] } | null;
+  const profileSummary = prefsData?.summary;
+  const uniqueTraits = prefsData?.unique_traits;
+  const verbalStyles = extractVerbalStyles(verbalPreference?.element_responses as VerbalResponses | null);
   const communicationGuidance = getCommStyleGuidance(verbalStyles, archetypes);
 
   const genderText = partnerProfile?.gender === 'female' ? 'female' :
@@ -158,7 +171,7 @@ RULES:
     { role: 'system', content: systemPrompt },
     ...(chatHistory || []).map(m => ({
       role: m.role as 'user' | 'assistant',
-      content: m.content
+      content: m.content || '',
     })),
     { role: 'user', content: message }
   ];
@@ -173,10 +186,10 @@ RULES:
   const assistantMessage = completion.choices[0].message.content || '';
 
   // Save both messages
-  await supabase.from('partner_chat_messages').insert([
+  await db.insertInto('partner_chat_messages').values([
     { user_id: user.id, partner_id: partnerId, role: 'user', content: message },
-    { user_id: user.id, partner_id: partnerId, role: 'assistant', content: assistantMessage }
-  ]);
+    { user_id: user.id, partner_id: partnerId, role: 'assistant', content: assistantMessage },
+  ]).execute();
 
   return NextResponse.json({ message: assistantMessage });
 }
@@ -195,7 +208,7 @@ function formatTagPreferencesForAI(tagPrefs: TagPreference[]): string {
   }
 
   const lines: string[] = [];
-  
+
   // Group by interest level
   const highInterest = tagPrefs.filter(p => (p.interest_level || 0) >= 70);
   const moderateInterest = tagPrefs.filter(p => (p.interest_level || 0) >= 50 && (p.interest_level || 0) < 70);
@@ -205,15 +218,15 @@ function formatTagPreferencesForAI(tagPrefs: TagPreference[]): string {
     lines.push('Really likes:');
     for (const pref of highInterest.slice(0, 15)) {
       const parts: string[] = [pref.tag_ref];
-      
+
       if (pref.role_preference) {
         parts.push(`role: ${pref.role_preference}`);
       }
-      
+
       if (pref.intensity_preference !== null) {
         parts.push(`intensity: ${pref.intensity_preference}/100`);
       }
-      
+
       if (pref.experience_level) {
         const expText = pref.experience_level === 'tried' ? 'has tried' :
                        pref.experience_level === 'want_to_try' ? 'wants to try' :
@@ -221,7 +234,7 @@ function formatTagPreferencesForAI(tagPrefs: TagPreference[]): string {
                        'not interested';
         parts.push(expText);
       }
-      
+
       lines.push(`  - ${parts.join(', ')}`);
     }
   }
@@ -249,9 +262,8 @@ function formatArchetypesForAI(archetypes: Array<{ id: string; name: { ru: strin
   }
 
   const lines: string[] = [];
-  
+
   for (const arch of archetypes) {
-    // Use English for AI, but could detect language from user message
     const name = arch.name.en || arch.name.ru;
     const desc = arch.description.en || arch.description.ru;
     const confidence = arch.score >= 0.7 ? 'strongly' : arch.score >= 0.5 ? 'moderately' : 'somewhat';
@@ -277,7 +289,7 @@ interface VerbalResponses {
   role?: { who_talks?: string };
 }
 
-function extractVerbalStyles(elementResponses: VerbalResponses | null): string[] {
+function extractVerbalStyles(elementResponses: VerbalResponses | null | undefined): string[] {
   if (!elementResponses?.type?.which) return [];
   return elementResponses.type.which;
 }

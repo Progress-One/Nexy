@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, createServiceClient } from '@/lib/supabase/server';
+import { getDbPool } from '@/lib/db';
+import { getCurrentUser } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
+    const user = await getCurrentUser();
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -19,18 +15,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Inviter ID required' }, { status: 400 });
     }
 
-    // Create notification (use service client for RLS bypass on insert)
-    const serviceSupabase = await createServiceClient();
-
-    const { error: notifyError } = await serviceSupabase.from('notifications').insert({
-      user_id: inviterId,
-      type: 'invite_accepted',
-      title: 'Приглашение принято!',
-      message: 'Ваш партнёр присоединился к Nexy',
-      data: { partnership_id: partnershipId, partner_id: user.id },
-    });
-
-    if (notifyError) {
+    // Create notification (notifications table not in generated schema)
+    try {
+      const pool = getDbPool();
+      await pool.query(
+        `INSERT INTO notifications (user_id, type, title, message, data)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [
+          inviterId,
+          'invite_accepted',
+          'Приглашение принято!',
+          'Ваш партнёр присоединился к Nexy',
+          JSON.stringify({ partnership_id: partnershipId, partner_id: user.id }),
+        ]
+      );
+    } catch (notifyError) {
       console.error('Notification insert error:', notifyError);
       // Don't fail the request - notification is not critical
     }

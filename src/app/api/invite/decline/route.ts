@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, createServiceClient } from '@/lib/supabase/server';
+import { db, getDbPool } from '@/lib/db';
+import { getCurrentUser } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
+    const user = await getCurrentUser();
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -20,14 +16,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Get invite
-    const { data: invite, error: inviteError } = await supabase
-      .from('partnerships')
-      .select('*')
-      .eq('invite_code', inviteCode)
-      .eq('status', 'pending')
-      .single();
+    const invite = await db
+      .selectFrom('partnerships')
+      .selectAll()
+      .where('invite_code', '=', inviteCode)
+      .where('status', '=', 'pending')
+      .executeTakeFirst();
 
-    if (inviteError || !invite) {
+    if (!invite) {
       return NextResponse.json({ error: 'Invite not found' }, { status: 404 });
     }
 
@@ -36,28 +32,37 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Cannot decline own invite' }, { status: 400 });
     }
 
-    // Update status to declined
-    const { error: updateError } = await supabase
-      .from('partnerships')
-      .update({
-        status: 'declined',
-        partner_id: user.id,
-      })
-      .eq('id', invite.id);
+    if (!invite.id) {
+      return NextResponse.json({ error: 'Invalid invite' }, { status: 500 });
+    }
 
-    if (updateError) {
+    // Update status to declined
+    try {
+      await db
+        .updateTable('partnerships')
+        .set({
+          status: 'declined',
+          partner_id: user.id,
+        })
+        .where('id', '=', invite.id)
+        .execute();
+    } catch {
       return NextResponse.json({ error: 'Failed to decline' }, { status: 500 });
     }
 
-    // Create notification for inviter (use service client for RLS bypass)
-    const serviceSupabase = await createServiceClient();
-    await serviceSupabase.from('notifications').insert({
-      user_id: invite.inviter_id,
-      type: 'invite_declined',
-      title: 'Приглашение отклонено',
-      message: 'Ваше приглашение было отклонено',
-      data: { partnership_id: invite.id },
-    });
+    // Create notification for inviter (notifications table not in generated schema)
+    const pool = getDbPool();
+    await pool.query(
+      `INSERT INTO notifications (user_id, type, title, message, data)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [
+        invite.inviter_id,
+        'invite_declined',
+        'Приглашение отклонено',
+        'Ваше приглашение было отклонено',
+        JSON.stringify({ partnership_id: invite.id }),
+      ]
+    );
 
     return NextResponse.json({ success: true });
   } catch (error) {

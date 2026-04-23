@@ -1,17 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getDbPool } from '@/lib/db';
+import { getCurrentUser } from '@/lib/auth';
 import { getResend, FROM_EMAIL } from '@/lib/resend';
 import { InviteEmail, getInviteEmailSubject } from '@/lib/email-templates/invite';
 
+interface InviteRow {
+  id: string;
+  invite_code: string;
+  inviter_id: string;
+  status: string;
+  expires_at: Date | null;
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
+    const user = await getCurrentUser();
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -27,16 +31,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
     }
 
-    // Check that invite exists and belongs to user
-    const { data: invite, error: inviteError } = await supabase
-      .from('partnerships')
-      .select('*')
-      .eq('invite_code', inviteCode)
-      .eq('inviter_id', user.id)
-      .eq('status', 'pending')
-      .single();
+    // Raw query: partnerships.expires_at / partner_email aren't in generated schema yet
+    const pool = getDbPool();
+    const inviteRes = await pool.query<InviteRow>(
+      `SELECT id, invite_code, inviter_id, status, expires_at
+       FROM partnerships
+       WHERE invite_code = $1 AND inviter_id = $2 AND status = 'pending'
+       LIMIT 1`,
+      [inviteCode, user.id]
+    );
+    const invite = inviteRes.rows[0];
 
-    if (inviteError || !invite) {
+    if (!invite) {
       return NextResponse.json({ error: 'Invite not found' }, { status: 404 });
     }
 
@@ -68,8 +74,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
     }
 
-    // Save partner email
-    await supabase.from('partnerships').update({ partner_email: email }).eq('id', invite.id);
+    // Save partner email (raw query)
+    await pool.query(
+      'UPDATE partnerships SET partner_email = $1 WHERE id = $2',
+      [email, invite.id]
+    );
 
     return NextResponse.json({ success: true });
   } catch (error) {
