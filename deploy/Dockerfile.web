@@ -15,12 +15,24 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . ./
-# Build-time env placeholders so module init (new Pool) doesn't crash.
-# Real values come from env_file at runtime.
+# Build-time env placeholders so module init (new Pool, new OpenAI, new Stripe, ...)
+# doesn't crash during Next.js page-data collection. Real values come from env_file at runtime.
 ENV DATABASE_URL=postgres://build-dummy:none@127.0.0.1:5432/none
 ENV JWT_SECRET=build-time-placeholder-secret-do-not-use-at-runtime-32chars
 ENV NEXT_PUBLIC_APP_URL=http://localhost:3000
 ENV NEXT_PUBLIC_MINIO_URL=http://localhost:9000
+ENV OPENAI_API_KEY=sk-build-dummy
+ENV ANTHROPIC_API_KEY=sk-ant-build-dummy
+ENV REPLICATE_API_TOKEN=r8_build-dummy
+ENV CIVITAI_API_KEY=build-dummy
+ENV RESEND_API_KEY=re_build-dummy
+ENV STRIPE_SECRET_KEY=sk_test_build-dummy
+ENV STRIPE_PUBLISHABLE_KEY=pk_test_build-dummy
+ENV STRIPE_WEBHOOK_SECRET=whsec_build-dummy
+ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_build-dummy
+ENV MINIO_ENDPOINT=http://build-dummy:9000
+ENV MINIO_ACCESS_KEY=build-dummy
+ENV MINIO_SECRET_KEY=build-dummy
 RUN npm run build
 
 FROM node:20-alpine AS runner
