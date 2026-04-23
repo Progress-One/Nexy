@@ -1,6 +1,11 @@
 import { db } from '@/lib/db';
 import type { Json } from '@/lib/db/schema';
 
+// Re-export pure helpers for server-side callers (backward compat).
+// Client-side code must import from `body-map-processing-pure` directly to
+// avoid pulling the server-only `db` module into the browser bundle.
+export * from './body-map-processing-pure';
+
 /**
  * Body Map Processing
  *
@@ -326,27 +331,4 @@ export async function processBodyMapToGatesAndTags(
   });
 
   return result;
-}
-
-/**
- * Check if a gate is open based on body map
- */
-export function isBodyMapGateOpen(
-  bodyMapGates: Record<string, boolean> | null,
-  gateKey: string
-): boolean {
-  if (!bodyMapGates) return false;
-  return bodyMapGates[gateKey] === true;
-}
-
-/**
- * Get all open gates from body map
- */
-export function getOpenBodyMapGates(
-  bodyMapGates: Record<string, boolean> | null
-): string[] {
-  if (!bodyMapGates) return [];
-  return Object.entries(bodyMapGates)
-    .filter(([_, isOpen]) => isOpen)
-    .map(([gate]) => gate);
 }
