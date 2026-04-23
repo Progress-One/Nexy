@@ -11,7 +11,6 @@ import type { SceneV2, V2Element } from '../types';
 
 const makeScene = (partial: Partial<SceneV2> & { slug: string }): SceneV2 => ({
   id: partial.slug,
-  slug: partial.slug,
   version: 2,
   elements: [],
   intensity: 2,
@@ -246,7 +245,7 @@ describe('calculateSceneScoreSync', () => {
   });
 
   it('score is never negative (floor at 0)', () => {
-    const scene = makeScene({ slug: 's', priority: 100, intensity: 5, role_direction: 'dom_sub' });
+    const scene = makeScene({ slug: 's', priority: 100, intensity: 5, role_direction: 'm_to_f' });
     const prefs = [
       { tag_ref: 'x', interest_level: 10, intensity_preference: null, role_preference: 'give' as const },
     ];

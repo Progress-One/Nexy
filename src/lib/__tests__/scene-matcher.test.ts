@@ -4,7 +4,6 @@ import type { ImageAnalysis } from '../image-analyzer';
 
 const makeScene = (partial: Partial<SceneData> & { slug: string }): SceneData => ({
   id: partial.slug,
-  slug: partial.slug,
   title: { ru: partial.slug, en: partial.slug },
   category: 'general',
   ...partial,
