@@ -44,12 +44,12 @@ export default function ProfilePage() {
         }
 
         // Fetch stats
-        const { count } = await supabase
+        const { data: responses } = await supabase
           .from('scene_responses')
-          .select('*', { count: 'exact', head: true })
+          .select('id')
           .eq('user_id', user.id);
 
-        setStats({ answered: count || 0 });
+        setStats({ answered: Array.isArray(responses) ? responses.length : 0 });
       } catch (error) {
         console.error('Error fetching profile:', error);
       } finally {

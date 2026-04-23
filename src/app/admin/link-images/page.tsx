@@ -501,7 +501,7 @@ export default function LinkImagesPage() {
       }
 
       // Also unlink from paired scene if exists
-      let pairedResult = null;
+      let pairedResult: { variants?: ImageVariant[] } | null = null;
       if (pairedScene) {
         const pairedResponse = await fetch('/api/admin/save-variant', {
           method: 'POST',
@@ -566,7 +566,7 @@ export default function LinkImagesPage() {
       }
 
       // Also link to paired scene if exists
-      let pairedResult = null;
+      let pairedResult: { variants?: ImageVariant[] } | null = null;
       if (pairedScene) {
         const pairedResponse = await fetch('/api/admin/save-variant', {
           method: 'POST',

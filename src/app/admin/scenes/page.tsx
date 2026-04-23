@@ -1436,7 +1436,7 @@ export default function AdminScenesPage() {
       addLog(`Service: ${settings.service}, Model: ${modelName}, ${resolution.name}`, 'info');
 
       // Build QA context only if QA is enabled AND useAiContext is true
-      let qaContext = null;
+      let qaContext: ReturnType<typeof buildQAContext> | null = null;
       if (qaEnabled) {
         if (useContext) {
           qaContext = buildQAContext(scene);
@@ -1447,10 +1447,10 @@ export default function AdminScenesPage() {
         // If no context (either useAiContext=false or ai_context missing), use prompt-based minimal context
         if (!qaContext) {
           qaContext = {
-            essence: prompt, // Use the prompt itself as essence
+            essence: prompt || '', // Use the prompt itself as essence
             key_elements: [{ element: 'scene content', critical: true, in_action: false }],
             mood: 'as described in prompt',
-            participants: { count: 0, genders: [] }, // Unknown from prompt alone
+            participants: { count: 0, genders: [] as string[] }, // Unknown from prompt alone
           };
         }
       }

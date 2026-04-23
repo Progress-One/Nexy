@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { t, getLocale } from "@/lib/locale";
-import type { User } from "@supabase/supabase-js";
+
+type User = { id: string; email?: string | null };
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
