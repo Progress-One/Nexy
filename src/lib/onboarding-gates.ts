@@ -18,12 +18,12 @@
  *
  * Usage:
  *   // Fetch gates from database
- *   const gates = await fetchUserGates(supabase, userId);
+ *   const gates = await fetchUserGates(userId);
  *   // Check scene access
  *   const allowed = isSceneAllowed('blowjob', gates);
  */
 
-import { SupabaseClient } from '@/lib/supabase/compat-types';
+import { db } from '@/lib/db';
 
 // Response value constants
 export const RESPONSE = {
@@ -106,48 +106,46 @@ export interface OnboardingGates {
  * Gates are auto-computed by triggers - no client computation needed
  */
 export async function fetchUserGates(
-  supabase: SupabaseClient,
   userId: string
 ): Promise<OnboardingGates> {
-  const { data, error } = await supabase
-    .from('user_gates')
+  const row = await db
+    .selectFrom('user_gates')
     .select('gates')
-    .eq('user_id', userId)
-    .single();
+    .where('user_id', '=', userId)
+    .executeTakeFirst();
 
-  if (error || !data) {
+  if (!row) {
     console.warn('No gates found for user:', userId);
     return {};
   }
 
-  return data.gates as OnboardingGates;
+  return (row.gates as OnboardingGates) ?? {};
 }
 
 /**
  * Fetch full gate details from database (for debugging)
  */
 export async function fetchUserGatesDetailed(
-  supabase: SupabaseClient,
   userId: string
 ): Promise<{
   gates: OnboardingGates;
   onboarding_gates: OnboardingGates;
   body_map_gates: Record<string, boolean>;
 } | null> {
-  const { data, error } = await supabase
-    .from('user_gates')
-    .select('gates, onboarding_gates, body_map_gates')
-    .eq('user_id', userId)
-    .single();
+  const row = await db
+    .selectFrom('user_gates')
+    .select(['gates', 'onboarding_gates', 'body_map_gates'])
+    .where('user_id', '=', userId)
+    .executeTakeFirst();
 
-  if (error || !data) {
+  if (!row) {
     return null;
   }
 
   return {
-    gates: data.gates as OnboardingGates,
-    onboarding_gates: data.onboarding_gates as OnboardingGates,
-    body_map_gates: data.body_map_gates as Record<string, boolean>,
+    gates: (row.gates as OnboardingGates) ?? {},
+    onboarding_gates: (row.onboarding_gates as OnboardingGates) ?? {},
+    body_map_gates: (row.body_map_gates as Record<string, boolean>) ?? {},
   };
 }
 

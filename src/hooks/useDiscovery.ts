@@ -266,7 +266,7 @@ export function useDiscovery() {
       try {
         const proposalsWithScenes = await fetchPendingProposals(supabase, userId);
         if (proposalsWithScenes.length > 0) {
-          const gates = await fetchUserGates(supabase, userId);
+          const gates = await fetchUserGates(userId);
 
           for (const { proposal, scene } of proposalsWithScenes) {
             // Respect safety gates — partner A never knows if gates blocked it

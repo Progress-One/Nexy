@@ -682,7 +682,7 @@ export async function getAdaptiveScenes(
   // 3. ONBOARDING GATES FILTERING
   // ========================================
   if (enableBaselineGates) {
-    const userGates = await fetchUserGates(supabase, userId);
+    const userGates = await fetchUserGates(userId);
     filteredScenes = filteredScenes.filter(
       (scene) => isSceneAllowed(scene.slug, userGates)
     );

@@ -14,8 +14,10 @@ function getPool(): pg.Pool {
   return _pool;
 }
 
+// Lazy pool resolution so importing this module doesn't require DATABASE_URL at module-load
+// (e.g., for unit tests that only import pure helpers sharing a module with async DB helpers).
 export const db = new Kysely<DB>({
-  dialect: new PostgresDialect({ pool: getPool() }),
+  dialect: new PostgresDialect({ pool: async () => getPool() }),
 });
 
 export function getDbPool(): pg.Pool {
