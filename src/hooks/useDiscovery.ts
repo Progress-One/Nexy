@@ -572,7 +572,6 @@ export function useDiscovery() {
       if (sceneV2.tags && sceneV2.tags.length > 0) {
         try {
           await updateTagPreferencesFromSwipe(
-            supabase,
             user.id,
             sceneV2.tags,
             sceneV2.slug || sceneV2.id,
