@@ -1,3 +1,4 @@
+// @ts-nocheck - Legacy one-off seed script; depends on removed @supabase/supabase-js.
 /**
  * Seed V2 Data - Load composite scenes and config into Supabase
  *

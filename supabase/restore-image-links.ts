@@ -1,3 +1,4 @@
+// @ts-nocheck - Legacy one-off migration script; depends on removed @supabase/supabase-js.
 /**
  * Restore Image Links - Re-link storage images to scenes by UUID
  *
