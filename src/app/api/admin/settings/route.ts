@@ -1,44 +1,46 @@
 import { NextResponse } from 'next/server';
-import { createServiceClient } from '@/lib/supabase/server';
+import { db } from '@/lib/db';
+import type { Json } from '@/lib/db/schema';
 
 const SETTINGS_KEY = 'generation_settings';
 
 // GET - load settings
 export async function GET() {
-  const supabase = await createServiceClient();
+  try {
+    const row = await db
+      .selectFrom('admin_settings')
+      .select('value')
+      .where('key', '=', SETTINGS_KEY)
+      .executeTakeFirst();
 
-  const { data, error } = await supabase
-    .from('admin_settings')
-    .select('value')
-    .eq('key', SETTINGS_KEY)
-    .single();
-
-  if (error && error.code !== 'PGRST116') {
-    // PGRST116 = not found, which is ok
+    return NextResponse.json({ settings: row?.value || null });
+  } catch (error) {
     console.error('[AdminSettings] Load error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
-
-  return NextResponse.json({ settings: data?.value || null });
 }
 
 // POST - save settings
 export async function POST(req: Request) {
-  const supabase = await createServiceClient();
   const { settings } = await req.json();
 
-  const { error } = await supabase
-    .from('admin_settings')
-    .upsert({
-      key: SETTINGS_KEY,
-      value: settings,
-      updated_at: new Date().toISOString(),
-    });
+  try {
+    await db
+      .insertInto('admin_settings')
+      .values({
+        key: SETTINGS_KEY,
+        value: settings as Json,
+        updated_at: new Date(),
+      })
+      .onConflict(oc => oc.column('key').doUpdateSet({
+        value: settings as Json,
+        updated_at: new Date(),
+      }))
+      .execute();
 
-  if (error) {
+    return NextResponse.json({ success: true });
+  } catch (error) {
     console.error('[AdminSettings] Save error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
-
-  return NextResponse.json({ success: true });
 }

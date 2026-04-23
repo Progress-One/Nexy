@@ -1,11 +1,37 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/compat-types';
+import { db } from '@/lib/db';
+import type { Scenes } from '@/lib/db/schema';
 
-// Use service role for admin operations (bypasses RLS)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+type UpdatableField =
+  | 'user_description'
+  | 'user_description_alt'
+  | 'alt_for_gender'
+  | 'priority'
+  | 'prompt_instructions'
+  | 'generation_prompt'
+  | 'accepted'
+  | 'is_active'
+  | 'selected_variant_index'
+  | 'elements'
+  | 'question'
+  | 'paired_scene'
+  | 'role_direction';
+
+const ALLOWED_FIELDS: UpdatableField[] = [
+  'user_description',
+  'user_description_alt',
+  'alt_for_gender',
+  'priority',
+  'prompt_instructions',
+  'generation_prompt',
+  'accepted',
+  'is_active',
+  'selected_variant_index',
+  'elements',
+  'question',
+  'paired_scene',
+  'role_direction',
+];
 
 export async function POST(req: Request) {
   try {
@@ -19,46 +45,26 @@ export async function POST(req: Request) {
     }
 
     // Only allow specific fields to be updated
-    const allowedFields = [
-      'user_description',
-      'user_description_alt',
-      'alt_for_gender',
-      'priority',
-      'prompt_instructions',
-      'generation_prompt',
-      'accepted',
-      'is_active',
-      'selected_variant_index',
-      'elements',
-      'question',
-      'paired_scene',
-      'role_direction',
-    ];
-    if (!allowedFields.includes(field)) {
+    if (!ALLOWED_FIELDS.includes(field)) {
       return NextResponse.json(
         { error: `Field ${field} not allowed` },
         { status: 400 }
       );
     }
 
-    let query = supabase
-      .from('scenes')
-      .update({ [field]: value });
+    const updateSet = { [field]: value } as unknown as Partial<Scenes>;
+
+    let query = db.updateTable('scenes').set(updateSet);
 
     if (sceneId) {
-      query = query.eq('id', sceneId);
+      query = query.where('id', '=', sceneId);
     } else {
-      query = query.eq('slug', slug);
+      query = query.where('slug', '=', slug);
     }
 
-    const { data, error } = await query.select('*, paired_scene');
+    const rows = await query.returningAll().execute();
 
-    if (error) {
-      console.error('[UpdateScene] Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    if (!data || data.length === 0) {
+    if (!rows || rows.length === 0) {
       return NextResponse.json(
         { error: 'Scene not found' },
         { status: 404 }
@@ -66,12 +72,13 @@ export async function POST(req: Request) {
     }
 
     // Sync paired scene for accepted status
-    const scene = data[0];
+    const scene = rows[0];
     if (field === 'accepted' && scene.paired_scene) {
-      await supabase
-        .from('scenes')
-        .update({ accepted: value })
-        .eq('slug', scene.paired_scene);
+      await db
+        .updateTable('scenes')
+        .set({ accepted: value })
+        .where('slug', '=', scene.paired_scene)
+        .execute();
       console.log(`[UpdateScene] Synced accepted=${value} to paired scene ${scene.paired_scene}`);
     }
 

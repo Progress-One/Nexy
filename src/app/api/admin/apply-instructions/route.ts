@@ -1,12 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/compat-types';
+import { db } from '@/lib/db';
 import { applyInstructionsToPrompt } from '@/lib/prompt-rewriter';
-
-// Use service role for admin operations (bypasses RLS)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export async function POST(req: Request) {
   try {
@@ -20,13 +14,13 @@ export async function POST(req: Request) {
     }
 
     // Get current scene
-    const { data: scene, error: selectError } = await supabase
-      .from('scenes')
-      .select('generation_prompt, prompt_instructions')
-      .eq('id', sceneId)
-      .single();
+    const scene = await db
+      .selectFrom('scenes')
+      .select(['generation_prompt', 'prompt_instructions'])
+      .where('id', '=', sceneId)
+      .executeTakeFirst();
 
-    if (selectError || !scene) {
+    if (!scene) {
       return NextResponse.json(
         { error: 'Scene not found' },
         { status: 404 }
@@ -52,18 +46,14 @@ export async function POST(req: Request) {
     console.log('[ApplyInstructions] Changes:', result.changes);
 
     // Update scene with new prompt AND save instructions
-    const { error: updateError } = await supabase
-      .from('scenes')
-      .update({
+    await db
+      .updateTable('scenes')
+      .set({
         generation_prompt: result.newPrompt,
         prompt_instructions: instructions,
       })
-      .eq('id', sceneId);
-
-    if (updateError) {
-      console.error('[ApplyInstructions] Update error:', updateError);
-      return NextResponse.json({ error: updateError.message }, { status: 500 });
-    }
+      .where('id', '=', sceneId)
+      .execute();
 
     return NextResponse.json({
       success: true,

@@ -1,28 +1,20 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/compat-types';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { db } from '@/lib/db';
 
 export async function GET() {
   try {
     // Fetch all scenes with prompts
-    const { data: scenes, error } = await supabase
-      .from('scenes')
-      .select('id, slug, generation_prompt, image_prompt, ai_context, tags, role_direction, category')
-      .order('slug');
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
+    const scenes = await db
+      .selectFrom('scenes')
+      .select(['id', 'slug', 'generation_prompt', 'image_prompt', 'ai_context', 'tags', 'role_direction', 'category'])
+      .orderBy('slug')
+      .execute();
 
     // Format for export
     const exportData = {
       exported_at: new Date().toISOString(),
-      total_scenes: scenes?.length || 0,
-      scenes: scenes?.map(s => ({
+      total_scenes: scenes.length,
+      scenes: scenes.map(s => ({
         id: s.id,
         slug: s.slug,
         category: s.category,

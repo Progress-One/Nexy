@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createServiceClient } from '@/lib/supabase/server';
+import { db } from '@/lib/db';
 
 /**
  * Delete a scene by ID or slug
@@ -9,8 +9,6 @@ import { createServiceClient } from '@/lib/supabase/server';
  * - slug: string - delete by slug
  */
 export async function POST(req: Request) {
-  const supabase = await createServiceClient();
-
   try {
     const body = await req.json();
     const { id, slug } = body;
@@ -22,23 +20,15 @@ export async function POST(req: Request) {
       );
     }
 
-    let query = supabase.from('scenes').delete();
+    let query = db.deleteFrom('scenes');
 
     if (id) {
-      query = query.eq('id', id);
+      query = query.where('id', '=', id);
     } else if (slug) {
-      query = query.eq('slug', slug);
+      query = query.where('slug', '=', slug);
     }
 
-    const { error, count } = await query;
-
-    if (error) {
-      console.error('Delete error:', error);
-      return NextResponse.json(
-        { error: error.message },
-        { status: 500 }
-      );
-    }
+    await query.execute();
 
     return NextResponse.json({
       success: true,
