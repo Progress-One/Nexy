@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { db } from '@/lib/db';
+import { getCurrentUser } from '@/lib/auth';
 
 /**
  * POST /api/wishlist
@@ -7,13 +8,7 @@ import { createClient } from '@/lib/supabase/server';
  */
 export async function POST(req: Request) {
   try {
-    const supabase = await createClient();
-
-    // Get current user
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
+    const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -29,25 +24,17 @@ export async function POST(req: Request) {
       );
     }
 
-    // Insert into wishlist (upsert to avoid duplicates)
-    const { data, error } = await supabase
-      .from('orientation_wishlist')
-      .upsert(
-        {
-          user_id: user.id,
-          requested_orientation,
-        },
-        {
-          onConflict: 'user_id,requested_orientation',
-        }
-      )
-      .select()
-      .single();
-
-    if (error) {
-      console.error('[Wishlist] Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
+    const data = await db
+      .insertInto('orientation_wishlist')
+      .values({
+        user_id: user.id,
+        requested_orientation,
+      })
+      .onConflict(oc => oc.columns(['user_id', 'requested_orientation']).doUpdateSet({
+        requested_orientation,
+      }))
+      .returningAll()
+      .executeTakeFirst();
 
     return NextResponse.json({ success: true, data });
   } catch (error) {
@@ -65,26 +52,16 @@ export async function POST(req: Request) {
  */
 export async function GET() {
   try {
-    const supabase = await createClient();
-
-    // Get current user
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
+    const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { data, error } = await supabase
-      .from('orientation_wishlist')
-      .select('*')
-      .eq('user_id', user.id);
-
-    if (error) {
-      console.error('[Wishlist] Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
+    const data = await db
+      .selectFrom('orientation_wishlist')
+      .selectAll()
+      .where('user_id', '=', user.id)
+      .execute();
 
     return NextResponse.json({ data: data || [] });
   } catch (error) {
