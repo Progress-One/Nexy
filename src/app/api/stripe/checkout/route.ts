@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { db } from '@/lib/db';
+import { getCurrentUser } from '@/lib/auth';
 import { stripe, PLANS } from '@/lib/stripe';
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !user) {
+    const user = await getCurrentUser();
+    if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -25,11 +23,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Get or create Stripe customer
-    const { data: subscription } = await supabase
-      .from('subscriptions')
+    const subscription = await db
+      .selectFrom('subscriptions')
       .select('stripe_customer_id')
-      .eq('user_id', user.id)
-      .single();
+      .where('user_id', '=', user.id)
+      .executeTakeFirst();
 
     let customerId = subscription?.stripe_customer_id;
 
@@ -42,10 +40,11 @@ export async function POST(request: NextRequest) {
       });
       customerId = customer.id;
 
-      await supabase
-        .from('subscriptions')
-        .update({ stripe_customer_id: customerId })
-        .eq('user_id', user.id);
+      await db
+        .updateTable('subscriptions')
+        .set({ stripe_customer_id: customerId })
+        .where('user_id', '=', user.id)
+        .execute();
     }
 
     const selectedPlan = PLANS[plan as keyof typeof PLANS];

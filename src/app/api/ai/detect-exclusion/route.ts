@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { createClient } from '@/lib/supabase/server';
+import { db } from '@/lib/db';
+import { getCurrentUser } from '@/lib/auth';
 
 const openai = new OpenAI();
 
 export async function POST(req: Request) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
+  const user = await getCurrentUser();
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -15,29 +14,31 @@ export async function POST(req: Request) {
   const { sceneId, feedback } = await req.json();
 
   // Get scene tags
-  const { data: scene } = await supabase
-    .from('scenes')
+  const scene = await db
+    .selectFrom('scenes')
     .select('tags')
-    .eq('id', sceneId)
-    .single();
+    .where('id', '=', sceneId)
+    .executeTakeFirst();
 
   if (!scene?.tags?.length) {
     return NextResponse.json({ category: null, confidence: 0 });
   }
 
   // Get categories for these tags
-  const { data: tagCats } = await supabase
-    .from('tag_categories')
-    .select('tag, category:categories(slug, name)')
-    .in('tag', scene.tags);
+  const tagCats = await db
+    .selectFrom('tag_categories as tc')
+    .leftJoin('categories as c', 'c.id', 'tc.category_id')
+    .select([
+      'tc.tag',
+      'c.slug as category_slug',
+      'c.name as category_name',
+    ])
+    .where('tc.tag', 'in', scene.tags)
+    .execute();
 
   const categories = [...new Set(
-    tagCats?.map(tc => {
-      const cat = tc.category as { slug: string; name: string } | { slug: string; name: string }[] | null;
-      if (Array.isArray(cat)) return cat[0]?.slug;
-      return cat?.slug;
-    }).filter(Boolean)
-  )];
+    tagCats.map(tc => tc.category_slug).filter(Boolean)
+  )] as string[];
 
   if (!categories.length) {
     return NextResponse.json({ category: null, confidence: 0 });

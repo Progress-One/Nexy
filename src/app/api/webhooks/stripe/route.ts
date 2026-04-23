@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { stripe } from '@/lib/stripe';
-import { createServiceClient } from '@/lib/supabase/server';
+import { db } from '@/lib/db';
 import Stripe from 'stripe';
 
 export async function POST(request: NextRequest) {
@@ -32,8 +32,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const supabase = await createServiceClient();
-
   try {
     switch (event.type) {
       case 'checkout.session.completed': {
@@ -42,14 +40,15 @@ export async function POST(request: NextRequest) {
         const plan = session.metadata?.plan;
 
         if (userId && plan) {
-          await supabase
-            .from('subscriptions')
-            .update({
+          await db
+            .updateTable('subscriptions')
+            .set({
               stripe_subscription_id: session.subscription as string,
               plan,
               status: 'active',
             })
-            .eq('user_id', userId);
+            .where('user_id', '=', userId)
+            .execute();
         }
         break;
       }
@@ -59,20 +58,24 @@ export async function POST(request: NextRequest) {
         const customerId = subscription.customer as string;
 
         // Find user by customer ID
-        const { data: sub } = await supabase
-          .from('subscriptions')
+        const sub = await db
+          .selectFrom('subscriptions')
           .select('user_id')
-          .eq('stripe_customer_id', customerId)
-          .single();
+          .where('stripe_customer_id', '=', customerId)
+          .executeTakeFirst();
 
-        if (sub) {
-          await supabase
-            .from('subscriptions')
-            .update({
+        if (sub?.user_id) {
+          // Stripe types don't officially declare current_period_end on Subscription itself
+          // but it exists at runtime (invoice-based subscription objects sometimes differ).
+          const periodEnd = (subscription as unknown as { current_period_end: number }).current_period_end;
+          await db
+            .updateTable('subscriptions')
+            .set({
               status: subscription.status === 'active' ? 'active' : 'past_due',
-              current_period_end: new Date((subscription as any).current_period_end * 1000).toISOString(),
+              current_period_end: new Date(periodEnd * 1000),
             })
-            .eq('user_id', sub.user_id);
+            .where('user_id', '=', sub.user_id)
+            .execute();
         }
         break;
       }
@@ -82,22 +85,23 @@ export async function POST(request: NextRequest) {
         const customerId = subscription.customer as string;
 
         // Find user by customer ID
-        const { data: sub } = await supabase
-          .from('subscriptions')
+        const sub = await db
+          .selectFrom('subscriptions')
           .select('user_id')
-          .eq('stripe_customer_id', customerId)
-          .single();
+          .where('stripe_customer_id', '=', customerId)
+          .executeTakeFirst();
 
-        if (sub) {
-          await supabase
-            .from('subscriptions')
-            .update({
+        if (sub?.user_id) {
+          await db
+            .updateTable('subscriptions')
+            .set({
               plan: 'free',
               status: 'canceled',
               stripe_subscription_id: null,
               current_period_end: null,
             })
-            .eq('user_id', sub.user_id);
+            .where('user_id', '=', sub.user_id)
+            .execute();
         }
         break;
       }
