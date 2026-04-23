@@ -1,11 +1,13 @@
-import type { SupabaseClient } from '@/lib/supabase/compat-types';
+import type { createClient } from '@/lib/supabase/client';
+
+type BrowserClient = ReturnType<typeof createClient>;
 
 /**
  * Track an analytics event.
  * Fire-and-forget — never blocks UI or throws.
  */
 export function trackEvent(
-  supabase: SupabaseClient,
+  supabase: BrowserClient,
   userId: string,
   eventName: string,
   eventData: Record<string, unknown> = {}

@@ -1,5 +1,7 @@
-import type { SupabaseClient } from '@/lib/supabase/compat-types';
+import type { createClient } from '@/lib/supabase/client';
 import type { Scene, Proposal } from './types';
+
+type BrowserClient = ReturnType<typeof createClient>;
 
 export interface ProposalWithScene {
   proposal: Proposal;
@@ -11,7 +13,7 @@ export interface ProposalWithScene {
  * Filters out proposals for scenes the user already answered.
  */
 export async function fetchPendingProposals(
-  supabase: SupabaseClient,
+  supabase: BrowserClient,
   userId: string
 ): Promise<ProposalWithScene[]> {
   // 1. Get pending proposals (RLS ensures only to_user_id can SELECT)
@@ -71,7 +73,7 @@ export async function fetchPendingProposals(
  * Update proposal status (pending → shown, shown → answered).
  */
 export async function updateProposalStatus(
-  supabase: SupabaseClient,
+  supabase: BrowserClient,
   proposalId: string,
   status: 'shown' | 'answered'
 ): Promise<void> {

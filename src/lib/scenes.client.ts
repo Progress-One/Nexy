@@ -1,5 +1,7 @@
 import type { Scene } from '@/lib/types';
-import type { SupabaseClient } from '@/lib/supabase/compat-types';
+import type { createClient } from '@/lib/supabase/client';
+
+type BrowserClient = ReturnType<typeof createClient>;
 
 /**
  * Client-side helper for fetching adaptive/filtered discovery scenes.
@@ -16,7 +18,7 @@ import type { SupabaseClient } from '@/lib/supabase/compat-types';
  * server-side using the authenticated session cookie.
  */
 export async function getFilteredScenesClient(
-  _supabaseClient: SupabaseClient,
+  _supabaseClient: BrowserClient,
   _userId: string,
   options: {
     maxIntensity?: number;
@@ -53,7 +55,7 @@ export async function getFilteredScenesClient(
  * Get categories for scene tags.
  */
 export async function getSceneCategories(
-  supabaseClient: SupabaseClient,
+  supabaseClient: BrowserClient,
   tags: string[]
 ): Promise<Array<{ slug: string; name: string }>> {
   if (!tags.length) return [];
