@@ -4,6 +4,10 @@
  * DB queries proxy through /api/db route (server-side execution).
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+type MutationOp = 'insert' | 'update' | 'upsert' | 'delete';
+
 class BrowserQueryBuilder {
   private table: string;
   private _select = '*';
@@ -11,6 +15,7 @@ class BrowserQueryBuilder {
   private _order: { col: string; asc: boolean }[] = [];
   private _limit?: number;
   private _single = false;
+  private _mutation: { op: MutationOp; data: unknown; opts?: any } | null = null;
 
   constructor(table: string) { this.table = table; }
 
@@ -28,27 +33,41 @@ class BrowserQueryBuilder {
   not(col: string, op: string, val: unknown) { this.filters.push({ col, op: `not_${op}`, val }); return this; }
   or(conditions: string) { this.filters.push({ col: '__or', op: 'or', val: conditions }); return this; }
   range(from: number, to: number) { this.filters.push({ col: '__range', op: 'range', val: [from, to] }); return this; }
-  order(col: string, opts?: { ascending?: boolean }) { this._order.push({ col, asc: opts?.ascending !== false }); return this; }
+  order(col: string, opts?: { ascending?: boolean; nullsFirst?: boolean }) {
+    this._order.push({ col, asc: opts?.ascending !== false });
+    return this;
+  }
   limit(n: number) { this._limit = n; return this; }
   single() { this._single = true; this._limit = 1; return this; }
   maybeSingle() { this._single = true; this._limit = 1; return this; }
 
-  insert(data: any) { return this._mutate('insert', data); }
-  update(data: any) { return this._mutate('update', data); }
-  upsert(data: any, opts?: any) { return this._mutate('upsert', data, opts); }
-  delete() { return this._mutate('delete', null); }
+  insert(data: any) { this._mutation = { op: 'insert', data }; return this; }
+  update(data: any) { this._mutation = { op: 'update', data }; return this; }
+  upsert(data: any, opts?: any) { this._mutation = { op: 'upsert', data, opts }; return this; }
+  delete() { this._mutation = { op: 'delete', data: null }; return this; }
 
-  private async _mutate(op: string, data: any, opts?: any) {
-    const res = await fetch('/api/db', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ table: this.table, op, data, filters: this.filters, opts }),
-    });
-    const json = await res.json();
-    return { data: json.data, error: json.error };
+  private async _executeMutation(): Promise<{ data: any; error: any }> {
+    if (!this._mutation) return { data: null, error: { message: 'No mutation set' } };
+    try {
+      const res = await fetch('/api/db', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          table: this.table,
+          op: this._mutation.op,
+          data: this._mutation.data,
+          filters: this.filters,
+          opts: this._mutation.opts,
+        }),
+      });
+      const json = await res.json();
+      return { data: json.data, error: json.error };
+    } catch (err: any) {
+      return { data: null, error: { message: err?.message || String(err) } };
+    }
   }
 
-  async then(resolve: (val: { data: any; error: any }) => void) {
+  private async _executeSelect(): Promise<{ data: any; error: any }> {
     try {
       const params = new URLSearchParams({
         table: this.table,
@@ -60,10 +79,15 @@ class BrowserQueryBuilder {
       });
       const res = await fetch(`/api/db?${params}`);
       const json = await res.json();
-      resolve({ data: json.data, error: json.error });
+      return { data: json.data, error: json.error };
     } catch (err: any) {
-      resolve({ data: null, error: { message: err.message } });
+      return { data: null, error: { message: err?.message || String(err) } };
     }
+  }
+
+  then(onFulfilled: (val: { data: any; error: any }) => any, onRejected?: (reason: any) => any) {
+    const promise = this._mutation ? this._executeMutation() : this._executeSelect();
+    return promise.then(onFulfilled, onRejected);
   }
 }
 
@@ -79,7 +103,8 @@ export function createClient() {
         if (!res.ok) { const d = await res.json(); return { error: { message: d.error || 'Login failed' } }; }
         return { error: null };
       },
-      signUp: async ({ email, password }: { email: string; password: string }) => {
+      signUp: async (args: { email: string; password: string; options?: any }) => {
+        const { email, password } = args;
         const res = await fetch('/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -96,22 +121,43 @@ export function createClient() {
         const d = await res.json();
         return { data: { user: d.user }, error: null };
       },
+      onAuthStateChange: (_cb: (event: string, session: any) => void) => {
+        // No-op on the browser shim — used only by landing header for UI reactivity.
+        // Callers expect `{ data: { subscription: { unsubscribe: () => void } } }`.
+        return { data: { subscription: { unsubscribe: () => {} } } };
+      },
+    },
+    rpc: async (_fnName: string, _params?: Record<string, unknown>) => {
+      // RPC is not exposed via the browser shim; callers should fall back.
+      return { data: null, error: { message: 'rpc not available in browser shim' } };
     },
     from: (table: string) => new BrowserQueryBuilder(table),
     storage: {
       from: (bucket: string) => ({
         upload: async (path: string, file: File | Buffer, opts?: any) => {
           const formData = new FormData();
-          formData.append('file', file instanceof File ? file : new Blob([file]));
+          if (file instanceof File) {
+            formData.append('file', file);
+          } else {
+            // Buffer → Blob for FormData; cast via unknown to satisfy DOM BlobPart types.
+            formData.append('file', new Blob([file as unknown as ArrayBuffer]));
+          }
           formData.append('path', path);
           formData.append('bucket', bucket);
           const res = await fetch('/api/storage/upload', { method: 'POST', body: formData });
-          if (!res.ok) return { error: { message: 'Upload failed' } };
+          if (!res.ok) return { error: { message: 'Upload failed' }, data: null };
           return { data: { path }, error: null };
         },
         getPublicUrl: (path: string) => ({
           data: { publicUrl: `${process.env.NEXT_PUBLIC_MINIO_URL || 'http://173.242.60.76:9000'}/${bucket}/${path}` },
         }),
+        list: async (path?: string, _opts?: any) => {
+          const params = new URLSearchParams({ bucket, ...(path ? { path } : {}) });
+          const res = await fetch(`/api/storage/list?${params}`);
+          if (!res.ok) return { data: null, error: { message: 'List failed' } };
+          const json = await res.json();
+          return { data: json.data, error: null };
+        },
       }),
     },
   };
