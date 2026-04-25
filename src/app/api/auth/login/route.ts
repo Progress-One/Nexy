@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { SignJWT } from 'jose';
 import pg from 'pg';
 import { createHash } from 'crypto';
+import argon2 from 'argon2';
 import { getJwtSecret } from '@/lib/auth';
 
 const { Pool } = pg;
@@ -13,8 +14,32 @@ function getPool() {
   return _pool;
 }
 
-function hashPassword(password: string): string {
+function legacySha256Hash(password: string): string {
   return createHash('sha256').update(password).digest('hex');
+}
+
+async function verifyAndMaybeMigrate(
+  pool: pg.Pool,
+  userId: string,
+  storedHash: string,
+  password: string,
+): Promise<boolean> {
+  // Modern argon2 hashes start with `$argon2`
+  if (storedHash.startsWith('$argon2')) {
+    return argon2.verify(storedHash, password);
+  }
+  // Legacy SHA-256 hex. On success, lazily upgrade to argon2.
+  if (storedHash === legacySha256Hash(password)) {
+    const newHash = await argon2.hash(password, {
+      type: argon2.argon2id,
+      memoryCost: 65536,
+      timeCost: 3,
+      parallelism: 4,
+    });
+    await pool.query('UPDATE profiles SET password_hash = $1 WHERE id = $2', [newHash, userId]);
+    return true;
+  }
+  return false;
 }
 
 export async function POST(req: Request) {
@@ -37,8 +62,9 @@ export async function POST(req: Request) {
 
   const user = rows[0];
 
-  // Verify password (using same hash as signup)
-  if (user.password_hash !== hashPassword(password)) {
+  // Verify password (argon2 with lazy SHA-256 migration)
+  const ok = await verifyAndMaybeMigrate(pool, user.id, user.password_hash, password);
+  if (!ok) {
     return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
   }
 
