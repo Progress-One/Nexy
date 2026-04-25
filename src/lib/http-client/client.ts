@@ -134,29 +134,26 @@ function _createClient() {
     from: (table: string) => new BrowserQueryBuilder(table),
     storage: {
       from: (bucket: string) => ({
-        upload: async (path: string, file: File | Buffer, opts?: any) => {
-          const formData = new FormData();
-          if (file instanceof File) {
-            formData.append('file', file);
-          } else {
-            // Buffer → Blob for FormData; cast via unknown to satisfy DOM BlobPart types.
-            formData.append('file', new Blob([file as unknown as ArrayBuffer]));
-          }
-          formData.append('path', path);
-          formData.append('bucket', bucket);
-          const res = await fetch('/api/storage/upload', { method: 'POST', body: formData });
-          if (!res.ok) return { error: { message: 'Upload failed' }, data: null };
-          return { data: { path }, error: null };
+        // Upload route is not implemented. Admin code that needs to upload files
+        // should use a dedicated /api/admin/* endpoint (e.g. /api/admin/upload-image).
+        upload: async (
+          _path: string,
+          _file: File | Buffer,
+          _opts?: any,
+        ): Promise<{ data: { path: string } | null; error: { message: string } | null }> => {
+          throw new Error('storage.upload not implemented — use /api/admin/upload-image or a dedicated route');
         },
+        // Pure URL builder — no network call, safe to keep.
         getPublicUrl: (path: string) => ({
           data: { publicUrl: `${process.env.NEXT_PUBLIC_MINIO_URL || 'http://173.242.60.76:9000'}/${bucket}/${path}` },
         }),
-        list: async (path?: string, _opts?: any) => {
-          const params = new URLSearchParams({ bucket, ...(path ? { path } : {}) });
-          const res = await fetch(`/api/storage/list?${params}`);
-          if (!res.ok) return { data: null, error: { message: 'List failed' } };
-          const json = await res.json();
-          return { data: json.data, error: null };
+        // List route is not implemented. Admin pages calling .list() will fail loudly
+        // until /api/storage/list (or an admin equivalent) exists.
+        list: async (
+          _path?: string,
+          _opts?: any,
+        ): Promise<{ data: Array<{ name: string; created_at: string | null }> | null; error: { message: string } | null }> => {
+          throw new Error('storage.list not implemented — add /api/storage/list or a dedicated admin route');
         },
       }),
     },
