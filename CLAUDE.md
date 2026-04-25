@@ -200,7 +200,7 @@ deploy/
 Когда будет создана папка `deploy/`, деплой чеклист:
 - [ ] DNS: `A nexy.life → 173.242.60.76` (проверить)
 - [ ] `cd /opt/studio/nexy && bash deploy/bootstrap.sh` (первый запуск сидит `.env` и выходит)
-- [ ] Заполнить `/opt/studio/nexy/.env`: `DATABASE_URL`, `JWT_SECRET`, `MINIO_*`, `RESEND_API_KEY`, `STRIPE_*`, `OPENAI_API_KEY`
+- [ ] Заполнить `/opt/studio/nexy/.env`: `DATABASE_URL`, `JWT_SECRET`, `ADMIN_EMAILS=alex@skill.im,...`, `MINIO_*`, `RESEND_API_KEY`, `STRIPE_*`, `OPENAI_API_KEY`
 - [ ] Повторно `bash deploy/bootstrap.sh` — билд, старт, reload Caddy
 - [ ] Smoke: `curl https://nexy.life/` → 200, login с тестовым аккаунтом
 
