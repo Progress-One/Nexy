@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { SignJWT } from 'jose';
 import pg from 'pg';
 import { createHash } from 'crypto';
+import { getJwtSecret } from '@/lib/auth';
 
 const { Pool } = pg;
 let _pool: pg.Pool | null = null;
@@ -42,7 +43,7 @@ export async function POST(req: Request) {
   }
 
   // Create JWT
-  const secret = new TextEncoder().encode(process.env['JWT_SECRET'] || 'nexy-jwt-secret');
+  const secret = getJwtSecret();
   const jwt = await new SignJWT({ sub: user.id, email: user.email })
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime('30d')

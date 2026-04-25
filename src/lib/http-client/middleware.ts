@@ -1,16 +1,15 @@
 import { jwtVerify } from 'jose';
 import { NextResponse, type NextRequest } from 'next/server';
+import { getJwtSecret } from '@/lib/auth';
 
 export async function updateSession(request: NextRequest) {
-  const jwtSecret = process.env['JWT_SECRET'] || 'nexy-jwt-secret';
   const token = request.cookies.get('nexy_session')?.value;
 
   let user: { id: string; email: string } | null = null;
 
   if (token) {
     try {
-      const secret = new TextEncoder().encode(jwtSecret);
-      const { payload } = await jwtVerify(token, secret);
+      const { payload } = await jwtVerify(token, getJwtSecret());
       user = { id: payload.sub as string, email: payload.email as string };
     } catch { /* expired/invalid */ }
   }
