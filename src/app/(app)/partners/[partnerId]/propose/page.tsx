@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, use } from 'react';
+import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,11 +22,18 @@ export default function ProposePage({ params }: { params: Promise<{ partnerId: s
   const { partnerId } = use(params);
   const [selectedDimension, setSelectedDimension] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [isPremium] = useState(false); // TODO: Check actual subscription
+  const [isPremium, setIsPremium] = useState<boolean | null>(null);
   const router = useRouter();
 
+  useEffect(() => {
+    fetch('/api/subscription/status')
+      .then((r) => (r.ok ? r.json() : { isPremium: false }))
+      .then((d: { isPremium?: boolean }) => setIsPremium(d.isPremium === true))
+      .catch(() => setIsPremium(false));
+  }, []);
+
   const handlePropose = async () => {
-    if (!selectedDimension || !isPremium) return;
+    if (!selectedDimension || isPremium !== true) return;
 
     setLoading(true);
     try {
@@ -61,7 +68,11 @@ export default function ProposePage({ params }: { params: Promise<{ partnerId: s
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {!isPremium ? (
+          {isPremium === null ? (
+            <div className="flex justify-center py-10">
+              <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            </div>
+          ) : !isPremium ? (
             <div className="text-center py-6">
               <Lock className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
               <h3 className="font-medium mb-2">Функция Premium</h3>
