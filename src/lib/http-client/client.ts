@@ -91,7 +91,7 @@ class BrowserQueryBuilder {
   }
 }
 
-export function createClient() {
+function _createClient() {
   return {
     auth: {
       signInWithPassword: async ({ email, password }: { email: string; password: string }) => {
@@ -161,4 +161,15 @@ export function createClient() {
       }),
     },
   };
+}
+
+let _client: ReturnType<typeof _createClient> | null = null;
+
+export function createClient() {
+  return (_client ??= _createClient());
+}
+
+// Test-only escape hatch
+export function __resetClientForTests() {
+  _client = null;
 }
