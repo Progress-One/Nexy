@@ -1,27 +1,26 @@
-import type { createClient } from '@/lib/http-client/client';
-
-type BrowserClient = ReturnType<typeof createClient>;
-
 /**
  * Track an analytics event.
  * Fire-and-forget — never blocks UI or throws.
+ *
+ * Migrated from direct DB write to typed server endpoint (`POST /api/analytics/track`).
+ * The legacy signature (with the supabase client + userId) is kept so existing
+ * call sites compile unchanged; both args are now ignored — the server uses the
+ * authenticated session.
  */
 export function trackEvent(
-  supabase: BrowserClient,
-  userId: string,
+  _supabase: unknown,
+  _userId: string,
   eventName: string,
-  eventData: Record<string, unknown> = {}
+  eventData: Record<string, unknown> = {},
 ): void {
-  supabase
-    .from('analytics_events')
-    .insert({
-      user_id: userId,
-      event_name: eventName,
-      event_data: eventData,
-    })
-    .then(({ error }) => {
-      if (error) console.error('[analytics] Failed to track:', eventName, error.message);
-    });
+  // Fire-and-forget; swallow errors.
+  void fetch('/api/analytics/track', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ event_name: eventName, event_data: eventData }),
+  }).catch((err) => {
+    console.error('[analytics] failed to track:', eventName, err);
+  });
 }
 
 // ─── Event name constants ───────────────────────────

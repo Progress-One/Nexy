@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { createClient } from '@/lib/http-client/client';
+import { useState, useEffect, useCallback } from 'react';
 import { type SwipeResponseValue } from '@/components/discovery/SwipeableSceneCard';
 import { type ExperienceLevel } from '@/components/discovery/ExperienceSelector';
 import { type SceneV3Response } from '@/components/discovery/SceneRendererV3';
@@ -21,6 +20,8 @@ import type {
   Locale,
   Profile,
   BodyGender,
+  BodyMapSceneConfig,
+  LocalizedString,
 } from '@/lib/types';
 
 // ─── Types ──────────────────────────────────────────────
@@ -31,6 +32,127 @@ export interface OnboardingResult {
   category: string;
   title: { ru: string; en: string };
   responseValue: SwipeResponseValue;
+}
+
+// ─── Helpers ────────────────────────────────────────────
+
+interface DiscoveryState {
+  profile: Profile | null;
+  flowState: { tag_scores?: Record<string, unknown> | null } | null;
+  sceneResponses: Array<{ scene_id: string | null; question_type: string | null }>;
+  bodyMapResponses: Array<{ activity_id: string | null; pass: string | null }>;
+  preferenceProfile: { preferences: Record<string, unknown> | null } | null;
+}
+
+async function fetchDiscoveryState(): Promise<DiscoveryState | null> {
+  try {
+    const res = await fetch('/api/discovery/state');
+    if (!res.ok) return null;
+    return (await res.json()) as DiscoveryState;
+  } catch (err) {
+    console.error('[useDiscovery] failed to fetch state:', err);
+    return null;
+  }
+}
+
+function deriveBodyMapStatus(
+  state: DiscoveryState,
+): 'completed' | 'skipped' | 'pending' {
+  const tagScores = state.flowState?.tag_scores ?? {};
+  if ((tagScores as Record<string, unknown>).body_map_skipped === true) {
+    return 'skipped';
+  }
+  const answered = new Set<string>();
+  for (const r of state.sceneResponses) {
+    if (r.scene_id && (r.scene_id.includes('bodymap') || r.question_type === 'body_map')) {
+      answered.add(r.scene_id);
+    }
+  }
+  for (const r of state.bodyMapResponses) {
+    if (r.activity_id) answered.add(r.activity_id);
+  }
+  return answered.size >= 1 ? 'completed' : 'pending';
+}
+
+async function saveSceneResponse(payload: {
+  scene_id: string;
+  scene_slug?: string | null;
+  question_type?: string | null;
+  answer?: unknown;
+  skipped?: boolean;
+}): Promise<void> {
+  try {
+    await fetch('/api/discovery/scene-response', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    console.error('[useDiscovery] saveSceneResponse failed:', err);
+  }
+}
+
+async function saveBodyMapResponse(payload: {
+  activity_id: string;
+  pass: string;
+  zones_selected: string[];
+}): Promise<void> {
+  try {
+    await fetch('/api/discovery/body-map-response', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    console.error('[useDiscovery] saveBodyMapResponse failed:', err);
+  }
+}
+
+async function savePreferenceProfile(preferences: Record<string, unknown>): Promise<void> {
+  try {
+    await fetch('/api/discovery/preference-profile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ preferences }),
+    });
+  } catch (err) {
+    console.error('[useDiscovery] savePreferenceProfile failed:', err);
+  }
+}
+
+async function setFlowState(payload: Record<string, unknown>): Promise<void> {
+  try {
+    await fetch('/api/discovery/flow-state', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    console.error('[useDiscovery] setFlowState failed:', err);
+  }
+}
+
+async function markVisualOnboardingComplete(): Promise<void> {
+  try {
+    await fetch('/api/discovery/onboarding-complete', { method: 'POST' });
+  } catch (err) {
+    console.error('[useDiscovery] markVisualOnboardingComplete failed:', err);
+  }
+}
+
+async function fetchOnboardingScenesApi(gender?: 'male' | 'female'): Promise<Scene[]> {
+  try {
+    const url = gender
+      ? `/api/discovery/onboarding-scenes?gender=${gender}`
+      : '/api/discovery/onboarding-scenes';
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const json = (await res.json()) as { scenes?: Scene[] };
+    return json.scenes ?? [];
+  } catch (err) {
+    console.error('[useDiscovery] fetchOnboardingScenesApi failed:', err);
+    return [];
+  }
 }
 
 // ─── Hook ───────────────────────────────────────────────
@@ -58,16 +180,14 @@ export function useDiscovery() {
   const [userProfile, setUserProfile] = useState<Profile | null>(null);
 
   // Body map config
-  const [bodyMapConfigs, setBodyMapConfigs] = useState<Record<string, any>>({});
-  const [bodyMapMainQuestions, setBodyMapMainQuestions] = useState<Record<string, any>>({});
+  const [bodyMapConfigs, setBodyMapConfigs] = useState<Record<string, BodyMapSceneConfig>>({});
+  const [bodyMapMainQuestions, setBodyMapMainQuestions] = useState<Record<string, LocalizedString>>({});
 
   // Experience selector
   const [experience, setExperience] = useState<ExperienceLevel>(null);
 
   // Proposals tracking: scene_id → proposal_id
   const [proposalMap, setProposalMap] = useState<Map<string, string>>(new Map());
-
-  const supabase = useMemo(() => createClient(), []);
 
   // ─── Derived state ──────────────────────────────────
 
@@ -95,8 +215,8 @@ export function useDiscovery() {
     bodyGenderForMap = 'male';
   }
 
-  const bodyMapConfig = currentScene ? bodyMapConfigs[currentScene.id] : null;
-  const bodyMapMainQuestion = currentScene ? bodyMapMainQuestions[currentScene.id] : null;
+  const bodyMapConfig = currentScene ? bodyMapConfigs[currentScene.id] : undefined;
+  const bodyMapMainQuestion = currentScene ? bodyMapMainQuestions[currentScene.id] : undefined;
 
   // ─── Data fetching ──────────────────────────────────
 
@@ -109,70 +229,13 @@ export function useDiscovery() {
     }
   }, [userProfile]);
 
-  // Check Body Map status
-  const checkBodyMapStatus = useCallback(async (userId: string): Promise<'completed' | 'skipped' | 'pending'> => {
-    const { data: flowState } = await supabase
-      .from('user_flow_state')
-      .select('*')
-      .eq('user_id', userId)
-      .single();
-
-    if (flowState?.tag_scores && (flowState.tag_scores as any).body_map_skipped === true) {
-      return 'skipped';
-    }
-
-    const { data: sceneResponses } = await supabase
-      .from('scene_responses')
-      .select('scene_id, question_type')
-      .eq('user_id', userId)
-      .or('question_type.eq.body_map,scene_id.like.bodymap-%');
-
-    const { data: bodyMapResponses } = await supabase
-      .from('body_map_responses')
-      .select('activity_id, pass')
-      .eq('user_id', userId);
-
-    const answeredBodyMaps = new Set<string>();
-
-    sceneResponses?.forEach(r => {
-      if (r.scene_id && (r.scene_id.includes('bodymap') || r.question_type === 'body_map')) {
-        answeredBodyMaps.add(r.scene_id);
-      }
-    });
-
-    bodyMapResponses?.forEach(r => {
-      if (r.activity_id) {
-        answeredBodyMaps.add(r.activity_id);
-      }
-    });
-
-    if (answeredBodyMaps.size >= 1) {
-      return 'completed';
-    }
-
-    return 'pending';
-  }, [supabase]);
-
-  // Fetch Body Map activities
-  const fetchBodyMapActivities = useCallback(async (userId: string) => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return [];
-
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('gender, interested_in')
-      .eq('id', user.id)
-      .single();
-
-    if (!profile) return [];
-
+  // Build virtual body-map "scenes" derived from profile
+  const buildBodyMapActivities = useCallback((profile: Profile, userId: string) => {
     const interestedIn = profile.interested_in || 'female';
-
     const virtualScenes: Scene[] = [];
 
-    // Self body map
     virtualScenes.push({
-      id: `bodymap-self-${user.id}`,
+      id: `bodymap-self-${userId}`,
       slug: 'bodymap-self',
       version: 2,
       category: 'body_map',
@@ -183,7 +246,7 @@ export function useDiscovery() {
       subtitle: { ru: 'Отметь зоны и действия для себя', en: 'Mark zones and actions for yourself' },
       user_description: {
         ru: 'Отметь на своём теле зоны и выбери действия, которые тебе нравятся или не нравятся',
-        en: 'Mark zones on your body and select actions you like or dislike'
+        en: 'Mark zones on your body and select actions you like or dislike',
       },
       ai_description: { ru: 'Интерактивная карта тела пользователя', en: 'Interactive body map for user' },
       question_type: 'body_map',
@@ -197,10 +260,9 @@ export function useDiscovery() {
       },
     } as Scene);
 
-    // Partner body maps
     if (interestedIn === 'female' || interestedIn === 'both') {
       virtualScenes.push({
-        id: `bodymap-partner-female-${user.id}`,
+        id: `bodymap-partner-female-${userId}`,
         slug: 'bodymap-partner-female',
         version: 2,
         category: 'body_map',
@@ -225,7 +287,7 @@ export function useDiscovery() {
 
     if (interestedIn === 'male' || interestedIn === 'both') {
       virtualScenes.push({
-        id: `bodymap-partner-male-${user.id}`,
+        id: `bodymap-partner-male-${userId}`,
         slug: 'bodymap-partner-male',
         version: 2,
         category: 'body_map',
@@ -251,17 +313,16 @@ export function useDiscovery() {
     setBodyMapActivities(virtualScenes);
     setCurrentBodyMapIndex(0);
     return virtualScenes;
-  }, [supabase]);
+  }, []);
 
   // Fetch regular scenes (with proposals injected)
   const fetchRegularScenes = useCallback(async (userId: string, gender?: 'male' | 'female') => {
     try {
-      // Fetch pending proposals and validate against gates
       const proposedScenes: Scene[] = [];
       const newProposalMap = new Map<string, string>();
 
       try {
-        const proposalsWithScenes = await fetchPendingProposals(supabase, userId);
+        const proposalsWithScenes = await fetchPendingProposals(null, userId);
         if (proposalsWithScenes.length > 0) {
           let gates: OnboardingGates = {};
           try {
@@ -275,26 +336,22 @@ export function useDiscovery() {
           }
 
           for (const { proposal, scene } of proposalsWithScenes) {
-            // Respect safety gates — partner A never knows if gates blocked it
             if (scene.slug && !isSceneAllowed(scene.slug, gates)) continue;
 
-            // Respect gender filter
             const forGender = (scene as unknown as Record<string, unknown>).for_gender as string | undefined;
             if (forGender && gender && forGender !== gender) continue;
 
             proposedScenes.push(scene);
             newProposalMap.set(scene.id, proposal.id);
 
-            // Mark as shown
-            await updateProposalStatus(supabase, proposal.id, 'shown');
+            await updateProposalStatus(null, proposal.id, 'shown');
           }
         }
       } catch (err) {
         console.error('[Discover] Error fetching proposals:', err);
       }
 
-      // Fetch regular scenes
-      const scenesData = await getFilteredScenesClient(supabase, userId, {
+      const scenesData = await getFilteredScenesClient(null, userId, {
         limit: 20,
         orderByPriority: false,
         enableAdaptiveFlow: true,
@@ -302,17 +359,18 @@ export function useDiscovery() {
         userGender: gender,
       });
 
-      // Deduplicate: remove proposal scenes from regular results
-      const proposalSceneIds = new Set(proposedScenes.map(s => s.id));
-      const deduped = (scenesData.length > 0 ? scenesData : await getFilteredScenesClient(supabase, userId, {
-        limit: 20,
-        orderByPriority: true,
-        enableAdaptiveFlow: false,
-        enableDedupe: true,
-        userGender: gender,
-      })).filter(s => !proposalSceneIds.has(s.id));
+      const proposalSceneIds = new Set(proposedScenes.map((s) => s.id));
+      const baseScenes = scenesData.length > 0
+        ? scenesData
+        : await getFilteredScenesClient(null, userId, {
+            limit: 20,
+            orderByPriority: true,
+            enableAdaptiveFlow: false,
+            enableDedupe: true,
+            userGender: gender,
+          });
+      const deduped = baseScenes.filter((s) => !proposalSceneIds.has(s.id));
 
-      // Proposals first, then regular
       const combined = [...proposedScenes, ...deduped];
       setScenes(combined);
       setProposalMap(newProposalMap);
@@ -322,106 +380,49 @@ export function useDiscovery() {
       console.error('[Discover] Error fetching scenes:', error);
       return [];
     }
-  }, [supabase]);
+  }, []);
 
-  // Fetch onboarding scenes
-  const fetchOnboardingScenes = useCallback(async (userId: string, gender?: 'male' | 'female') => {
-    try {
-      const { data: answered } = await supabase
-        .from('scene_responses')
-        .select('scene_id')
-        .eq('user_id', userId);
-
-      const answeredIds = new Set(answered?.map(r => r.scene_id) || []);
-
-      let query = supabase
-        .from('scenes')
-        .select('*')
-        .eq('is_onboarding', true)
-        .eq('is_active', true)
-        .order('onboarding_order', { ascending: true, nullsFirst: false })
-        .order('priority', { ascending: true });
-
-      if (gender) {
-        query = query.or(`for_gender.eq.${gender},for_gender.is.null`);
-      }
-
-      const { data: onboardingScenesData, error } = await query;
-
-      if (error) {
-        console.error('[Discover] Error fetching onboarding scenes:', error);
-        return [];
-      }
-
-      const unanswered = (onboardingScenesData || []).filter(s => !answeredIds.has(s.id));
-
-      setOnboardingScenes(unanswered);
-      setCurrentOnboardingIndex(0);
-      return unanswered;
-    } catch (error) {
-      console.error('[Discover] Error fetching onboarding scenes:', error);
-      return [];
-    }
-  }, [supabase]);
-
-  // Main orchestrator
+  // Main orchestrator — uses /api/discovery/state for the initial multi-table read
   const fetchScenes = useCallback(async () => {
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      const state = await fetchDiscoveryState();
+      if (!state || !state.profile) return;
 
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
+      const profile = state.profile;
+      setUserProfile(profile);
+      setLocale(getLocale(profile));
+      setAnsweredCount(state.sceneResponses.length);
 
-      if (profile) {
-        setUserProfile(profile as Profile);
-        setLocale(getLocale(profile as Profile));
-      }
-
-      const { data: answered } = await supabase
-        .from('scene_responses')
-        .select('scene_id')
-        .eq('user_id', user.id);
-
-      setAnsweredCount(answered?.length || 0);
-
-      const visualOnboardingCompleted = (profile as any)?.visual_onboarding_completed === true;
+      const visualOnboardingCompleted = (profile as unknown as Record<string, unknown>).visual_onboarding_completed === true;
+      const gender = profile.gender as 'male' | 'female' | undefined;
 
       if (!visualOnboardingCompleted) {
-        const gender = profile?.gender as 'male' | 'female' | undefined;
-        const onboardingScenesData = await fetchOnboardingScenes(user.id, gender);
+        const onboardingScenesData = await fetchOnboardingScenesApi(gender);
+        setOnboardingScenes(onboardingScenesData);
+        setCurrentOnboardingIndex(0);
 
         if (onboardingScenesData.length > 0) {
           setDiscoveryStage('onboarding_intro');
         } else {
-          await supabase
-            .from('profiles')
-            .update({ visual_onboarding_completed: true })
-            .eq('id', user.id);
-
-          const bodyMapStatus = await checkBodyMapStatus(user.id);
+          await markVisualOnboardingComplete();
+          const bodyMapStatus = deriveBodyMapStatus(state);
           if (bodyMapStatus === 'pending') {
             setDiscoveryStage('body_map');
-            await fetchBodyMapActivities(user.id);
+            buildBodyMapActivities(profile, profile.id);
           } else {
             setDiscoveryStage('scenes');
-            await fetchRegularScenes(user.id, gender);
+            await fetchRegularScenes(profile.id, gender);
           }
         }
       } else {
-        const bodyMapStatus = await checkBodyMapStatus(user.id);
-
+        const bodyMapStatus = deriveBodyMapStatus(state);
         if (bodyMapStatus === 'pending') {
           setDiscoveryStage('body_map');
-          await fetchBodyMapActivities(user.id);
+          buildBodyMapActivities(profile, profile.id);
         } else {
           setDiscoveryStage('scenes');
-          const gender = profile?.gender as 'male' | 'female' | undefined;
-          await fetchRegularScenes(user.id, gender);
+          await fetchRegularScenes(profile.id, gender);
         }
       }
     } catch (error) {
@@ -429,7 +430,7 @@ export function useDiscovery() {
     } finally {
       setLoading(false);
     }
-  }, [supabase, checkBodyMapStatus, fetchBodyMapActivities, fetchRegularScenes, fetchOnboardingScenes]);
+  }, [buildBodyMapActivities, fetchRegularScenes]);
 
   // Initial fetch
   useEffect(() => {
@@ -439,19 +440,24 @@ export function useDiscovery() {
   // Body map config computation
   useEffect(() => {
     if (currentScene?.question_type === 'body_map') {
-      const aiContext = (currentScene as any).ai_context || {};
-      const passes = (aiContext.passes || []).map((p: any) => ({
-        subject: p.id === 'give' || p.id === 'receive' ? p.id : (p.subject || 'give'),
-        question: p.question || { ru: '', en: '' },
-      }));
+      const aiContext = (currentScene as unknown as Record<string, unknown>).ai_context as Record<string, unknown> | undefined ?? {};
+      const passesRaw = (aiContext.passes as Array<Record<string, unknown>>) ?? [];
+      const passes = passesRaw.map((p) => {
+        const subject: 'give' | 'receive' =
+          p.id === 'give' || p.id === 'receive'
+            ? (p.id as 'give' | 'receive')
+            : ((p.subject as 'give' | 'receive' | undefined) ?? 'give');
+        const question = (p.question as LocalizedString | undefined) ?? { ru: '', en: '' };
+        return { subject, question };
+      });
 
-      const zones = aiContext.zones;
+      const zones = aiContext.zones as Record<string, unknown> | undefined;
       const availableZones = (zones && typeof zones === 'object' && 'available' in zones)
-        ? zones.available
+        ? (zones.available as string[])
         : ['lips', 'ears', 'neck', 'shoulders', 'chest', 'breasts', 'nipples', 'stomach', 'back', 'lower_back', 'arms', 'hands', 'buttocks', 'anus', 'groin', 'penis', 'vulva', 'thighs', 'feet'];
 
-      const config = {
-        action: aiContext.action || 'universal',
+      const config: BodyMapSceneConfig = {
+        action: (aiContext.action as BodyMapSceneConfig['action']) || 'universal',
         passes: passes.length > 0 ? passes : [{
           subject: currentScene.slug === 'bodymap-self' ? 'receive' : 'give',
           question: {
@@ -463,13 +469,13 @@ export function useDiscovery() {
               : 'Where do you like or dislike touching your partner?',
           },
         }],
-        availableZones,
+        availableZones: availableZones as BodyMapSceneConfig['availableZones'],
       };
 
-      setBodyMapConfigs(prev => ({ ...prev, [currentScene.id]: config }));
+      setBodyMapConfigs((prev) => ({ ...prev, [currentScene.id]: config }));
 
       const firstPass = config.passes[0];
-      setBodyMapMainQuestions(prev => ({ ...prev, [currentScene.id]: firstPass.question }));
+      setBodyMapMainQuestions((prev) => ({ ...prev, [currentScene.id]: firstPass.question }));
     }
   }, [currentScene]);
 
@@ -478,52 +484,33 @@ export function useDiscovery() {
   const moveToNextScene = useCallback(async () => {
     if (discoveryStage === 'onboarding') {
       if (currentOnboardingIndex < onboardingScenes.length - 1) {
-        setCurrentOnboardingIndex(prev => prev + 1);
+        setCurrentOnboardingIndex((prev) => prev + 1);
       } else {
         setDiscoveryStage('onboarding_results');
       }
     } else if (discoveryStage === 'body_map') {
       if (currentBodyMapIndex < bodyMapActivities.length - 1) {
-        setCurrentBodyMapIndex(prev => prev + 1);
-      } else {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          setDiscoveryStage('scenes');
-          await fetchRegularScenes(user.id, userProfile?.gender as 'male' | 'female' | undefined);
-        }
+        setCurrentBodyMapIndex((prev) => prev + 1);
+      } else if (userProfile) {
+        setDiscoveryStage('scenes');
+        await fetchRegularScenes(userProfile.id, userProfile.gender as 'male' | 'female' | undefined);
       }
     } else {
-      setAnsweredCount(prev => prev + 1);
+      setAnsweredCount((prev) => prev + 1);
       if (currentIndex < scenes.length - 1) {
-        setCurrentIndex(prev => prev + 1);
+        setCurrentIndex((prev) => prev + 1);
       } else {
         await fetchScenes();
       }
     }
-  }, [discoveryStage, currentIndex, scenes.length, currentBodyMapIndex, bodyMapActivities.length, currentOnboardingIndex, onboardingScenes.length, fetchScenes, fetchRegularScenes, supabase, userProfile?.gender]);
+  }, [discoveryStage, currentIndex, scenes.length, currentBodyMapIndex, bodyMapActivities.length, currentOnboardingIndex, onboardingScenes.length, fetchScenes, fetchRegularScenes, userProfile]);
 
   const skipBodyMap = useCallback(async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    const { data: flowState } = await supabase
-      .from('user_flow_state')
-      .select('*')
-      .eq('user_id', user.id)
-      .single();
-
-    const tagScores = flowState?.tag_scores || {};
-    (tagScores as any).body_map_skipped = true;
-
-    if (flowState) {
-      await supabase.from('user_flow_state').update({ tag_scores: tagScores }).eq('user_id', user.id);
-    } else {
-      await supabase.from('user_flow_state').insert({ user_id: user.id, tag_scores: tagScores });
-    }
-
+    if (!userProfile) return;
+    await setFlowState({ body_map_skipped: true });
     setDiscoveryStage('scenes');
-    await fetchRegularScenes(user.id, userProfile?.gender as 'male' | 'female' | undefined);
-  }, [fetchRegularScenes, supabase, userProfile?.gender]);
+    await fetchRegularScenes(userProfile.id, userProfile.gender as 'male' | 'female' | undefined);
+  }, [fetchRegularScenes, userProfile]);
 
   const startOnboarding = useCallback(() => {
     setDiscoveryStage('onboarding');
@@ -532,48 +519,41 @@ export function useDiscovery() {
   const finishOnboarding = useCallback(async () => {
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!userProfile) return;
+      await markVisualOnboardingComplete();
 
-      await supabase
-        .from('profiles')
-        .update({ visual_onboarding_completed: true })
-        .eq('id', user.id);
-
-      const bodyMapStatus = await checkBodyMapStatus(user.id);
+      // Re-derive body-map status from a fresh state read
+      const state = await fetchDiscoveryState();
+      const bodyMapStatus = state ? deriveBodyMapStatus(state) : 'pending';
 
       if (bodyMapStatus === 'pending') {
         setDiscoveryStage('body_map');
-        await fetchBodyMapActivities(user.id);
+        buildBodyMapActivities(userProfile, userProfile.id);
       } else {
         setDiscoveryStage('scenes');
-        await fetchRegularScenes(user.id, userProfile?.gender as 'male' | 'female' | undefined);
+        await fetchRegularScenes(userProfile.id, userProfile.gender as 'male' | 'female' | undefined);
       }
     } catch (error) {
       console.error('Error finishing onboarding:', error);
     } finally {
       setLoading(false);
     }
-  }, [supabase, checkBodyMapStatus, fetchBodyMapActivities, fetchRegularScenes, userProfile?.gender]);
+  }, [buildBodyMapActivities, fetchRegularScenes, userProfile]);
 
   const handleSwipeResponse = useCallback(async (value: SwipeResponseValue) => {
     if (!currentScene) return;
 
     setSubmitting(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
       const sceneV2 = currentScene as unknown as SceneV2;
 
-      await supabase.from('scene_responses').upsert({
-        user_id: user.id,
+      await saveSceneResponse({
         scene_id: currentScene.id,
         scene_slug: sceneV2.slug || currentScene.id,
         question_type: 'swipe',
         answer: { value, experience },
         skipped: value === 0,
-      }, { onConflict: 'user_id,scene_id' });
+      });
 
       if (sceneV2.tags && sceneV2.tags.length > 0) {
         try {
@@ -614,10 +594,9 @@ export function useDiscovery() {
         }
       }
 
-      // Update proposal status if this was a proposed scene
       const proposalId = proposalMap.get(currentScene.id);
       if (proposalId) {
-        await updateProposalStatus(supabase, proposalId, 'answered');
+        await updateProposalStatus(null, proposalId, 'answered');
       }
 
       setExperience(null);
@@ -627,7 +606,7 @@ export function useDiscovery() {
     } finally {
       setSubmitting(false);
     }
-  }, [currentScene, experience, supabase, moveToNextScene, proposalMap]);
+  }, [currentScene, experience, moveToNextScene, proposalMap]);
 
   const handleOnboardingResponse = useCallback(async (value: SwipeResponseValue) => {
     const scene = onboardingScenes[currentOnboardingIndex];
@@ -635,22 +614,18 @@ export function useDiscovery() {
 
     setSubmitting(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
       const sceneV2 = scene as unknown as SceneV2;
 
-      await supabase.from('scene_responses').upsert({
-        user_id: user.id,
+      await saveSceneResponse({
         scene_id: scene.id,
         scene_slug: sceneV2.slug || scene.id,
         question_type: 'swipe',
         answer: { value },
         skipped: value === 0,
-      }, { onConflict: 'user_id,scene_id' });
+      });
 
       if (value > 0) {
-        setOnboardingResults(prev => [...prev, {
+        setOnboardingResults((prev) => [...prev, {
           category: sceneV2.category || 'general',
           title: scene.title || { ru: '', en: '' },
           responseValue: value,
@@ -663,53 +638,54 @@ export function useDiscovery() {
     } finally {
       setSubmitting(false);
     }
-  }, [onboardingScenes, currentOnboardingIndex, supabase, moveToNextScene]);
+  }, [onboardingScenes, currentOnboardingIndex, moveToNextScene]);
 
   const handleBodyMapSubmit = useCallback(async (answer: Answer) => {
     if (!currentScene) return;
 
     setSubmitting(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const bodyMapAnswer = answer as any;
+      const bodyMapAnswer = answer as unknown as { passes: Array<{ subject: string; gender?: string; zoneActionPreferences?: Record<string, Record<string, unknown>> }> };
       const activityId = currentScene.slug || currentScene.id;
 
       for (const pass of bodyMapAnswer.passes) {
         const zones: string[] = [];
         if (pass.zoneActionPreferences) {
           for (const [zoneId, actions] of Object.entries(pass.zoneActionPreferences)) {
-            const actionPrefs = actions as Record<string, any>;
-            const hasPreferences = Object.values(actionPrefs).some(pref => pref !== null && pref !== undefined);
+            const actionPrefs = actions as Record<string, unknown>;
+            const hasPreferences = Object.values(actionPrefs).some((pref) => pref !== null && pref !== undefined);
             if (hasPreferences) zones.push(zoneId);
           }
         }
 
         if (zones.length > 0) {
-          await supabase.from('body_map_responses').upsert({
-            user_id: user.id,
+          await saveBodyMapResponse({
             activity_id: activityId,
             pass: pass.subject,
             zones_selected: zones,
-          }, { onConflict: 'user_id,activity_id,pass' });
+          });
         }
       }
 
-      const { data: prefProfile } = await supabase
-        .from('preference_profiles')
-        .select('preferences')
-        .eq('user_id', user.id)
-        .maybeSingle();
+      // Read existing preferences then merge
+      let existingPreferences: Record<string, unknown> = {};
+      try {
+        const res = await fetch('/api/discovery/preference-profile');
+        if (res.ok) {
+          const json = (await res.json()) as { preferences?: Record<string, unknown> | null };
+          existingPreferences = json.preferences ?? {};
+        }
+      } catch (err) {
+        console.error('[useDiscovery] failed to read preferences:', err);
+      }
 
-      const preferences = prefProfile?.preferences || {};
+      const preferences = { ...existingPreferences };
       if (!preferences.body_map) preferences.body_map = {};
-
-      const bodyMapPrefs = preferences.body_map as Record<string, any>;
+      const bodyMapPrefs = preferences.body_map as Record<string, unknown>;
       const sceneSlug = currentScene.slug || currentScene.id;
 
       bodyMapPrefs[sceneSlug] = {
-        zoneActionPreferences: bodyMapAnswer.passes.map((pass: any) => ({
+        zoneActionPreferences: bodyMapAnswer.passes.map((pass) => ({
           subject: pass.subject,
           gender: pass.gender,
           zoneActionPreferences: pass.zoneActionPreferences || {},
@@ -717,10 +693,7 @@ export function useDiscovery() {
         updatedAt: new Date().toISOString(),
       };
 
-      await supabase.from('preference_profiles').upsert({
-        user_id: user.id,
-        preferences,
-      }, { onConflict: 'user_id' });
+      await savePreferenceProfile(preferences);
 
       try {
         await fetch('/api/body-map/process', {
@@ -738,16 +711,13 @@ export function useDiscovery() {
     } finally {
       setSubmitting(false);
     }
-  }, [currentScene, supabase, moveToNextScene]);
+  }, [currentScene, moveToNextScene]);
 
   const handleV3Response = useCallback(async (response: SceneV3Response) => {
     if (!currentScene) return;
 
     setSubmitting(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
       let answer: Answer;
       if (response.type === 'multi_choice_text') {
         const selected = response.customValue
@@ -766,18 +736,16 @@ export function useDiscovery() {
         answer = { value: 0 };
       }
 
-      await supabase.from('scene_responses').upsert({
-        user_id: user.id,
+      await saveSceneResponse({
         scene_id: currentScene.id,
-        scene_slug: (currentScene as any).slug || currentScene.id,
+        scene_slug: (currentScene as unknown as { slug?: string }).slug || currentScene.id,
         question_type: response.type,
         answer,
-      }, { onConflict: 'user_id,scene_id' });
+      });
 
-      // Update proposal status if this was a proposed scene
       const proposalId = proposalMap.get(currentScene.id);
       if (proposalId) {
-        await updateProposalStatus(supabase, proposalId, 'answered');
+        await updateProposalStatus(null, proposalId, 'answered');
       }
 
       await moveToNextScene();
@@ -786,12 +754,13 @@ export function useDiscovery() {
     } finally {
       setSubmitting(false);
     }
-  }, [currentScene, supabase, moveToNextScene, proposalMap]);
+  }, [currentScene, moveToNextScene, proposalMap]);
 
   const refreshScenes = useCallback(async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) await fetchRegularScenes(user.id, userProfile?.gender as 'male' | 'female' | undefined);
-  }, [supabase, fetchRegularScenes, userProfile?.gender]);
+    if (userProfile) {
+      await fetchRegularScenes(userProfile.id, userProfile.gender as 'male' | 'female' | undefined);
+    }
+  }, [fetchRegularScenes, userProfile]);
 
   // ─── Return ─────────────────────────────────────────
 
