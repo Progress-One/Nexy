@@ -1,6 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import type { DB } from '@/lib/db/schema';
+import { requireAdmin } from '@/lib/auth';
+
+/**
+ * ADMIN-ONLY DB proxy.
+ *
+ * In Phase 4b (April 2026) every privacy-sensitive client caller was migrated
+ * to typed per-feature endpoints. This proxy now only serves admin tools that
+ * still construct ad-hoc Kysely queries from the browser (admin pages under
+ * /app/admin/*). Regular user routes MUST NOT use this — use a typed route.
+ *
+ * Authorization: `requireAdmin()` short-circuits with 401/403 for non-admins.
+ */
 
 type Filter = { col: string; op: string; val: unknown };
 
@@ -63,6 +75,8 @@ function applyFilter(qb: any, f: Filter): any {
 }
 
 export async function GET(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   try {
     const params = req.nextUrl.searchParams;
     const table = params.get('table') as keyof DB;
@@ -92,6 +106,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
   try {
     const body = await req.json();
     const { table, op, data, filters = [], opts } = body as {
