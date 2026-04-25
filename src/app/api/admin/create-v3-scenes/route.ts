@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { ALL_V3_TEMPLATES, getTemplatesByGroup, V3SceneTemplate } from '@/lib/v3-scene-templates';
 import type { Json } from '@/lib/db/schema';
+import { requireAdmin } from '@/lib/auth';
 
 /**
  * Create V3 scenes from templates
@@ -12,6 +13,9 @@ import type { Json } from '@/lib/db/schema';
  * - all: boolean - create all templates
  */
 export async function POST(req: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const body = await req.json();
     const { groupId, slugs, all } = body;
@@ -113,6 +117,9 @@ export async function POST(req: Request) {
  * GET - List available templates and their status
  */
 export async function GET() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     // Get all existing V3 template slugs
     const existingScenes = await db

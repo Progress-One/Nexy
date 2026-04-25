@@ -4,6 +4,7 @@ import { uploadToStorage, getStoragePublicUrl } from '@/lib/storage';
 import { generateWithRetry } from '@/lib/civitai';
 import { generateWithReplicate } from '@/lib/replicate';
 import { buildPrompt, STYLE_VARIANTS } from '@/lib/civitai-config';
+import { requireAdmin } from '@/lib/auth';
 import {
   evaluateImage,
   shouldApprove,
@@ -303,6 +304,9 @@ async function generateWithQA(params: {
 }
 
 export async function POST(req: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   const {
     sceneId,
     prompt,

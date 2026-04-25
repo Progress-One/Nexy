@@ -8,6 +8,7 @@ import { db } from '@/lib/db';
 import { listStorageFiles, getStoragePublicUrl } from '@/lib/storage';
 import { analyzeImage, ImageAnalysis } from '@/lib/image-analyzer';
 import type { Json } from '@/lib/db/schema';
+import { requireAdmin } from '@/lib/auth';
 
 const DEFAULT_BATCH_SIZE = 5;
 
@@ -19,6 +20,9 @@ interface BatchResult {
 }
 
 export async function POST(request: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const body = await request.json().catch(() => ({}));
     const batchSize = body.batchSize || DEFAULT_BATCH_SIZE;
@@ -163,6 +167,9 @@ export async function POST(request: Request) {
 
 // GET - retrieve all analysis data
 export async function GET() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const data = await db
       .selectFrom('image_analysis')

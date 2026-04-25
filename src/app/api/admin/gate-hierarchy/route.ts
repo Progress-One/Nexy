@@ -2,8 +2,12 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { SCENE_GATES, ALL_GATES } from '@/lib/onboarding-gates';
 import type { Json } from '@/lib/db/schema';
+import { requireAdmin } from '@/lib/auth';
 
 export async function GET() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     // Fetch all active scenes
     const scenes = await db

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { uploadToStorage, getStoragePublicUrl } from '@/lib/storage';
 import type { Json } from '@/lib/db/schema';
+import { requireAdmin } from '@/lib/auth';
 
 interface ImageVariant {
   url: string;
@@ -11,6 +12,9 @@ interface ImageVariant {
 }
 
 export async function POST(req: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const formData = await req.formData();
     const file = formData.get('file') as File | null;

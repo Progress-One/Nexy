@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { requireAdmin } from '@/lib/auth';
 
 export async function GET(request: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   const url = new URL(request.url);
   const days = parseInt(url.searchParams.get('days') || '30');
 

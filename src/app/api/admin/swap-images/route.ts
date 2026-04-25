@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { sql } from 'kysely';
 import type { Json } from '@/lib/db/schema';
+import { requireAdmin } from '@/lib/auth';
 
 interface ImageVariant {
   url: string;
@@ -10,6 +11,9 @@ interface ImageVariant {
 }
 
 export async function POST(req: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const { action, sceneIdA, sceneIdB } = await req.json();
 
@@ -174,6 +178,9 @@ export async function POST(req: Request) {
 
 // GET - Get pairs with different images
 export async function GET() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const scenes = await db
       .selectFrom('scenes')

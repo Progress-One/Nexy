@@ -7,8 +7,12 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { analyzeImage, ImageAnalysis } from '@/lib/image-analyzer';
 import { matchScenesToImage } from '@/lib/scene-matcher';
+import { requireAdmin } from '@/lib/auth';
 
 export async function POST(request: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const { imageUrl } = await request.json();
 

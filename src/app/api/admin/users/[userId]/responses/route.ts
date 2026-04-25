@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { requireAdmin } from '@/lib/auth';
 
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ userId: string }> }
 ) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const { userId } = await params;
 

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import type { Json } from '@/lib/db/schema';
+import { requireAdmin } from '@/lib/auth';
 
 interface ImageVariant {
   url: string;
@@ -81,6 +82,9 @@ async function syncVariantsToLinkedScenes(
 }
 
 export async function POST(req: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const body = await req.json();
     const { sceneId, action, variantUrl, imageUrl, prompt } = body;

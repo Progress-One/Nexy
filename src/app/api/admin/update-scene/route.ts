@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { requireAdmin } from '@/lib/auth';
 
 type UpdatableField =
   | 'user_description'
@@ -33,6 +34,9 @@ const ALLOWED_FIELDS: UpdatableField[] = [
 ];
 
 export async function POST(req: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const { sceneId, slug, field, value } = await req.json();
 

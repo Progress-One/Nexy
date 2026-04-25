@@ -3,6 +3,7 @@ import { db } from '@/lib/db';
 import { uploadToStorage, getStoragePublicUrl } from '@/lib/storage';
 import { generateWithReplicate } from '@/lib/replicate';
 import { ALL_V3_TEMPLATES, getTemplatesByGroup } from '@/lib/v3-scene-templates';
+import { requireAdmin } from '@/lib/auth';
 
 const DEFAULT_MODEL = 'black-forest-labs/flux-1.1-pro';
 const DEFAULT_ASPECT_RATIO = '3:4';
@@ -17,6 +18,9 @@ const DEFAULT_ASPECT_RATIO = '3:4';
  * - modelId: string - Replicate model to use (optional)
  */
 export async function POST(req: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const body = await req.json();
     const { groupId, slugs, all, modelId = DEFAULT_MODEL } = body;
@@ -160,6 +164,9 @@ export async function POST(req: Request) {
  * GET - Check generation status for V3 scenes
  */
 export async function GET() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const scenes = await db
       .selectFrom('scenes')

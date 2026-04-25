@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { requireAdmin } from '@/lib/auth';
 
 /**
  * Delete a scene by ID or slug
@@ -9,6 +10,9 @@ import { db } from '@/lib/db';
  * - slug: string - delete by slug
  */
 export async function POST(req: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const body = await req.json();
     const { id, slug } = body;

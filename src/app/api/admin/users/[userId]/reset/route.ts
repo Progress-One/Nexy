@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import type { DB } from '@/lib/db/schema';
+import { requireAdmin } from '@/lib/auth';
 
 type ResetableTable =
   | 'scene_responses'
@@ -23,6 +24,9 @@ export async function POST(
   req: Request,
   { params }: { params: Promise<{ userId: string }> }
 ) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const { userId } = await params;
     const { tables } = await req.json();

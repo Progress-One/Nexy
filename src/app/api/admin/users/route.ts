@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server';
 import { db, getDbPool } from '@/lib/db';
 import { sql } from 'kysely';
+import { requireAdmin } from '@/lib/auth';
 
 export async function GET() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     // Get all profiles - use raw pool query for email field (not yet in generated schema)
     const pool = getDbPool();

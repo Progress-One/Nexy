@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import Anthropic from '@anthropic-ai/sdk';
+import { requireAdmin } from '@/lib/auth';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
@@ -148,6 +149,9 @@ function buildEnrichedPrompt(originalPrompt: string, booruTags: string[], partic
 }
 
 export async function GET() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     // Fetch all scenes with prompts
     const scenes = await db
@@ -183,6 +187,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const { sceneIds, dryRun = true } = await req.json();
 

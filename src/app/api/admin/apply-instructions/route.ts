@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { applyInstructionsToPrompt } from '@/lib/prompt-rewriter';
+import { requireAdmin } from '@/lib/auth';
 
 export async function POST(req: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const { sceneId, instructions } = await req.json();
 

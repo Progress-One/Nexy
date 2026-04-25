@@ -4,6 +4,7 @@ import { sql } from 'kysely';
 import type { Json } from '@/lib/db/schema';
 import * as fs from 'fs';
 import * as path from 'path';
+import { requireAdmin } from '@/lib/auth';
 
 interface V2Element {
   id: string;
@@ -44,6 +45,9 @@ interface V2SceneJSON {
 }
 
 export async function POST() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const scenesDir = path.join(process.cwd(), 'scenes', 'v2-ACTIVE-92-scenes', 'composite');
 
@@ -173,6 +177,9 @@ export async function POST() {
 
 // GET endpoint to check V2 import status
 export async function GET() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     // Count V2 scenes
     const v2Row = await db

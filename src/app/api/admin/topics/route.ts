@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 import { readFile, writeFile } from 'fs/promises';
 import path from 'path';
+import { requireAdmin } from '@/lib/auth';
 
 const TOPICS_PATH = path.join(process.cwd(), 'scenes/v2/topics.json');
 
 export async function GET() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const content = await readFile(TOPICS_PATH, 'utf-8');
     const data = JSON.parse(content);
@@ -16,6 +20,9 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const data = await request.json();
 

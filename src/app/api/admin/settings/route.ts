@@ -1,11 +1,15 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import type { Json } from '@/lib/db/schema';
+import { requireAdmin } from '@/lib/auth';
 
 const SETTINGS_KEY = 'generation_settings';
 
 // GET - load settings
 export async function GET() {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const row = await db
       .selectFrom('admin_settings')
@@ -22,6 +26,9 @@ export async function GET() {
 
 // POST - save settings
 export async function POST(req: Request) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   const { settings } = await req.json();
 
   try {
