@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { type SwipeResponseValue } from '@/components/discovery/SwipeableSceneCard';
 import { type ExperienceLevel } from '@/components/discovery/ExperienceSelector';
 import { type SceneV3Response } from '@/components/discovery/SceneRendererV3';
@@ -12,6 +12,7 @@ import {
   calculateTestScoreUpdates,
 } from '@/lib/profile-signals-pure';
 import { getLocale } from '@/lib/locale';
+import { trackEvent, EVENTS } from '@/lib/analytics';
 import type {
   Scene,
   SceneV2,
@@ -436,6 +437,23 @@ export function useDiscovery() {
   useEffect(() => {
     fetchScenes();
   }, [fetchScenes]);
+
+  // Onboarding funnel tracking — emit on entry to onboarding stages.
+  // Legacy /onboarding page tracks the text-flow (gender/interest/openness);
+  // these events track the visual-discovery flow used by /discover.
+  const trackedStages = useRef<Set<DiscoveryStage>>(new Set());
+  useEffect(() => {
+    if (!userProfile) return;
+    if (trackedStages.current.has(discoveryStage)) return;
+
+    if (discoveryStage === 'onboarding_intro') {
+      trackedStages.current.add('onboarding_intro');
+      trackEvent(null, userProfile.id, EVENTS.ONBOARDING_START);
+    } else if (discoveryStage === 'onboarding_results') {
+      trackedStages.current.add('onboarding_results');
+      trackEvent(null, userProfile.id, EVENTS.ONBOARDING_COMPLETE);
+    }
+  }, [discoveryStage, userProfile]);
 
   // Body map config computation
   useEffect(() => {
