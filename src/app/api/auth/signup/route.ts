@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { SignJWT } from 'jose';
 import pg from 'pg';
-import { createHash, randomUUID } from 'crypto';
+import { randomUUID } from 'crypto';
+import argon2 from 'argon2';
 import { getJwtSecret } from '@/lib/auth';
 
 const { Pool } = pg;
@@ -13,8 +14,13 @@ function getPool() {
   return _pool;
 }
 
-function hashPassword(password: string): string {
-  return createHash('sha256').update(password).digest('hex');
+async function hashPassword(password: string): Promise<string> {
+  return argon2.hash(password, {
+    type: argon2.argon2id,
+    memoryCost: 65536,
+    timeCost: 3,
+    parallelism: 4,
+  });
 }
 
 export async function POST(req: Request) {
@@ -37,9 +43,10 @@ export async function POST(req: Request) {
 
   // Create user
   const userId = randomUUID();
+  const passwordHash = await hashPassword(password);
   await pool.query(
     'INSERT INTO profiles (id, email, password_hash, onboarding_completed) VALUES ($1, $2, $3, false)',
-    [userId, email, hashPassword(password)],
+    [userId, email, passwordHash],
   );
 
   // Create JWT
