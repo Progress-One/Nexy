@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createClient } from '@/lib/http-client/client';
 import { PricingCards } from '@/components/premium/PricingCards';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,25 +15,22 @@ export default function PremiumPage() {
     status: string;
     currentPeriodEnd: string | null;
   } | null>(null);
-  const supabase = createClient();
 
   useEffect(() => {
     async function fetchSubscription() {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-
-        const { data } = await supabase
-          .from('subscriptions')
-          .select('plan, status, current_period_end')
-          .eq('user_id', user.id)
-          .single();
-
-        if (data) {
+        const res = await fetch('/api/subscription/status');
+        if (!res.ok) return;
+        const json = (await res.json()) as {
+          plan?: string | null;
+          status?: string | null;
+          current_period_end?: string | null;
+        };
+        if (json.plan && json.status) {
           setSubscription({
-            plan: data.plan,
-            status: data.status,
-            currentPeriodEnd: data.current_period_end,
+            plan: json.plan,
+            status: json.status,
+            currentPeriodEnd: json.current_period_end ?? null,
           });
         }
       } catch (error) {
@@ -45,7 +41,7 @@ export default function PremiumPage() {
     }
 
     fetchSubscription();
-  }, [supabase]);
+  }, []);
 
   const handleSelectPlan = async (plan: 'monthly' | 'yearly') => {
     setCheckoutLoading(true);

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/http-client/client';
 import { DateResults } from '@/components/date/DateResults';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowLeft } from 'lucide-react';
@@ -15,80 +14,26 @@ export default function DateResultsPage({ params }: { params: Promise<{ dateId: 
   const [partnerName, setPartnerName] = useState('Партнёр');
   const [loading, setLoading] = useState(true);
   const [waitingForPartner, setWaitingForPartner] = useState(false);
-  const supabase = createClient();
 
   useEffect(() => {
     async function fetchResults() {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
+        const res = await fetch(`/api/dates/${dateId}/results`);
+        if (!res.ok) return;
+        const json = (await res.json()) as {
+          waitingForPartner?: boolean;
+          partnerName?: string;
+          bothYes?: Scene[];
+          bothMaybe?: Scene[];
+        };
 
-        // Get date and partnership
-        const { data: dateData } = await supabase
-          .from('dates')
-          .select('partnership_id')
-          .eq('id', dateId)
-          .single();
-
-        if (!dateData) return;
-
-        const { data: partnership } = await supabase
-          .from('partnerships')
-          .select('user_id, partner_id, nickname')
-          .eq('id', dateData.partnership_id)
-          .single();
-
-        if (partnership?.nickname) {
-          setPartnerName(partnership.nickname);
-        }
-
-        // Get all responses for this date
-        const { data: responses } = await supabase
-          .from('date_responses')
-          .select('user_id, scene_id, answer, scenes(*)')
-          .eq('date_id', dateId);
-
-        if (!responses) return;
-
-        // Check if both users have responded
-        const userIds = new Set(responses.map(r => r.user_id));
-        if (userIds.size < 2) {
+        if (json.partnerName) setPartnerName(json.partnerName);
+        if (json.waitingForPartner) {
           setWaitingForPartner(true);
           return;
         }
-
-        // Group by scene
-        const byScene = new Map<string, Map<string, string>>();
-
-        for (const r of responses) {
-          if (!byScene.has(r.scene_id)) {
-            byScene.set(r.scene_id, new Map());
-          }
-          byScene.get(r.scene_id)!.set(r.user_id, r.answer);
-        }
-
-        const yesScenes: Scene[] = [];
-        const maybeScenes: Scene[] = [];
-
-        for (const [sceneId, answers] of byScene) {
-          if (answers.size !== 2) continue; // Both users need to answer
-
-          const answerValues = Array.from(answers.values()) as string[];
-          const responseWithScene = responses.find(r => r.scene_id === sceneId);
-          const scene = (responseWithScene?.scenes as unknown) as Scene | null;
-
-          if (!scene) continue;
-
-          if (answerValues.every(a => a === 'yes')) {
-            yesScenes.push(scene);
-          } else if (answerValues.every(a => a === 'yes' || a === 'maybe')) {
-            // At least one is 'yes' or 'maybe', none is 'no'
-            maybeScenes.push(scene);
-          }
-        }
-
-        setBothYes(yesScenes);
-        setBothMaybe(maybeScenes);
+        setBothYes(json.bothYes ?? []);
+        setBothMaybe(json.bothMaybe ?? []);
       } catch (error) {
         console.error('Error fetching results:', error);
       } finally {
@@ -97,7 +42,7 @@ export default function DateResultsPage({ params }: { params: Promise<{ dateId: 
     }
 
     fetchResults();
-  }, [dateId, supabase]);
+  }, [dateId]);
 
   if (loading) {
     return (

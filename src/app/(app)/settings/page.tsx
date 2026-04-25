@@ -20,33 +20,26 @@ export default function SettingsPage() {
   useEffect(() => {
     async function fetchProfile() {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
-          .single();
-
-        if (profileData) {
-          const profile = profileData as Profile;
-          setProfile(profile);
-          const locale = getLocale(profile);
-          setCurrentLocale(locale);
+        const res = await fetch('/api/settings/me');
+        if (!res.ok) {
+          setCurrentLocale(getLocale());
+          return;
+        }
+        const json = (await res.json()) as { profile?: Profile | null };
+        if (json.profile) {
+          setProfile(json.profile);
+          setCurrentLocale(getLocale(json.profile));
         } else {
-          const locale = getLocale();
-          setCurrentLocale(locale);
+          setCurrentLocale(getLocale());
         }
       } catch (error) {
         console.error('Error fetching profile:', error);
-        const locale = getLocale();
-        setCurrentLocale(locale);
+        setCurrentLocale(getLocale());
       }
     }
 
     fetchProfile();
-  }, [supabase]);
+  }, []);
 
   const handleLogout = async () => {
     setLoading(true);
@@ -66,24 +59,20 @@ export default function SettingsPage() {
   const handleLanguageChange = async (newLocale: Locale) => {
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      // Update profile in database
-      const { error } = await supabase
-        .from('profiles')
-        .update({ language: newLocale })
-        .eq('id', user.id);
-
-      if (error) {
-        console.error('Error updating language:', error);
+      const res = await fetch('/api/settings/me', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language: newLocale }),
+      });
+      if (!res.ok) {
+        console.error('Error updating language:', res.status);
         return;
       }
 
       // Update local state
       setCurrentLocale(newLocale);
       setLocale(newLocale);
-      
+
       // Update profile state
       if (profile) {
         setProfile({ ...profile, language: newLocale });

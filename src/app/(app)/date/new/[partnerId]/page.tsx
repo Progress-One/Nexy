@@ -2,7 +2,6 @@
 
 import { useState, use } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/http-client/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
@@ -20,33 +19,25 @@ export default function NewDatePage({ params }: { params: Promise<{ partnerId: s
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
 
   const handleCreate = async () => {
     if (!selectedMood) return;
 
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data: newDate, error } = await supabase
-        .from('dates')
-        .insert({
-          partnership_id: partnerId,
-          initiator_id: user.id,
-          mood: selectedMood,
-          status: 'pending',
-        })
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Error creating date:', error);
+      const res = await fetch('/api/dates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ partnership_id: partnerId, mood: selectedMood }),
+      });
+      if (!res.ok) {
+        console.error('Error creating date:', res.status);
         return;
       }
-
-      router.push(`/date/${newDate.id}`);
+      const json = (await res.json()) as { date?: { id: string | null } };
+      if (json.date?.id) {
+        router.push(`/date/${json.date.id}`);
+      }
     } catch (error) {
       console.error('Error:', error);
     } finally {

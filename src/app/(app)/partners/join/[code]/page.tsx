@@ -2,7 +2,6 @@
 
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/http-client/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, UserCheck, AlertCircle } from 'lucide-react';
@@ -12,53 +11,28 @@ export default function JoinPage({ params }: { params: Promise<{ code: string }>
   const [status, setStatus] = useState<'loading' | 'valid' | 'invalid' | 'joining' | 'success'>('loading');
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const supabase = createClient();
 
   useEffect(() => {
     async function validateInvite() {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-
-        if (!user) {
-          // Redirect to login with return URL
+        const res = await fetch(`/api/partners/join/${code}`);
+        if (res.status === 401) {
           router.push(`/login?next=/partners/join/${code}`);
           return;
         }
-
-        // Check if invite exists and is valid
-        const { data: invite, error: inviteError } = await supabase
-          .from('partnerships')
-          .select('*')
-          .eq('invite_code', code)
-          .eq('status', 'pending')
-          .single();
-
-        if (inviteError || !invite) {
+        if (!res.ok) {
           setStatus('invalid');
           setError('Приглашение не найдено или уже использовано');
           return;
         }
-
-        // Check if user is trying to join their own invite
-        if (invite.inviter_id === user.id) {
+        const json = (await res.json()) as { valid?: boolean; reason?: string };
+        if (!json.valid) {
           setStatus('invalid');
-          setError('Нельзя принять своё собственное приглашение');
+          if (json.reason === 'self') setError('Нельзя принять своё собственное приглашение');
+          else if (json.reason === 'already_partners') setError('Вы уже партнёры');
+          else setError('Приглашение не найдено или уже использовано');
           return;
         }
-
-        // Check if already partners
-        const { data: existing } = await supabase
-          .from('partnerships')
-          .select('id')
-          .or(`and(user_id.eq.${user.id},partner_id.eq.${invite.inviter_id}),and(user_id.eq.${invite.inviter_id},partner_id.eq.${user.id})`)
-          .single();
-
-        if (existing) {
-          setStatus('invalid');
-          setError('Вы уже партнёры');
-          return;
-        }
-
         setStatus('valid');
       } catch {
         setStatus('invalid');
@@ -67,50 +41,18 @@ export default function JoinPage({ params }: { params: Promise<{ code: string }>
     }
 
     validateInvite();
-  }, [code, supabase, router]);
+  }, [code, router]);
 
   const handleJoin = async () => {
     setStatus('joining');
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      // Get the invite
-      const { data: invite } = await supabase
-        .from('partnerships')
-        .select('*')
-        .eq('invite_code', code)
-        .eq('status', 'pending')
-        .single();
-
-      if (!invite) {
-        setError('Приглашение не найдено');
+      const res = await fetch(`/api/partners/join/${code}/accept`, { method: 'POST' });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        setError(data.error || 'Не удалось принять приглашение');
         setStatus('invalid');
         return;
       }
-
-      // Update the partnership
-      const { error: updateError } = await supabase
-        .from('partnerships')
-        .update({
-          partner_id: user.id,
-          status: 'active',
-        })
-        .eq('id', invite.id);
-
-      if (updateError) {
-        setError('Не удалось принять приглашение');
-        setStatus('invalid');
-        return;
-      }
-
-      // Create reverse partnership record
-      await supabase.from('partnerships').insert({
-        user_id: user.id,
-        partner_id: invite.inviter_id,
-        inviter_id: invite.inviter_id,
-        status: 'active',
-      });
 
       setStatus('success');
       setTimeout(() => {

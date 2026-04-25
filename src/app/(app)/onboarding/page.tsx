@@ -125,18 +125,20 @@ export default function OnboardingPage() {
         return;
       }
 
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({
+      const res = await fetch('/api/settings/me', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           gender,
           interested_in: interestedIn,
           openness_level: selected,
           onboarding_completed: true,
-        })
-        .eq('id', user.id);
+        }),
+      });
 
-      if (updateError) {
-        setError(updateError.message);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError((data as { error?: string }).error || 'Failed to save profile');
         return;
       }
 

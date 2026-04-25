@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createClient } from '@/lib/http-client/client';
 import { PreferenceMap } from '@/components/profile/PreferenceMap';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -13,43 +12,20 @@ export default function ProfilePage() {
   const [preferences, setPreferences] = useState<Record<string, unknown>>({});
   const [stats, setStats] = useState({ answered: 0 });
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
   useEffect(() => {
     async function fetchProfile() {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-
-        // Fetch profile
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
-          .single();
-
-        if (profileData) {
-          setProfile(profileData as Profile);
-        }
-
-        // Fetch preferences
-        const { data: prefData } = await supabase
-          .from('preference_profiles')
-          .select('preferences')
-          .eq('user_id', user.id)
-          .single();
-
-        if (prefData) {
-          setPreferences(prefData.preferences as Record<string, unknown>);
-        }
-
-        // Fetch stats
-        const { data: responses } = await supabase
-          .from('scene_responses')
-          .select('id')
-          .eq('user_id', user.id);
-
-        setStats({ answered: Array.isArray(responses) ? responses.length : 0 });
+        const res = await fetch('/api/profile/me');
+        if (!res.ok) return;
+        const json = (await res.json()) as {
+          profile?: Profile | null;
+          preferences?: Record<string, unknown> | null;
+          stats?: { answered?: number };
+        };
+        if (json.profile) setProfile(json.profile);
+        if (json.preferences) setPreferences(json.preferences);
+        setStats({ answered: json.stats?.answered ?? 0 });
       } catch (error) {
         console.error('Error fetching profile:', error);
       } finally {
@@ -58,7 +34,7 @@ export default function ProfilePage() {
     }
 
     fetchProfile();
-  }, [supabase]);
+  }, []);
 
   if (loading) {
     return (

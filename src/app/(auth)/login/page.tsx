@@ -33,13 +33,19 @@ export default function LoginPage() {
         return;
       }
 
-      // Check if onboarding is completed
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('onboarding_completed')
-        .single();
+      // Check if onboarding is completed via typed endpoint
+      let onboardingCompleted = false;
+      try {
+        const res = await fetch('/api/settings/me');
+        if (res.ok) {
+          const json = (await res.json()) as { profile?: { onboarding_completed?: boolean | null } | null };
+          onboardingCompleted = json.profile?.onboarding_completed === true;
+        }
+      } catch {
+        // fall through with onboardingCompleted = false
+      }
 
-      if (profile?.onboarding_completed) {
+      if (onboardingCompleted) {
         router.push('/discover');
       } else {
         router.push('/onboarding');

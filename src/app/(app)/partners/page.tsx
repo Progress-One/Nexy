@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/http-client/client';
 import { PartnerCard } from '@/components/partners/PartnerCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,29 +18,14 @@ interface Partnership {
 export default function PartnersPage() {
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
   useEffect(() => {
     async function fetchPartnerships() {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-
-        // Fetch partnerships where user is either user_id or partner_id
-        const { data } = await supabase
-          .from('partnerships')
-          .select('*')
-          .or(`user_id.eq.${user.id},partner_id.eq.${user.id}`)
-          .order('created_at', { ascending: false });
-
-        if (data) {
-          // Transform to always have the "other" person as partner
-          const transformed = data.map((p) => ({
-            ...p,
-            partner_id: p.user_id === user.id ? p.partner_id : p.user_id,
-          }));
-          setPartnerships(transformed);
-        }
+        const res = await fetch('/api/partners/list?status=any');
+        if (!res.ok) return;
+        const json = (await res.json()) as { partnerships?: Partnership[] };
+        setPartnerships(json.partnerships ?? []);
       } catch (error) {
         console.error('Error fetching partnerships:', error);
       } finally {
@@ -50,7 +34,7 @@ export default function PartnersPage() {
     }
 
     fetchPartnerships();
-  }, [supabase]);
+  }, []);
 
   if (loading) {
     return (

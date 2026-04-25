@@ -1,16 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createClient } from '@/lib/http-client/client';
-import { generateInviteCode } from '@/lib/matching';
 import { trackEvent, EVENTS } from '@/lib/analytics';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Copy, Check, Link as LinkIcon, Mail, Loader2, Clock, Share2 } from 'lucide-react';
-
-const INVITE_EXPIRY_DAYS = 7;
 
 export default function InvitePage() {
   const [inviteCode, setInviteCode] = useState<string | null>(null);
@@ -25,7 +21,6 @@ export default function InvitePage() {
   const [emailError, setEmailError] = useState<string | null>(null);
 
   const [canShare, setCanShare] = useState(false);
-  const supabase = createClient();
 
   // Check Web Share API support
   useEffect(() => {
@@ -35,45 +30,21 @@ export default function InvitePage() {
   useEffect(() => {
     async function getOrCreateInvite() {
       try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (!user) return;
+        // Track page view (server uses session for user_id)
+        trackEvent(null, '', EVENTS.INVITE_PAGE_VIEW);
 
-        // Track page view
-        trackEvent(supabase, user.id, EVENTS.INVITE_PAGE_VIEW);
-
-        // Check for existing valid pending invite (not expired)
-        const { data: existing } = await supabase
-          .from('partnerships')
-          .select('invite_code, expires_at')
-          .eq('inviter_id', user.id)
-          .eq('status', 'pending')
-          .is('partner_id', null)
-          .gt('expires_at', new Date().toISOString())
-          .single();
-
-        if (existing?.invite_code) {
-          setInviteCode(existing.invite_code);
-          setExpiresAt(existing.expires_at ? new Date(existing.expires_at) : null);
-        } else {
-          // Create new invite with expiry
-          const code = generateInviteCode();
-          const expires = new Date();
-          expires.setDate(expires.getDate() + INVITE_EXPIRY_DAYS);
-
-          const { error } = await supabase.from('partnerships').insert({
-            user_id: user.id,
-            inviter_id: user.id,
-            invite_code: code,
-            status: 'pending',
-            expires_at: expires.toISOString(),
-          });
-
-          if (!error) {
-            setInviteCode(code);
-            setExpiresAt(expires);
-          }
+        // POST is idempotent server-side: returns the existing pending invite if any,
+        // otherwise creates a new one.
+        const res = await fetch('/api/partners/invite', { method: 'POST' });
+        if (!res.ok) {
+          return;
+        }
+        const json = (await res.json()) as {
+          invite?: { invite_code: string | null; expires_at: string | null } | null;
+        };
+        if (json.invite?.invite_code) {
+          setInviteCode(json.invite.invite_code);
+          setExpiresAt(json.invite.expires_at ? new Date(json.invite.expires_at) : null);
         }
       } catch (error) {
         console.error('Error getting invite:', error);
@@ -83,7 +54,7 @@ export default function InvitePage() {
     }
 
     getOrCreateInvite();
-  }, [supabase]);
+  }, []);
 
   const copyToClipboard = async () => {
     if (!inviteCode) return;
@@ -104,9 +75,8 @@ export default function InvitePage() {
       setTimeout(() => setCopied(false), 2000);
     }
 
-    // Track
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) trackEvent(supabase, user.id, EVENTS.INVITE_CODE_COPIED);
+    // Track (server reads session for user_id)
+    trackEvent(null, '', EVENTS.INVITE_CODE_COPIED);
   };
 
   const nativeShare = async () => {
@@ -119,8 +89,7 @@ export default function InvitePage() {
         text: 'Присоединяйся ко мне на Nexy!',
         url,
       });
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) trackEvent(supabase, user.id, EVENTS.INVITE_CODE_COPIED, { method: 'native_share' });
+      trackEvent(null, '', EVENTS.INVITE_CODE_COPIED, { method: 'native_share' });
     } catch {
       // User cancelled share — ignore
     }
@@ -148,8 +117,7 @@ export default function InvitePage() {
       setEmailSent(true);
       setEmail('');
       // Track
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) trackEvent(supabase, user.id, EVENTS.INVITE_EMAIL_SENT);
+      trackEvent(null, '', EVENTS.INVITE_EMAIL_SENT);
     } catch (error) {
       setEmailError(error instanceof Error ? error.message : 'Ошибка отправки');
     } finally {

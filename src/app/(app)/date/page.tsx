@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/http-client/client';
 import { DateCard } from '@/components/date/DateCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -21,49 +20,18 @@ export default function DatesPage() {
   const [dates, setDates] = useState<DateWithPartner[]>([]);
   const [partnerships, setPartnerships] = useState<{ id: string; nickname: string | null }[]>([]);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
   useEffect(() => {
     async function fetchDates() {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-
-        // Get partnerships
-        const { data: partnershipData } = await supabase
-          .from('partnerships')
-          .select('id, nickname, user_id, partner_id')
-          .or(`user_id.eq.${user.id},partner_id.eq.${user.id}`)
-          .eq('status', 'active');
-
-        if (partnershipData) {
-          setPartnerships(partnershipData.map(p => ({
-            id: p.id,
-            nickname: p.nickname || 'Партнёр'
-          })));
-        }
-
-        // Get dates for all partnerships
-        const partnershipIds = partnershipData?.map(p => p.id) || [];
-
-        if (partnershipIds.length > 0) {
-          const { data: datesData } = await supabase
-            .from('dates')
-            .select('*')
-            .in('partnership_id', partnershipIds)
-            .order('created_at', { ascending: false });
-
-          if (datesData) {
-            const datesWithPartners = datesData.map(d => {
-              const partnership = partnershipData?.find(p => p.id === d.partnership_id);
-              return {
-                ...d,
-                partnerName: partnership?.nickname || 'Партнёр',
-              };
-            });
-            setDates(datesWithPartners);
-          }
-        }
+        const res = await fetch('/api/dates');
+        if (!res.ok) return;
+        const json = (await res.json()) as {
+          dates?: DateWithPartner[];
+          partnerships?: Array<{ id: string; nickname: string | null }>;
+        };
+        setPartnerships(json.partnerships ?? []);
+        setDates(json.dates ?? []);
       } catch (error) {
         console.error('Error fetching dates:', error);
       } finally {
@@ -72,7 +40,7 @@ export default function DatesPage() {
     }
 
     fetchDates();
-  }, [supabase]);
+  }, []);
 
   if (loading) {
     return (

@@ -2,7 +2,6 @@
 
 import { useState, use } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/http-client/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -25,49 +24,22 @@ export default function ProposePage({ params }: { params: Promise<{ partnerId: s
   const [loading, setLoading] = useState(false);
   const [isPremium] = useState(false); // TODO: Check actual subscription
   const router = useRouter();
-  const supabase = createClient();
 
   const handlePropose = async () => {
     if (!selectedDimension || !isPremium) return;
 
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      // Get partnership to find actual partner ID
-      const { data: partnership } = await supabase
-        .from('partnerships')
-        .select('user_id, partner_id')
-        .eq('id', partnerId)
-        .single();
-
-      if (!partnership) return;
-
-      const actualPartnerId = partnership.user_id === user.id
-        ? partnership.partner_id
-        : partnership.user_id;
-
-      // Find a V2 scene with this tag
-      const { data: scenes } = await supabase
-        .from('scenes')
-        .select('id')
-        .eq('version', 2)
-        .eq('is_active', true)
-        .contains('tags', [selectedDimension])
-        .limit(5);
-
-      if (scenes && scenes.length > 0) {
-        const randomScene = scenes[Math.floor(Math.random() * scenes.length)];
-
-        // Create proposal
-        await supabase.from('proposals').insert({
-          from_user_id: user.id,
-          to_user_id: actualPartnerId,
-          scene_id: randomScene.id,
+      const res = await fetch('/api/proposals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          partnership_id: partnerId,
           dimension: selectedDimension,
-          status: 'pending',
-        });
+        }),
+      });
+      if (!res.ok) {
+        console.error('proposal creation failed', res.status);
       }
 
       router.push(`/partners/${partnerId}`);

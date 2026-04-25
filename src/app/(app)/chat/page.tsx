@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { createClient } from '@/lib/http-client/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -22,7 +21,6 @@ export default function ChatPage() {
   const [rateLimited, setRateLimited] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const supabase = createClient();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -35,22 +33,18 @@ export default function ChatPage() {
   useEffect(() => {
     async function fetchHistory() {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-
-        const { data } = await supabase
-          .from('ai_messages')
-          .select('id, role, content')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: true })
-          .limit(50);
-
-        if (data) {
-          setMessages(data.map(m => ({
-            id: m.id,
-            role: m.role as 'user' | 'assistant',
-            content: m.content,
-          })));
+        const res = await fetch('/api/chat/history');
+        if (res.ok) {
+          const json = (await res.json()) as {
+            messages?: Array<{ id: string; role: string; content: string }>;
+          };
+          setMessages(
+            (json.messages ?? []).map((m) => ({
+              id: m.id,
+              role: m.role as 'user' | 'assistant',
+              content: m.content,
+            })),
+          );
         }
       } catch (error) {
         console.error('Error fetching history:', error);
@@ -60,7 +54,7 @@ export default function ChatPage() {
     }
 
     fetchHistory();
-  }, [supabase]);
+  }, []);
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;

@@ -2,8 +2,6 @@
 
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/http-client/client';
-import { getTagBasedMatches, type TagPreference } from '@/lib/matching';
 import { MatchList } from '@/components/partners/MatchList';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,53 +17,24 @@ export default function PartnerDetailPage({ params }: { params: Promise<{ partne
   const [matches, setMatches] = useState<MatchResult[]>([]);
   const [showChat, setShowChat] = useState(false);
   const [actualPartnerId, setActualPartnerId] = useState<string | null>(null);
-  const supabase = createClient();
 
   useEffect(() => {
     async function fetchMatches() {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
+        const res = await fetch(`/api/partners/${partnerId}/match-view`);
+        if (!res.ok) return;
+        const json = (await res.json()) as {
+          matches?: MatchResult[];
+          partnership?: { nickname?: string | null; partner_id?: string | null };
+        };
 
-        // Get partnership details
-        const { data: partnership } = await supabase
-          .from('partnerships')
-          .select('*')
-          .eq('id', partnerId)
-          .single();
-
-        if (!partnership) return;
-
-        // Determine actual partner ID
-        const partnerUserId = partnership.user_id === user.id
-          ? partnership.partner_id
-          : partnership.user_id;
-
-        setActualPartnerId(partnerUserId);
-
-        if (partnership.nickname) {
-          setPartnerName(partnership.nickname);
+        if (json.partnership?.nickname) {
+          setPartnerName(json.partnership.nickname);
         }
-
-        // Fetch tag_preferences for role-based matching
-        const [myTags, partnerTagsResult] = await Promise.all([
-          supabase
-            .from('tag_preferences')
-            .select('tag_ref, interest_level, role_preference')
-            .eq('user_id', user.id),
-          supabase
-            .from('tag_preferences')
-            .select('tag_ref, interest_level, role_preference')
-            .eq('user_id', partnerUserId),
-        ]);
-
-        // Tag-based matching with role complementarity
-        const tagResults = getTagBasedMatches(
-          (myTags.data || []) as TagPreference[],
-          (partnerTagsResult.data || []) as TagPreference[]
-        );
-
-        setMatches(tagResults.matches);
+        if (json.partnership?.partner_id) {
+          setActualPartnerId(json.partnership.partner_id);
+        }
+        setMatches(json.matches ?? []);
       } catch (error) {
         console.error('Error fetching matches:', error);
       } finally {
@@ -74,7 +43,7 @@ export default function PartnerDetailPage({ params }: { params: Promise<{ partne
     }
 
     fetchMatches();
-  }, [partnerId, supabase]);
+  }, [partnerId]);
 
   if (loading) {
     return (
